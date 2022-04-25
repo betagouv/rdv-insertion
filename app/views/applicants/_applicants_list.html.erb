@@ -20,16 +20,11 @@
           <th scope="col" class="d-none d-lg-table-cell">Email</th>
           <th scope="col" class="d-none d-lg-table-cell">Téléphone</th>
           <% unless @not_invited_list %>
-            <% if show_sms_invitation?(@current_configuration) %>
-              <th scope="col">Dernière invitation SMS</th>
+            <% unless show_notification?(@current_configuration) %>
+              <th scope="col">Première invitation</th>
+              <th scope="col">Dernière invitation</th>
             <% end %>
-            <% if show_email_invitation?(@current_configuration) %>
-              <th scope="col">Dernière invitation email</th>
-            <% end %>
-            <% if show_postal_invitation?(@current_configuration) %>
-              <th scope="col">Dernière invitation courrier</th>
-            <% end %>
-            <% if show_notification?(@current_configuration)%>
+            <% if show_notification?(@current_configuration) %>
               <th scope="col">Dernière Notification envoyée le</th>
             <% end %>
             <th scope="col">Statut</th>
@@ -45,14 +40,9 @@
               <td class="d-none d-lg-table-cell"><%= display_attribute applicant.email %></td>
               <td class="d-none d-lg-table-cell"><%= display_attribute applicant.phone_number %></td>
               <% unless @not_invited_list %>
-                <% if show_sms_invitation?(@current_configuration) %>
-                  <td><%= display_attribute format_date(rdv_context.last_sms_invitation_sent_at) %></td>
-                <% end %>
-                <% if show_email_invitation?(@current_configuration) %>
-                  <td><%= display_attribute format_date(rdv_context.last_email_invitation_sent_at) %></td>
-                <% end %>
-                <% if show_postal_invitation?(@current_configuration) %>
-                  <td><%= display_attribute format_date(rdv_context.last_postal_invitation_sent_at) %></td>
+                <% unless show_notification?(@current_configuration) %>
+                  <td><%= display_attribute format_date(rdv_context.first_invitation_sent_at) %></td>
+                  <td><%= rdv_context.invitations.length > 1 ? display_attribute(format_date(rdv_context.last_invitation_sent_at)) : "-" %></td>
                 <% end %>
                 <% if show_notification?(@current_configuration) %>
                   <td><%= display_attribute format_date(applicant.last_notification_sent_at) %></td>

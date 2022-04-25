@@ -1,6 +1,14 @@
 module InvitableConcern
   extend ActiveSupport::Concern
 
+  def first_sent_invitation
+    invitations.select(&:sent_at).min_by(&:sent_at)
+  end
+
+  def first_invitation_sent_at
+    first_sent_invitation&.sent_at
+  end
+
   def last_sent_invitation
     invitations.select(&:sent_at).max_by(&:sent_at)
   end

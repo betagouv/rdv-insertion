@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import retrieveInvitationsByFormatAndContext from "../../lib/retrieveInvitationsByFormatAndContext";
 import retrieveLastInvitationDate from "../../lib/retrieveLastInvitationDate";
 import handleApplicantInvitation from "../lib/handleApplicantInvitation";
 import getInvitationLetter from "../actions/getInvitationLetter";
@@ -30,6 +31,10 @@ export default function InvitationBlock({
   const [lastPostalInvitationSentAt, setLastPostalInvitationSentAt] = useState(
     retrieveLastInvitationDate(invitations, "postal")
   );
+  const [smsInvitations, setSmsInvitations] = useState(retrieveInvitationsByFormatAndContext(invitations, "sms"));
+  const [emailInvitations, setEmailInvitations] = useState(retrieveInvitationsByFormatAndContext(invitations, "email"));
+  const [postalInvitations, setPostalInvitations] = useState(retrieveInvitationsByFormatAndContext(invitations, "postal"));
+  const [showInvitationsHistory, setShowInvitationsHistory] = useState(false);
 
   const showInvitation = (format) => invitationFormats.includes(format);
 
@@ -54,6 +59,8 @@ export default function InvitationBlock({
     if (action === "smsInvitation") {
       const invitation = await handleApplicantInvitation(...applicantParams, "sms");
       setLastSmsInvitationSentAt(invitation?.sent_at);
+      invitations.push(invitation);
+      setSmsInvitations(invitations);
     } else if (action === "emailInvitation") {
       const invitation = await handleApplicantInvitation(...applicantParams, "email");
       setLastEmailInvitationSentAt(invitation?.sent_at);
@@ -67,54 +74,84 @@ export default function InvitationBlock({
     setIsLoading({ ...isLoading, [action]: false });
   };
 
+  const toggleInvitationsHistory = (value) => {
+    setShowInvitationsHistory(value)
+  }
+
   return (
     <div className="d-flex justify-content-center">
       <table className="block-white text-center align-middle mb-4 mx-4">
-        <caption className="text-center">Dernières Invitations</caption>
         <thead>
           <tr>
             {showInvitation("sms") && (
-              <th className="px-4 py-3">
+              <th className="px-4 py-2">
                 <h4>Invitation SMS</h4>
               </th>
             )}
             {showInvitation("email") && (
-              <th className="px-4 py-3">
+              <th className="px-4 py-2">
                 <h4>Invitation mail</h4>
               </th>
             )}
             {showInvitation("postal") && (
-              <th className="px-4 py-3">
+              <th className="px-4 py-2">
                 <h4>Invitation courrier</h4>
               </th>
             )}
           </tr>
         </thead>
         <tbody>
+          {!showInvitationsHistory &&
+            <tr>
+              {showInvitation("sms") && (
+                <td className="px-4 py-2">
+                  {lastSmsInvitationSentAt ? getFrenchFormatDateString(lastSmsInvitationSentAt) : "-"}
+                </td>
+              )}
+              {showInvitation("email") && (
+                <td className="px-4 py-2">
+                  {lastEmailInvitationSentAt
+                    ? getFrenchFormatDateString(lastEmailInvitationSentAt)
+                    : "-"}
+                </td>
+              )}
+              {showInvitation("postal") && (
+                <td className="px-4 py-2">
+                  {lastPostalInvitationSentAt
+                    ? getFrenchFormatDateString(lastPostalInvitationSentAt)
+                    : "-"}
+                </td>
+              )}
+            </tr>
+          }
+          {showInvitationsHistory &&
+            <tr>
+              {showInvitation("sms") && (
+                smsInvitations.map(invitation =>
+                  <td className="px-4 py-2">
+                    {invitation.sent_at}
+                  </td>
+                )
+              )}
+              {showInvitation("email") && (
+                emailInvitations.map(invitation =>
+                  <td className="px-4 py-2">
+                    {invitation.sent_at}
+                  </td>
+                )
+              )}
+              {showInvitation("postal") && (
+                postalInvitations.map(invitation =>
+                  <td className="px-4 py-2">
+                    {invitation.sent_at}
+                  </td>
+                )
+              )}
+            </tr>
+          }
           <tr>
             {showInvitation("sms") && (
-              <td className="px-4 py-3">
-                {lastSmsInvitationSentAt ? getFrenchFormatDateString(lastSmsInvitationSentAt) : "-"}
-              </td>
-            )}
-            {showInvitation("email") && (
-              <td className="px-4 py-3">
-                {lastEmailInvitationSentAt
-                  ? getFrenchFormatDateString(lastEmailInvitationSentAt)
-                  : "-"}
-              </td>
-            )}
-            {showInvitation("postal") && (
-              <td className="px-4 py-3">
-                {lastPostalInvitationSentAt
-                  ? getFrenchFormatDateString(lastPostalInvitationSentAt)
-                  : "-"}
-              </td>
-            )}
-          </tr>
-          <tr>
-            {showInvitation("sms") && (
-              <td className="px-4 py-3">
+              <td className="px-4 py-2">
                 <button
                   type="button"
                   disabled={
@@ -133,7 +170,7 @@ export default function InvitationBlock({
               </td>
             )}
             {showInvitation("email") && (
-              <td className="px-4 py-3">
+              <td className="px-4 py-2">
                 <button
                   type="button"
                   disabled={
@@ -152,7 +189,7 @@ export default function InvitationBlock({
               </td>
             )}
             {showInvitation("postal") && (
-              <td className="px-4 py-3">
+              <td className="px-4 py-2">
                 <button
                   type="button"
                   disabled={
@@ -171,6 +208,34 @@ export default function InvitationBlock({
               </td>
             )}
           </tr>
+          {!showInvitationsHistory &&
+            <tr>
+              <td
+                className="px-4 py-2"
+                colSpan={3}
+                style={{ cursor: "pointer" }}
+              >
+                <a onClick={() => toggleInvitationsHistory(true)}>
+                  <i className="fas fa-angle-down" /> Voir l'historique <i className="fas fa-angle-down" />
+                </a>
+
+              </td>
+            </tr>
+          }
+          {showInvitationsHistory &&
+            <tr>
+              <td
+                className="px-4 py-2"
+                colSpan={3}
+                style={{ cursor: "pointer" }}
+              >
+                <a onClick={() => toggleInvitationsHistory(false)}>
+                  <i className="fas fa-angle-up" /> Voir moins <i className="fas fa-angle-up" />
+                </a>
+              </td>
+            </tr>
+          }
+
         </tbody>
       </table>
     </div>
