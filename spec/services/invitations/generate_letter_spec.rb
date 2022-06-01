@@ -14,7 +14,6 @@ describe Invitations::GenerateLetter, type: :service do
     )
   end
   let!(:letter_configuration) { create(:letter_configuration) }
-  let!(:responsible) { create(:responsible, first_name: "Gael", last_name: "Monfils") }
   let!(:organisation) do
     create(:organisation, responsible: responsible, letter_configuration: letter_configuration, department: department)
   end

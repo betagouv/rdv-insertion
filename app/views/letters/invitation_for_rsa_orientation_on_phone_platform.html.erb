@@ -13,13 +13,6 @@
   <p>Pour cela, <span class="bold-blue">merci d’appeler le <%= invitation.help_phone_number %> dans un délai de <%= invitation.number_of_days_to_accept_invitation %> jours à réception de ce courrier.</span></p>
   <p>Cet appel est obligatoire dans le cadre du versement de votre allocation RSA.</p>
   <p>Veuillez agréer, <%= applicant.title.capitalize %>, l’expression de mes salutations distinguées.</p>
-  <div class="letter-signature">
-    <% if organisation.responsible.present? %>
-      <p>Pour le Président du Conseil départemental et par délégation,<br/>
-      <%= organisation.responsible.full_name %>, <%= organisation.responsible.role %></p>
-    <% else %>
-      <p>Le département <%= I18n.t("with_prefix.#{department.pronoun}", name: invitation.department.name) %><br/></p>
-    <% end %>
-  </div>
+  <%= render 'letters/signature', letter_configuration: letter_configuration %>
 </div>
 <%= render 'letters/footer', department: department, organisation: organisation %>

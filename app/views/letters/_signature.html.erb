@@ -1,0 +1,12 @@
+<div class="letter-signature">
+  <% if letter_configuration.signature_lines.present? %>
+    <p>
+      <% letter_configuration.signature_lines.each_with_index do |address_line, i| %>
+          <%= address_line %>
+          <%= tag(:br) unless letter_configuration.signature_lines.length == i + 1 %>
+      <% end %>
+    </p>
+  <% else %>
+    <p>Le département <%= I18n.t("with_prefix.#{department.pronoun}", name: invitation.department.name) %><br/></p>
+  <% end %>
+</div>
