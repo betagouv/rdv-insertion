@@ -44,9 +44,9 @@
         <%= line_chart @stat.rate_of_applicants_with_rdv_seen_in_less_than_30_days_by_month, title: "Taux rdv en - de 30 jours par mois", suffix: "%", colors: ["#083b66"] %>
       </div>
       <div class="col-12 col-md-6 px-5 pb-5">
-        <p class="highlight-stat big margin-left"><%= @stat.rate_of_rdvs_created_by_user.round %> %</p>
-        <p class="highlight-stat margin-left">de rendez-vous <strong>pris en autonomie</strong><br/>par les bénéficiaires</p>
-        <%= line_chart @stat.rate_of_rdvs_created_by_user_grouped_by_month, title: "Taux de rdvs pris en autonomie par mois", suffix: "%", colors: ["#083b66"] %>
+        <p class="highlight-stat big margin-left"><%= @stat.rate_of_applicants_autonomy.round %> %</p>
+        <p class="highlight-stat margin-left">de bénéficiaires invités ayant pris au moins <strong>un rendez-vous en autonomie</strong></p>
+        <%= line_chart @stat.rate_of_applicants_autonomy_grouped_by_month, title: "Taux de bénéficiaires autonomes par mois", suffix: "%", colors: ["#083b66"] %>
       </div>
     </div>
     <div class="row d-flex justify-content-center flex-wrap">

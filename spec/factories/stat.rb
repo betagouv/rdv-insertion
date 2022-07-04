@@ -14,8 +14,8 @@ FactoryBot.define do
     average_time_between_rdv_creation_and_start_in_days_by_month { {} }
     rate_of_applicants_with_rdv_seen_in_less_than_30_days { 0.0 }
     rate_of_applicants_with_rdv_seen_in_less_than_30_days_by_month { {} }
-    rate_of_rdvs_created_by_user { 0.0 }
-    rate_of_rdvs_created_by_user_grouped_by_month { {} }
+    rate_of_applicants_autonomy { 0.0 }
+    rate_of_applicants_autonomy_grouped_by_month { {} }
     agents_count { 1 }
     sequence(:department_number)
   end
