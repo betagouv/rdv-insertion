@@ -24,7 +24,11 @@ describe Stats::GlobalStats::UpsertStatJob do
       end
 
       it "raises an error" do
-        expect { subject }.to raise_error(StatsJobError, "something happened")
+        expect { subject }.to raise_error(
+          ApplicationJob::FailedServiceError,
+          "Calling service Stats::GlobalStats::UpsertStat failed in Stats::GlobalStats::UpsertStatJob:" \
+          "\nErrors: [\"something happened\"]"
+        )
       end
     end
   end

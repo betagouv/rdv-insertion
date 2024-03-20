@@ -1,4 +1,4 @@
-describe NotifyParticipationJob do
+describe NotifyParticipationToUserJob do
   subject do
     described_class.new.perform(participation_id, format, event)
   end
@@ -11,7 +11,7 @@ describe NotifyParticipationJob do
 
   describe "#perform" do
     before do
-      allow(Notifications::NotifyParticipation).to receive(:call)
+      allow(Notifications::SaveAndSend).to receive(:call)
         .and_return(OpenStruct.new(success?: true))
       allow(Participation).to receive(:find).and_return(participation)
       allow(participation).to receive_messages(user: user, notifiable?: true)
@@ -19,19 +19,23 @@ describe NotifyParticipationJob do
     end
 
     it "calls the notify user service" do
-      expect(Notifications::NotifyParticipation).to receive(:call)
+      expect(Notifications::SaveAndSend).to receive(:call)
         .with(participation: participation, format: format, event: event)
       subject
     end
 
     context "when the service fails" do
       before do
-        allow(Notifications::NotifyParticipation).to receive(:call)
+        allow(Notifications::SaveAndSend).to receive(:call)
           .and_return(OpenStruct.new(success?: false, errors: ["cannot notify"]))
       end
 
       it "raises an error" do
-        expect { subject }.to raise_error(NotificationsJobError, "cannot notify")
+        expect { subject }.to raise_error(
+          ApplicationJob::FailedServiceError,
+          "Calling service Notifications::SaveAndSend failed in " \
+          "NotifyParticipationToUserJob:\nErrors: [\"cannot notify\"]"
+        )
       end
     end
 
@@ -41,7 +45,7 @@ describe NotifyParticipationJob do
       end
 
       it "does not calls the notify user service" do
-        expect(Notifications::NotifyParticipation).not_to receive(:call)
+        expect(Notifications::SaveAndSend).not_to receive(:call)
         subject
       end
 
@@ -49,7 +53,7 @@ describe NotifyParticipationJob do
         let!(:event) { "participation_updated" }
 
         it "still calls the notify user service" do
-          expect(Notifications::NotifyParticipation).to receive(:call)
+          expect(Notifications::SaveAndSend).to receive(:call)
             .with(participation: participation, format: format, event: event)
           subject
         end
@@ -63,7 +67,7 @@ describe NotifyParticipationJob do
           end
 
           it "does not calls the notify user service" do
-            expect(Notifications::NotifyParticipation).not_to receive(:call)
+            expect(Notifications::SaveAndSend).not_to receive(:call)
             subject
           end
         end
@@ -73,7 +77,7 @@ describe NotifyParticipationJob do
         before { allow(user).to receive(:notifiable?).and_return(false) }
 
         it "does notify the user" do
-          expect(Notifications::NotifyParticipation).not_to receive(:call)
+          expect(Notifications::SaveAndSend).not_to receive(:call)
           subject
         end
       end
@@ -82,7 +86,7 @@ describe NotifyParticipationJob do
         before { allow(participation).to receive(:notifiable?).and_return(false) }
 
         it "does notify the user" do
-          expect(Notifications::NotifyParticipation).not_to receive(:call)
+          expect(Notifications::SaveAndSend).not_to receive(:call)
           subject
         end
       end
@@ -93,7 +97,7 @@ describe NotifyParticipationJob do
         before { participation.update! status: "revoked" }
 
         it "does notify the user" do
-          expect(Notifications::NotifyParticipation).not_to receive(:call)
+          expect(Notifications::SaveAndSend).not_to receive(:call)
           subject
         end
       end

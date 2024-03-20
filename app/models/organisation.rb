@@ -44,6 +44,10 @@ class Organisation < ApplicationRecord
     name
   end
 
+  def france_travail? = safir_code?
+
+  private
+
   def validate_organisation_phone_number
     return if phone_number_is_valid?
 

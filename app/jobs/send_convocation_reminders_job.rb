@@ -2,7 +2,7 @@ class SendConvocationRemindersJob < ApplicationJob
   def perform
     return if staging_env?
 
-    NotifyParticipationsJob.perform_async(participations_to_send_reminders_to.ids, "reminder")
+    NotifyParticipationsToUsersJob.perform_async(participations_to_send_reminders_to.ids, "reminder")
     notify_on_mattermost
   end
 

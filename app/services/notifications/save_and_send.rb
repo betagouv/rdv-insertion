@@ -1,5 +1,5 @@
 module Notifications
-  class NotifyParticipation < BaseService
+  class SaveAndSend < BaseService
     def initialize(participation:, event:, format:)
       @participation = participation
       @event = event

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_20_170445) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -502,7 +502,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
   create_table "webhook_receipts", force: :cascade do |t|
     t.bigint "resource_id"
     t.datetime "timestamp"
-    t.bigint "webhook_endpoint_id", null: false
+    t.bigint "webhook_endpoint_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "resource_model"

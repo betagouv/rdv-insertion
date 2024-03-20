@@ -28,7 +28,7 @@ class NotificationsController < ApplicationController
   end
 
   def notify_participation
-    @notify_participation ||= Notifications::NotifyParticipation.call(
+    @notify_participation ||= Notifications::SaveAndSend.call(
       participation: @participation,
       format: notification_params[:format],
       event: notification_params[:event]

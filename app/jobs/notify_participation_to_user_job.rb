@@ -1,6 +1,6 @@
 class NotificationsJobError < StandardError; end
 
-class NotifyParticipationJob < ApplicationJob
+class NotifyParticipationToUserJob < ApplicationJob
   def perform(participation_id, format, event)
     @participation = Participation.find(participation_id)
     @format = format
@@ -12,7 +12,7 @@ class NotifyParticipationJob < ApplicationJob
     Notification.with_advisory_lock "notifying_particpation_#{@participation.id}" do
       return if already_notified?
 
-      notify_participation!
+      save_and_send_notification!
     end
   end
 
@@ -34,12 +34,9 @@ class NotifyParticipationJob < ApplicationJob
     end
   end
 
-  def notify_participation!
-    raise NotificationsJobError, notify_participation.errors.join(" - ") unless notify_participation.success?
-  end
-
-  def notify_participation
-    @notify_participation ||= Notifications::NotifyParticipation.call(
+  def save_and_send_notification!
+    call_service!(
+      Notifications::SaveAndSend,
       participation: @participation, format: @format, event: @event
     )
   end

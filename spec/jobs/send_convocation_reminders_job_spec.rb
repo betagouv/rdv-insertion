@@ -15,12 +15,12 @@ describe SendConvocationRemindersJob do
     let!(:rdv4) { create(:rdv, starts_at: 2.days.from_now, participations: [participation4]) }
 
     before do
-      allow(NotifyParticipationsJob).to receive(:perform_async)
+      allow(NotifyParticipationsToUsersJob).to receive(:perform_async)
       allow(MattermostClient).to receive(:send_to_notif_channel)
     end
 
     it "notifies the convocable participation that starts in 2 days" do
-      expect(NotifyParticipationsJob).to receive(:perform_async)
+      expect(NotifyParticipationsToUsersJob).to receive(:perform_async)
         .with([239], "reminder")
       subject
     end

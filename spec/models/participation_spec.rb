@@ -57,9 +57,9 @@ describe Participation do
 
     context "after record creation" do
       it "enqueues a job to notify the user" do
-        expect(NotifyParticipationJob).to receive(:perform_async)
+        expect(NotifyParticipationToUserJob).to receive(:perform_async)
           .with(participation.id, "sms", "participation_created")
-        expect(NotifyParticipationJob).to receive(:perform_async)
+        expect(NotifyParticipationToUserJob).to receive(:perform_async)
           .with(participation.id, "email", "participation_created")
         subject
       end
@@ -68,7 +68,7 @@ describe Participation do
         before { participation.update! convocable: false }
 
         it "does not enqueue a notify users job" do
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
           subject
         end
       end
@@ -77,9 +77,9 @@ describe Participation do
         let!(:user) { create(:user, email: nil) }
 
         it "enqueues a job to notify by sms only" do
-          expect(NotifyParticipationJob).to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).to receive(:perform_async)
             .with(participation_id, "sms", "participation_created")
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
             .with(participation_id, "email", "participation_created")
           subject
         end
@@ -89,9 +89,9 @@ describe Participation do
         let!(:user) { create(:user, phone_number: nil) }
 
         it "enqueues a job to notify by sms only" do
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
             .with(participation_id, "sms", "participation_created")
-          expect(NotifyParticipationJob).to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).to receive(:perform_async)
             .with(participation_id, "email", "participation_created")
           subject
         end
@@ -102,7 +102,7 @@ describe Participation do
       before { rdv.update! starts_at: 2.days.ago }
 
       it "doess not enqueue jobs" do
-        expect(NotifyParticipationJob).not_to receive(:perform_async)
+        expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
         subject
       end
     end
@@ -120,9 +120,9 @@ describe Participation do
 
       it "enqueues a job to notify rdv users" do
         participation.status = "revoked"
-        expect(NotifyParticipationJob).to receive(:perform_async)
+        expect(NotifyParticipationToUserJob).to receive(:perform_async)
           .with(participation.id, "sms", "participation_cancelled")
-        expect(NotifyParticipationJob).to receive(:perform_async)
+        expect(NotifyParticipationToUserJob).to receive(:perform_async)
           .with(participation.id, "email", "participation_cancelled")
         subject
       end
@@ -131,7 +131,7 @@ describe Participation do
         before { participation.update! convocable: false }
 
         it "does not enqueue a notify users job" do
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
           subject
         end
       end
@@ -149,7 +149,7 @@ describe Participation do
 
         it "does not enqueue a notify users job" do
           participation.status = "revoked"
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
           subject
         end
       end
@@ -157,7 +157,7 @@ describe Participation do
       context "when the rdv is excused" do
         it "does not notify the user" do
           participation.status = "excused"
-          expect(NotifyParticipationJob).not_to receive(:perform_async)
+          expect(NotifyParticipationToUserJob).not_to receive(:perform_async)
           subject
         end
       end

@@ -99,7 +99,7 @@ describe CreateAndInviteUserJob do
         .with(department, user_attributes, ["could not save user"])
       expect(department_mail).to receive(:deliver_now)
       expect { subject }.to raise_error(
-        FailedServiceError,
+        ApplicationJob::FailedServiceError,
         'Error upserting user in CreateAndInviteUserJob: ["could not save user"]'
       )
     end

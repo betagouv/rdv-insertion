@@ -49,8 +49,8 @@ describe InviteUserJob do
 
       it "raises an error" do
         expect { subject }.to raise_error(
-          FailedServiceError,
-          "Could not send invitation to user 9999 in InviteUserJob: [\"Could not send invite\"]"
+          ApplicationJob::FailedServiceError,
+          "Calling service InviteUser failed in InviteUserJob:\nErrors: [\"Could not send invite\"]"
         )
       end
     end

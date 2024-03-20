@@ -1,4 +1,4 @@
-describe Notifications::NotifyParticipation, type: :service do
+describe Notifications::SaveAndSend, type: :service do
   subject do
     described_class.call(
       participation: participation, event: event, format: format

@@ -24,7 +24,7 @@ class CreateAndInviteUserJob < ApplicationJob
 
     notify_department_by_email(upsert_user.errors)
     raise(
-      FailedServiceError,
+      ApplicationJob::FailedServiceError,
       "Error upserting user in CreateAndInviteUserJob: #{upsert_user.errors}"
     )
   end

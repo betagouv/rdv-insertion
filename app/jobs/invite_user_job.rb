@@ -15,19 +15,13 @@ class InviteUserJob < ApplicationJob
   private
 
   def invite_user!
-    invite_user_service = InviteUser.call(
+    call_service!(
+      InviteUser,
       user: @user,
       organisations: [@organisation],
       invitation_attributes: @invitation_attributes,
       motif_category_attributes: @motif_category_attributes,
       check_creneaux_availability: false
-    )
-    return if invite_user_service.success?
-
-    raise(
-      FailedServiceError,
-      "Could not send invitation to user #{@user.id} in InviteUserJob: " \
-      "#{invite_user_service.errors}"
     )
   end
 end

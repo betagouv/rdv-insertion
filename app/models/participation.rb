@@ -58,8 +58,11 @@ class Participation < ApplicationRecord
   end
 
   def notify_user
-    NotifyParticipationJob.perform_async(id, "sms", "participation_#{event_to_notify}") if phone_number_is_mobile?
-    NotifyParticipationJob.perform_async(id, "email", "participation_#{event_to_notify}") if email?
+    if phone_number_is_mobile?
+      NotifyParticipationToUserJob.perform_async(id, "sms",
+                                                 "participation_#{event_to_notify}")
+    end
+    NotifyParticipationToUserJob.perform_async(id, "email", "participation_#{event_to_notify}") if email?
   end
 
   def event_to_notify

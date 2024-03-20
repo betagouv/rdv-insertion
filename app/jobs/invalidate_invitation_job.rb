@@ -5,8 +5,6 @@ class InvalidateInvitationJob < ApplicationJob
     invitation = Invitation.find(invitation_id)
     return if invitation.expired?
 
-    invalidate_invitation = Invitations::InvalidateLink.call(invitation: invitation)
-
-    raise InvalidateInvitationJobError, invalidate_invitation.errors.join(" - ") unless invalidate_invitation.success?
+    call_service!(Invitations::InvalidateLink, invitation:)
   end
 end
