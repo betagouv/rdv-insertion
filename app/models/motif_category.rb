@@ -3,7 +3,7 @@ class MotifCategory < ApplicationRecord
     :name, :short_name
   ].freeze
 
-  has_many :configurations, dependent: :restrict_with_exception
+  has_many :category_configurations, dependent: :restrict_with_exception
   has_many :rdv_contexts, dependent: :restrict_with_exception
   has_many :motifs, dependent: :restrict_with_exception
   belongs_to :template

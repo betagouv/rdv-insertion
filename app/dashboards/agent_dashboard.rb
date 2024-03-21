@@ -11,7 +11,7 @@ class AgentDashboard < Administrate::BaseDashboard
     id: Field::Number,
     agent_roles: Field::HasMany,
     agents_rdvs: Field::HasMany,
-    configurations: Field::HasMany,
+    category_configurations: Field::HasMany,
     departments: Field::HasMany,
     email: Field::String,
     first_name: Field::String,
@@ -46,7 +46,7 @@ class AgentDashboard < Administrate::BaseDashboard
     id
     agent_roles
     agents_rdvs
-    configurations
+    category_configurations
     departments
     email
     first_name
@@ -70,7 +70,7 @@ class AgentDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     agent_roles
     agents_rdvs
-    configurations
+    category_configurations
     departments
     email
     first_name

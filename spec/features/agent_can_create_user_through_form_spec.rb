@@ -6,11 +6,11 @@ describe "Agents can create user through form", :js do
       :organisation,
       department: department,
       rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
-      configurations: [configuration]
+      category_configurations: [category_configuration]
     )
   end
 
-  let!(:configuration) { create(:configuration) }
+  let!(:category_configuration) { create(:category_configuration) }
 
   let!(:rdv_solidarites_user_id) { 2323 }
   let!(:rdv_solidarites_organisation_id) { 3234 }

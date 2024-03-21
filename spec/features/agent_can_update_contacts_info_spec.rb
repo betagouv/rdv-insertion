@@ -17,12 +17,12 @@ describe "Agents can update contact info with caf file", :js do
   describe "when user is not created yet" do
     include_context "with file configuration"
 
-    let!(:configuration) do
-      create(:configuration, file_configuration: file_configuration, organisation: organisation)
+    let!(:category_configuration) do
+      create(:category_configuration, file_configuration: file_configuration, organisation: organisation)
     end
 
     it "updates the user list with the info from the csv file" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -50,8 +50,8 @@ describe "Agents can update contact info with caf file", :js do
   describe "when the user is already created" do
     include_context "with file configuration"
 
-    let!(:configuration) do
-      create(:configuration, file_configuration: file_configuration, organisation: organisation)
+    let!(:category_configuration) do
+      create(:category_configuration, file_configuration: file_configuration, organisation: organisation)
     end
 
     let!(:user) do
@@ -63,7 +63,7 @@ describe "Agents can update contact info with caf file", :js do
     end
 
     it "can update the user attributes with the info from the csv file one by one" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -102,7 +102,7 @@ describe "Agents can update contact info with caf file", :js do
     end
 
     it "can update all the attributes at once" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -140,7 +140,7 @@ describe "Agents can update contact info with caf file", :js do
       end
 
       it "does not show the update button" do
-        visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+        visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
         attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 

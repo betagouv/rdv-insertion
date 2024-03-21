@@ -5,8 +5,8 @@ describe SendPeriodicInvitesJob do
 
   describe "#perform" do
     let!(:organisation) { create(:organisation) }
-    let!(:configuration) do
-      create(:configuration,
+    let!(:category_configuration) do
+      create(:category_configuration,
              organisation: organisation,
              number_of_days_between_periodic_invites: 15,
              motif_category: motif_category)
@@ -28,8 +28,10 @@ describe SendPeriodicInvitesJob do
       context "number_of_days_between_periodic_invites is set" do
         context "when renewing is due" do
           it "sends periodic invites" do
-            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, configuration.id, "email")
-            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "email")
+            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "sms")
             subject
           end
         end
@@ -46,16 +48,18 @@ describe SendPeriodicInvitesJob do
           end
 
           it "does not send periodic invites" do
-            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "email")
-            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                              "email")
+            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                              "sms")
             subject
           end
         end
       end
 
       context "day_of_the_month_periodic_invites is set" do
-        let!(:configuration) do
-          create(:configuration,
+        let!(:category_configuration) do
+          create(:category_configuration,
                  organisation: organisation,
                  day_of_the_month_periodic_invites: Time.zone.today.day,
                  motif_category: motif_category)
@@ -63,23 +67,27 @@ describe SendPeriodicInvitesJob do
 
         context "when renewing is due" do
           it "sends periodic invites" do
-            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, configuration.id, "email")
-            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "email")
+            expect(SendPeriodicInviteJob).to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "sms")
             subject
           end
         end
 
         context "when renewing is not due" do
-          let!(:configuration) do
-            create(:configuration,
+          let!(:category_configuration) do
+            create(:category_configuration,
                    organisation: organisation,
                    day_of_the_month_periodic_invites: Time.zone.yesterday.day,
                    motif_category: motif_category)
           end
 
           it "sends periodic invites" do
-            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "email")
-            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                              "email")
+            expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                              "sms")
             subject
           end
         end
@@ -97,16 +105,18 @@ describe SendPeriodicInvitesJob do
         end
 
         it "does not send periodic invites" do
-          expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "email")
-          expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+          expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                            "email")
+          expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                            "sms")
           subject
         end
       end
     end
 
-    context "when configuration is not set" do
-      let!(:configuration) do
-        create(:configuration,
+    context "when category_configuration is not set" do
+      let!(:category_configuration) do
+        create(:category_configuration,
                organisation: organisation,
                number_of_days_between_periodic_invites: nil,
                day_of_the_month_periodic_invites: nil,
@@ -114,8 +124,10 @@ describe SendPeriodicInvitesJob do
       end
 
       it "does not send periodic invites" do
-        expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "email")
-        expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, configuration.id, "sms")
+        expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "email")
+        expect(SendPeriodicInviteJob).not_to receive(:perform_async).with(invitation.id, category_configuration.id,
+                                                                          "sms")
         subject
       end
     end

@@ -7,13 +7,13 @@ describe "Agents can update user through form", :js do
       department: department,
       rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
       # needed for the organisation users page
-      configurations: [configuration],
+      category_configurations: [category_configuration],
       slug: "org1"
     )
   end
 
-  let!(:configuration) do
-    create(:configuration)
+  let!(:category_configuration) do
+    create(:category_configuration)
   end
 
   let!(:user) do

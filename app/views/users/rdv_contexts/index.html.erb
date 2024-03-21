@@ -5,8 +5,8 @@
 
   <%= turbo_frame_tag "user_page_body" do %>
     <%= render "users/user_tabs", user: @user, tab: "rdvs" %>
-    <% @all_configurations.each do |configuration| %>
-      <% rdv_context = @rdv_contexts.find { |rc| rc.motif_category_id == configuration.motif_category_id } %>
+    <% @all_configurations.each do |category_configuration| %>
+      <% rdv_context = @rdv_contexts.find { |rc| rc.motif_category_id == category_configuration.motif_category_id } %>
       <% if rdv_context %>
         <%=
           render(
@@ -14,7 +14,7 @@
             rdv_context: rdv_context, organisation: @organisation, user: @user, department: @department,
             participations: rdv_context.participations, user_organisations: @user_organisations,
             convocable_participations: rdv_context.participations.select(&:convocable?),
-            configuration: configuration, invitations: rdv_context.invitations
+            category_configuration: category_configuration, invitations: rdv_context.invitations
           )
         %>
       <% else %>
@@ -24,12 +24,12 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h5>
-                    <strong><%= configuration.motif_category_name %></strong>
-                    <small><%= configuration.rdv_with_referents? ? " (avec référents)" : "" %></small>
+                    <strong><%= category_configuration.motif_category_name %></strong>
+                    <small><%= category_configuration.rdv_with_referents? ? " (avec référents)" : "" %></small>
                   </h5>
                 </div>
                 <div>
-                  <%= render "rdv_contexts/new_button", user: @user, configuration: configuration, turbo: false, button_text: "Ouvrir un suivi" %>
+                  <%= render "rdv_contexts/new_button", user: @user, category_configuration: category_configuration, turbo: false, button_text: "Ouvrir un suivi" %>
                 </div>
               </div>
             </div>

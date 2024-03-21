@@ -8,11 +8,11 @@ describe InviteUser, type: :service do
   let!(:check_creneaux_availability) { true }
   let!(:department) { create(:department) }
   let!(:user) { create(:user, organisations: [organisation]) }
-  let!(:organisation) { create(:organisation, department:, configurations: [configuration]) }
+  let!(:organisation) { create(:organisation, department:, category_configurations: [category_configuration]) }
   let!(:organisations) { [organisation] }
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category:, rdv_with_referents: true, invite_to_user_organisations_only: true,
       number_of_days_before_action_required: 5
     )
@@ -57,7 +57,7 @@ describe InviteUser, type: :service do
     context "when there is no motif category attributes" do
       let!(:motif_category_attributes) { {} }
 
-      context "when there is only one available configuration" do
+      context "when there is only one available category_configuration" do
         it "is a success" do
           is_a_success
         end
@@ -79,8 +79,8 @@ describe InviteUser, type: :service do
         end
       end
 
-      context "when there are multiple available configurations" do
-        before { organisation.configurations << create(:configuration) }
+      context "when there are multiple available category_configurations" do
+        before { organisation.category_configurations << create(:category_configuration) }
 
         it "is a failure" do
           is_a_failure
@@ -126,10 +126,10 @@ describe InviteUser, type: :service do
           end
         end
 
-        context "when the configuration has a custom phone number" do
+        context "when the category_configuration has a custom phone number" do
           let(:phone_number) { "0102030405" }
 
-          before { configuration.update!(phone_number:) }
+          before { category_configuration.update!(phone_number:) }
 
           it "invites with the proper phone number" do
             expect(Invitation).to receive(:new)
@@ -143,7 +143,7 @@ describe InviteUser, type: :service do
         end
 
         context "when the invitation is not restricted to the user organisations" do
-          before { configuration.update! invite_to_user_organisations_only: false }
+          before { category_configuration.update! invite_to_user_organisations_only: false }
 
           it "is a success" do
             is_a_success

@@ -20,7 +20,7 @@ class MessagesConfigurationsController < ApplicationController
     @messages_configuration.assign_attributes(**formatted_params)
     if @messages_configuration.save
       flash.now[:success] = "Les réglages ont été modifiés avec succès"
-      redirect_to organisation_configurations_path(@organisation)
+      redirect_to organisation_category_configurations_path(@organisation)
     else
       flash.now[:error] = @messages_configuration.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity

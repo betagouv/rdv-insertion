@@ -150,9 +150,10 @@ module Exporters
     end
 
     def number_of_days_before_action_required
-      @number_of_days_before_action_required ||= @structure.configurations.includes(:motif_category).find do |c|
-        c.motif_category == @motif_category
-      end.number_of_days_before_action_required
+      @number_of_days_before_action_required ||=
+        @structure.category_configurations.includes(:motif_category).find do |c|
+          c.motif_category == @motif_category
+        end.number_of_days_before_action_required
     end
 
     def display_date(date)

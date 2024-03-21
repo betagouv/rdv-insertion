@@ -220,7 +220,7 @@ MotifCategory.create!(
 )
 
 # --------------------------------------------------------------------------------------------------------------------
-puts "Creating file configurations..."
+puts "Creating file category_configurations..."
 file_config_drome = FileConfiguration.create(
   sheet_name: "ENTRETIENS PHYSIQUES",
   address_first_field_column: "Adresse",
@@ -251,7 +251,7 @@ file_config_yonne = FileConfiguration.create(
 )
 
 # --------------------------------------------------------------------------------------------------------------------
-puts "Creating organisations and configurations..."
+puts "Creating organisations and category_configurations..."
 drome1_organisation = Organisation.create!(
   name: "Plateforme mutualisée d'orientation",
   phone_number: "0475796991",

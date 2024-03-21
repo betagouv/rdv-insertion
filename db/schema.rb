@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_20_221821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
     t.index ["user_id"], name: "index_archives_on_user_id"
   end
 
-  create_table "configurations", force: :cascade do |t|
+  create_table "category_configurations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "invitation_formats", default: ["sms", "email", "postal"], null: false, array: true
@@ -111,9 +111,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
     t.integer "position", default: 0
     t.integer "department_position", default: 0
     t.string "phone_number"
-    t.index ["file_configuration_id"], name: "index_configurations_on_file_configuration_id"
-    t.index ["motif_category_id"], name: "index_configurations_on_motif_category_id"
-    t.index ["organisation_id"], name: "index_configurations_on_organisation_id"
+    t.index ["file_configuration_id"], name: "index_category_configurations_on_file_configuration_id"
+    t.index ["motif_category_id"], name: "index_category_configurations_on_motif_category_id"
+    t.index ["organisation_id"], name: "index_category_configurations_on_organisation_id"
   end
 
   create_table "csv_exports", force: :cascade do |t|
@@ -516,9 +516,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_13_154309) do
   add_foreign_key "agent_roles", "organisations"
   add_foreign_key "archives", "departments"
   add_foreign_key "archives", "users"
-  add_foreign_key "configurations", "file_configurations"
-  add_foreign_key "configurations", "motif_categories"
-  add_foreign_key "configurations", "organisations"
+  add_foreign_key "category_configurations", "file_configurations"
+  add_foreign_key "category_configurations", "motif_categories"
+  add_foreign_key "category_configurations", "organisations"
   add_foreign_key "csv_exports", "agents"
   add_foreign_key "invitations", "departments"
   add_foreign_key "invitations", "rdv_contexts"

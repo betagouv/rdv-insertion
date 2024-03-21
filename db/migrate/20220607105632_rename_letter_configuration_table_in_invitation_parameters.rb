@@ -34,11 +34,11 @@ class RenameLetterConfigurationTableInInvitationParameters < ActiveRecord::Migra
   end
 
   def set_sms_sender_name_on_configuration
-    Configuration.find_each do |configuration|
-      next unless (invitation_parameters = configuration.organisations.first.invitation_parameters)
+    CategoryConfiguration.find_each do |_configuration|
+      next unless (invitation_parameters = category_configuration.organisations.first.invitation_parameters)
 
-      configuration.sms_sender_name = invitation_parameters.sms_sender_name
-      configuration.save!
+      category_configuration.sms_sender_name = invitation_parameters.sms_sender_name
+      category_configuration.save!
     end
   end
 end

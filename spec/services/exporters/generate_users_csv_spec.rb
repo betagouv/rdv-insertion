@@ -10,7 +10,9 @@ describe Exporters::GenerateUsersCsv, type: :service do
   let!(:organisation) { create(:organisation, name: "Drome RSA", department: department) }
   let!(:agent) { create(:agent, organisations: [organisation]) }
   let!(:structure) { organisation }
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: motif_category) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: motif_category)
+  end
   let!(:nir) { generate_random_nir }
   let!(:user1) do
     create(

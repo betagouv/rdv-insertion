@@ -3,7 +3,7 @@ module Users
     include BackToListConcern
     include Users::Sortable
 
-    before_action :set_organisation, :set_department, :set_all_configurations, :set_current_configuration,
+    before_action :set_organisation, :set_department, :set_all_configurations, :set_current_category_configuration,
                   :set_current_motif_category, :set_organisations, :set_motif_category_name, :set_users,
                   :set_rdv_contexts, :set_back_to_users_list_url, :filter_users_by_non_invited_status,
                   :order_by_rdv_contexts, for: :new
@@ -34,28 +34,31 @@ module Users
     def set_organisations
       @organisations = policy_scope(Organisation)
                        .where(department: @department)
-                       .where(configurations: @all_configurations.where(motif_category: @current_motif_category))
+                       .where(category_configurations:
+                       @all_configurations.where(
+                         motif_category: @current_motif_category
+                       ))
     end
 
     def set_all_configurations
       @all_configurations =
-        policy_scope(::Configuration).joins(:organisation)
-                                     .where(current_organisation_filter)
+        policy_scope(CategoryConfiguration).joins(:organisation)
+                                           .where(current_organisation_filter)
     end
 
-    def set_current_configuration
+    def set_current_category_configuration
       return unless params[:motif_category_id]
 
-      @current_configuration =
+      @current_category_configuration =
         @all_configurations.find { |c| c.motif_category_id == params[:motif_category_id].to_i }
     end
 
     def set_motif_category_name
-      @motif_category_name = @current_configuration&.motif_category_name
+      @motif_category_name = @current_category_configuration&.motif_category_name
     end
 
     def set_current_motif_category
-      @current_motif_category = @current_configuration&.motif_category
+      @current_motif_category = @current_category_configuration&.motif_category
     end
 
     def set_rdv_contexts

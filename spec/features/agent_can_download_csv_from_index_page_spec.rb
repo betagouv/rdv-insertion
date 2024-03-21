@@ -14,15 +14,15 @@ describe "Agents can download csv from index page", :js do
   let!(:rdv_solidarites_token) { "123456" }
   let!(:rdv_context) { create(:rdv_context, user: user, motif_category: motif_category, status: "rdv_seen") }
   let!(:rdv_context2) { create(:rdv_context, user: user, motif_category: motif_category2, status: "rdv_seen") }
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: motif_category, organisation: organisation, invitation_formats: %w[sms email]
     )
   end
-  let!(:configuration2) do
+  let!(:category_configuration2) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: motif_category2, organisation: organisation, invitation_formats: %w[sms email]
     )
   end

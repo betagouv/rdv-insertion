@@ -126,9 +126,9 @@ SimpleForm.setup do |config|
 
   # Tell browsers whether to use the native HTML5 validations (novalidate form option).
   # These validations are enabled in SimpleForm's internal config but disabled by default
-  # in this configuration, which is recommended due to some quirks from different browsers.
+  # in this category_configuration, which is recommended due to some quirks from different browsers.
   # To stop SimpleForm from generating the novalidate option, enabling the HTML5 validations,
-  # change this configuration to true.
+  # change this category_configuration to true.
   config.browser_validations = false
 
   # Custom mappings for input types. This should be a hash containing a regexp

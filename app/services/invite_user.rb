@@ -10,7 +10,7 @@ class InviteUser < BaseService
   end
 
   def call
-    set_current_configuration
+    set_current_category_configuration
     find_or_create_rdv_context
     set_invitation_organisations
     set_invitation
@@ -29,9 +29,9 @@ class InviteUser < BaseService
       rdv_context: @rdv_context,
       # the validity of an invitation is equal to the number of days before an action is required,
       # then the organisation usually convene the user
-      valid_until: @current_configuration.number_of_days_before_action_required.days.from_now,
-      help_phone_number: @current_configuration.phone_number,
-      rdv_with_referents: @current_configuration.rdv_with_referents,
+      valid_until: @current_category_configuration.number_of_days_before_action_required.days.from_now,
+      help_phone_number: @current_category_configuration.phone_number,
+      rdv_with_referents: @current_category_configuration.rdv_with_referents,
       **@invitation_attributes
     )
   end
@@ -42,7 +42,7 @@ class InviteUser < BaseService
 
   def set_invitation_organisations
     @invitation_organisations =
-      if @current_configuration.invite_to_user_organisations_only?
+      if @current_category_configuration.invite_to_user_organisations_only?
         @organisations & @user.organisations
       else
         @organisations
@@ -61,7 +61,8 @@ class InviteUser < BaseService
 
   def find_or_create_rdv_context
     RdvContext.with_advisory_lock "setting_rdv_context_for_user_#{@user.id}" do
-      @rdv_context = RdvContext.find_or_create_by!(motif_category: @current_configuration.motif_category, user: @user)
+      @rdv_context = RdvContext.find_or_create_by!(motif_category: @current_category_configuration.motif_category,
+                                                   user: @user)
     end
   end
 
@@ -70,11 +71,11 @@ class InviteUser < BaseService
   end
 
   def all_configurations
-    @all_configurations ||= Configuration.where(organisation: @organisations & @user.organisations).to_a
+    @all_configurations ||= CategoryConfiguration.where(organisation: @organisations & @user.organisations).to_a
   end
 
-  def set_current_configuration
-    @current_configuration =
+  def set_current_category_configuration
+    @current_category_configuration =
       if motif_category.nil?
 
         if all_configurations.length != 1

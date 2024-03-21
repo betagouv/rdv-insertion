@@ -39,7 +39,7 @@ module Users::Filterable
     return unless params[:action_required] == "true"
 
     @users = @users.joins(:rdv_contexts).where(
-      rdv_contexts: @rdv_contexts.action_required(@current_configuration.number_of_days_before_action_required)
+      rdv_contexts: @rdv_contexts.action_required(@current_category_configuration.number_of_days_before_action_required)
     )
   end
 

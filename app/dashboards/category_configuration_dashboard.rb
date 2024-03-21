@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class ConfigurationDashboard < Administrate::BaseDashboard
+class CategoryConfigurationDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -99,10 +99,10 @@ class ConfigurationDashboard < Administrate::BaseDashboard
   #   }.freeze
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how configurations are displayed
+  # Overwrite this method to customize how category_configurations are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(configuration)
-  #   "Configuration ##{configuration.id}"
+  # def display_resource(category_configuration)
+  #   "Configuration ##{category_configuration.id}"
   # end
 end

@@ -1,0 +1,4 @@
+<%= simple_form_for(@category_configuration, url: organisation_category_configuration_path(@organisation, @category_configuration), html: { method: :patch }) do |f| %>
+  <%= render 'category_configuration_form', f: f, title: "Modifier \"#{@category_configuration.motif_category_name}\"", category_configuration: @category_configuration, return_path: organisation_category_configuration_path(@organisation, @category_configuration), current_file_configuration: @file_configuration, organisation: @organisation, template: @template %>
+<% end %>
+

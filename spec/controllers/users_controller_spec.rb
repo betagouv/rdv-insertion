@@ -6,9 +6,9 @@ describe UsersController do
   let!(:category_accompagnement) do
     create(:motif_category, short_name: "rsa_accompagnement", name: "RSA accompagnement")
   end
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: category_orientation,
       number_of_days_before_action_required: number_of_days_before_action_required
     )
@@ -16,7 +16,7 @@ describe UsersController do
   let!(:number_of_days_before_action_required) { 6 }
   let!(:organisation) do
     create(:organisation, rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
-                          department_id: department.id, configurations: [configuration])
+                          department_id: department.id, category_configurations: [category_configuration])
   end
   let!(:agent) { create(:agent, basic_role_in_organisations: [organisation]) }
   let!(:rdv_solidarites_organisation_id) { 888 }
@@ -233,7 +233,7 @@ describe UsersController do
       let!(:index_params) { { department_id: department.id } }
 
       context "when department has no motif_categories" do
-        let!(:organisation) { create(:organisation, department: department, configurations: []) }
+        let!(:organisation) { create(:organisation, department: department, category_configurations: []) }
 
         it "redirects to the department_users_paths with no params" do
           get :default_list, params: index_params
@@ -246,8 +246,10 @@ describe UsersController do
         let!(:category_orientation) do
           create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation")
         end
-        let!(:configuration) { create(:configuration, motif_category: category_orientation) }
-        let!(:organisation) { create(:organisation, department: department, configurations: [configuration]) }
+        let!(:category_configuration) { create(:category_configuration, motif_category: category_orientation) }
+        let!(:organisation) do
+          create(:organisation, department: department, category_configurations: [category_configuration])
+        end
 
         it "redirects to the motif_category index" do
           get :default_list, params: index_params
@@ -265,10 +267,11 @@ describe UsersController do
         let!(:category_accompagnement) do
           create(:motif_category, short_name: "rsa_accompagnement", name: "RSA accompagnement")
         end
-        let!(:configuration) { create(:configuration, motif_category: category_orientation) }
-        let!(:configuration2) { create(:configuration, motif_category: category_accompagnement) }
+        let!(:category_configuration) { create(:category_configuration, motif_category: category_orientation) }
+        let!(:category_configuration2) { create(:category_configuration, motif_category: category_accompagnement) }
         let!(:organisation) do
-          create(:organisation, department: department, configurations: [configuration, configuration2])
+          create(:organisation, department: department,
+                                category_configurations: [category_configuration, category_configuration2])
         end
 
         it "redirects to the department_users_paths with no params" do
@@ -283,7 +286,7 @@ describe UsersController do
       let!(:index_params) { { organisation_id: organisation.id } }
 
       context "when organisation has no motif_categories" do
-        let!(:organisation) { create(:organisation, department: department, configurations: []) }
+        let!(:organisation) { create(:organisation, department: department, category_configurations: []) }
 
         it "redirects to the organisation_users_paths with no params" do
           get :default_list, params: index_params
@@ -296,8 +299,10 @@ describe UsersController do
         let!(:category_orientation) do
           create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation")
         end
-        let!(:configuration) { create(:configuration, motif_category: category_orientation) }
-        let!(:organisation) { create(:organisation, department: department, configurations: [configuration]) }
+        let!(:category_configuration) { create(:category_configuration, motif_category: category_orientation) }
+        let!(:organisation) do
+          create(:organisation, department: department, category_configurations: [category_configuration])
+        end
 
         it "redirects to the motif_category index" do
           get :default_list, params: index_params
@@ -315,10 +320,11 @@ describe UsersController do
         let!(:category_accompagnement) do
           create(:motif_category, short_name: "rsa_accompagnement", name: "RSA accompagnement")
         end
-        let!(:configuration) { create(:configuration, motif_category: category_orientation) }
-        let!(:configuration2) { create(:configuration, motif_category: category_accompagnement) }
+        let!(:category_configuration) { create(:category_configuration, motif_category: category_orientation) }
+        let!(:category_configuration2) { create(:category_configuration, motif_category: category_accompagnement) }
         let!(:organisation) do
-          create(:organisation, department: department, configurations: [configuration, configuration2])
+          create(:organisation, department: department,
+                                category_configurations: [category_configuration, category_configuration2])
         end
 
         it "redirects to the organisation_users_paths with no params" do
@@ -357,7 +363,7 @@ describe UsersController do
       )
     end
     let!(:rdv_context3) { build(:rdv_context, motif_category: category_accompagnement, status: "invitation_pending") }
-    let!(:configuration2) { create(:configuration, motif_category: category_accompagnement) }
+    let!(:category_configuration2) { create(:category_configuration, motif_category: category_accompagnement) }
 
     let!(:archived_user) do
       create(
@@ -628,7 +634,7 @@ describe UsersController do
         end
       end
 
-      context "when the invitation has been sent after the number of days defined in the configuration 3 days ago" do
+      context "when the invitation has been sent after the number of days defined in the category_configuration" do
         let!(:invitation) { create(:invitation, user: user2, rdv_context: rdv_context2, created_at: 3.days.ago) }
 
         it "filters by action required" do
@@ -660,7 +666,7 @@ describe UsersController do
 
     context "when the organisation convene users" do
       before do
-        configuration.update!(convene_user: true)
+        category_configuration.update!(convene_user: true)
         rdv_context2.update!(motif_category: category_accompagnement)
       end
 

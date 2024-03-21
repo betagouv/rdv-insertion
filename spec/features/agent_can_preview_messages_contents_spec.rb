@@ -4,12 +4,14 @@ describe "Agents can preview messages contents", :js do
   let!(:agent) { create(:agent) }
   let!(:organisation) { create(:organisation, department: create(:department, number: "26")) }
   let!(:agent_role) { create(:agent_role, agent:, organisation:, access_level: "admin") }
-  let!(:configuration) { create(:configuration, motif_category: category_rsa_orientation, organisation:) }
+  let!(:category_configuration) do
+    create(:category_configuration, motif_category: category_rsa_orientation, organisation:)
+  end
 
   before { setup_agent_session(agent) }
 
   it "can preview and edit messages contents" do
-    visit organisation_configuration_path(organisation, configuration)
+    visit organisation_category_configuration_path(organisation, category_configuration)
 
     expect(page).to have_button("Convocations")
     expect(page).to have_button("Invitations")
@@ -39,10 +41,10 @@ describe "Agents can preview messages contents", :js do
 
     click_button("Modifier")
 
-    page.fill_in "configuration_template_rdv_title_override", with: "nouveau type de rendez-vous"
-    page.fill_in "configuration_template_rdv_title_by_phone_override", with: "nouveau coup de téléphone"
-    page.fill_in "configuration_template_user_designation_override", with: "une personne remarquable"
-    page.fill_in "configuration_template_rdv_purpose_override", with: "vous rencontrer"
+    page.fill_in "category_configuration_template_rdv_title_override", with: "nouveau type de rendez-vous"
+    page.fill_in "category_configuration_template_rdv_title_by_phone_override", with: "nouveau coup de téléphone"
+    page.fill_in "category_configuration_template_user_designation_override", with: "une personne remarquable"
+    page.fill_in "category_configuration_template_rdv_purpose_override", with: "vous rencontrer"
 
     click_button("Enregistrer")
 
@@ -76,10 +78,12 @@ describe "Agents can preview messages contents", :js do
   end
 
   context "when the category does not require all the template variables and has no reminder" do
-    let!(:configuration) { create(:configuration, motif_category: category_rsa_insertion_offer, organisation:) }
+    let!(:category_configuration) do
+      create(:category_configuration, motif_category: category_rsa_insertion_offer, organisation:)
+    end
 
     it "still can preview contents" do
-      visit organisation_configuration_path(organisation, configuration)
+      visit organisation_category_configuration_path(organisation, category_configuration)
 
       expect(page).to have_button("Convocations")
       expect(page).to have_button("Invitations")

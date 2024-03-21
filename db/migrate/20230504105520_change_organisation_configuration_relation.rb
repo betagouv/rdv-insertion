@@ -6,9 +6,9 @@ class ChangeOrganisationConfigurationRelation < ActiveRecord::Migration[7.0]
     configurations_organisations = ActiveRecord::Base.connection.execute("SELECT * FROM configurations_organisations")
 
     configurations_organisations.to_a.each do |config_org|
-      configuration = ::Configuration.find(config_org["configuration_id"])
-      configuration.organisation_id = config_org["organisation_id"]
-      configuration.save!
+      category_configuration = ::Configuration.find(config_org["configuration_id"])
+      category_configuration.organisation_id = config_org["organisation_id"]
+      category_configuration.save!
     end
 
     drop_table :configurations_organisations

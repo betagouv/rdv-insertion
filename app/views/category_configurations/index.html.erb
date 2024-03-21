@@ -21,9 +21,9 @@
   <%= render "organisations/organisation", organisation: @organisation %>
 
   <h4>Catégories de motifs configurés</h4>
-  <%= render "configurations/configurations_list", configurations: @configurations, organisation: @organisation, department: @department %>
+  <%= render "category_configurations/category_configurations_list", category_configurations: @category_configurations, organisation: @organisation, department: @department %>
   <div class="d-flex justify-content-end mb-4">
-    <%= link_to new_organisation_configuration_path(@organisation) do %>
+    <%= link_to new_organisation_category_configuration_path(@organisation) do %>
       <button class="btn btn-blue">Ajouter</button>
     <% end %>
   </div>

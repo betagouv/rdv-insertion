@@ -5,14 +5,14 @@ describe RdvContextsController do
   let!(:category_orientation) do
     create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation")
   end
-  let!(:configuration) do
-    create(:configuration, motif_category: category_orientation, organisation: organisation)
+  let!(:category_configuration) do
+    create(:category_configuration, motif_category: category_orientation, organisation: organisation)
   end
   let(:agent) { create(:agent, organisations: [organisation]) }
   let(:rdv_context_params) do
     {
       rdv_context: { user_id: user.id, motif_category_id: category_orientation.id },
-      configuration_id: configuration.id,
+      category_configuration_id: category_configuration.id,
       organisation_id: organisation.id
     }
   end
@@ -67,7 +67,7 @@ describe RdvContextsController do
         let(:rdv_context_params) do
           {
             rdv_context: { user_id: user.id, motif_category_id: category_orientation.id },
-            configuration_id: configuration.id,
+            category_configuration_id: category_configuration.id,
             department_id: department.id
           }
         end

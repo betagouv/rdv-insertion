@@ -10,7 +10,7 @@ class Agent < ApplicationRecord
 
   has_many :organisations, through: :agent_roles
   has_many :departments, -> { distinct }, through: :organisations
-  has_many :configurations, through: :organisations
+  has_many :category_configurations, through: :organisations
   has_many :motif_categories, -> { distinct }, through: :organisations
   has_many :rdvs, through: :agents_rdvs
   has_many :users, through: :referent_assignations

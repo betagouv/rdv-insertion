@@ -123,7 +123,7 @@ module Previews
 
     def overridable_texts
       # we sort the array because we want to highlight rdv_title_by_phone before rdv_title because it often contains it
-      ::Configuration.template_override_attributes.sort_by(&:length).reverse.map do |attribute|
+      CategoryConfiguration.template_override_attributes.sort_by(&:length).reverse.map do |attribute|
         @notification.send(attribute.gsub("template_", "").gsub("_override", ""))
       end.compact
     end

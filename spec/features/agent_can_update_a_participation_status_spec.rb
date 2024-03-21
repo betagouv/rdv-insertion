@@ -3,9 +3,10 @@ describe "Agents can update a participation status", :js do
   let(:organisation) { create(:organisation, department: department) }
   let(:agent) { create(:agent, organisations: [organisation]) }
   let(:category_orientation) do
-    create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation", configurations: [configuration])
+    create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation",
+                            category_configurations: [category_configuration])
   end
-  let(:configuration) { create(:configuration, organisation: organisation) }
+  let(:category_configuration) { create(:category_configuration, organisation: organisation) }
   let(:user) do
     create(:user, organisations: [organisation])
   end

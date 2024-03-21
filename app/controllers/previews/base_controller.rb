@@ -1,19 +1,19 @@
 module Previews
   class BaseController < ApplicationController
-    before_action :set_configuration, :set_template, :set_organisation, :set_motif_category, :set_department
+    before_action :set_category_configuration, :set_template, :set_organisation, :set_motif_category, :set_department
 
     private
 
     def set_template
-      @template = @configuration.template
+      @template = @category_configuration.template
     end
 
-    def set_configuration
-      @configuration = ::Configuration.find(params[:configuration_id])
+    def set_category_configuration
+      @category_configuration = CategoryConfiguration.find(params[:category_configuration_id])
     end
 
     def set_organisation
-      @organisation = @configuration.organisation
+      @organisation = @category_configuration.organisation
     end
 
     def set_department
@@ -21,7 +21,7 @@ module Previews
     end
 
     def set_motif_category
-      @motif_category = @configuration.motif_category
+      @motif_category = @category_configuration.motif_category
     end
 
     def set_and_format_contents

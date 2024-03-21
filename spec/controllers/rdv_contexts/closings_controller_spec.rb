@@ -2,8 +2,10 @@ describe RdvContexts::ClosingsController do
   let!(:agent) { create(:agent, organisations: [organisation]) }
   let!(:department) { create(:department) }
   let!(:motif_category) { create(:motif_category) }
-  let!(:configuration) { create(:configuration, motif_category: motif_category) }
-  let!(:organisation) { create(:organisation, department: department, configurations: [configuration]) }
+  let!(:category_configuration) { create(:category_configuration, motif_category: motif_category) }
+  let!(:organisation) do
+    create(:organisation, department: department, category_configurations: [category_configuration])
+  end
   let!(:user) { create(:user, organisations: [organisation]) }
   let!(:rdv_context) { create(:rdv_context, user: user, motif_category: motif_category) }
 

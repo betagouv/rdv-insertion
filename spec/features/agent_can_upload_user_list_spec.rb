@@ -9,14 +9,14 @@ describe "Agents can upload user list", :js do
       department: department,
       rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
       # needed for the organisation users page
-      configurations: [configuration],
+      category_configurations: [category_configuration],
       slug: "org1"
     )
   end
   let!(:motif) { create(:motif, organisation: organisation, motif_category: motif_category) }
 
-  let!(:configuration) do
-    create(:configuration, motif_category: motif_category, file_configuration: file_configuration)
+  let!(:category_configuration) do
+    create(:category_configuration, motif_category: motif_category, file_configuration: file_configuration)
   end
 
   let!(:other_org_from_same_department) { create(:organisation, department: department) }
@@ -42,7 +42,7 @@ describe "Agents can upload user list", :js do
     before { travel_to now }
 
     it "can create and invite user" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       ### Upload
 
@@ -136,7 +136,7 @@ describe "Agents can upload user list", :js do
 
       ### Re-upload the file
 
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -221,7 +221,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -250,7 +250,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -289,7 +289,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -315,7 +315,7 @@ describe "Agents can upload user list", :js do
             end
 
             it "can add the user to the org" do
-              visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+              visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
               attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                           make_visible: true)
@@ -362,7 +362,7 @@ describe "Agents can upload user list", :js do
             end
 
             it "fails to add the user to the org" do
-              visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+              visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
               attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                           make_visible: true)
@@ -399,7 +399,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -420,7 +420,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -444,7 +444,7 @@ describe "Agents can upload user list", :js do
             end
 
             it "can add the user to the org" do
-              visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+              visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
               attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                           make_visible: true)
@@ -482,7 +482,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -502,7 +502,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -525,7 +525,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -563,7 +563,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -586,7 +586,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+            visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -623,7 +623,7 @@ describe "Agents can upload user list", :js do
     before { travel_to now }
 
     it "can create and invite user" do
-      visit new_department_upload_path(department, configuration_id: configuration.id)
+      visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
       ### Upload
 
@@ -716,7 +716,7 @@ describe "Agents can upload user list", :js do
 
       ### Re-upload the file
 
-      visit new_department_upload_path(department, configuration_id: configuration.id)
+      visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -733,7 +733,7 @@ describe "Agents can upload user list", :js do
     describe "Bulk actions" do
       context "without errors" do
         it "can bulk create users" do
-          visit new_department_upload_path(department, configuration_id: configuration.id)
+          visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
           attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                       make_visible: true)
@@ -748,7 +748,7 @@ describe "Agents can upload user list", :js do
         end
 
         it "can bulk invite" do
-          visit new_department_upload_path(department, configuration_id: configuration.id)
+          visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
           attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                       make_visible: true)
@@ -772,7 +772,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "highlights users with errors" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -787,7 +787,7 @@ describe "Agents can upload user list", :js do
 
         context "in case of invalid uploaded file" do
           it "highlights users with errors" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test_invalid.xlsx"),
                         make_visible: true)
@@ -872,7 +872,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -895,7 +895,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -934,7 +934,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -958,7 +958,7 @@ describe "Agents can upload user list", :js do
             end
 
             it "can add the user to the org" do
-              visit new_department_upload_path(department, configuration_id: configuration.id)
+              visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
               attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                           make_visible: true)
@@ -996,7 +996,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1017,7 +1017,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1041,7 +1041,7 @@ describe "Agents can upload user list", :js do
             end
 
             it "can add the user to the org" do
-              visit new_department_upload_path(department, configuration_id: configuration.id)
+              visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
               attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                           make_visible: true)
@@ -1079,7 +1079,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1099,7 +1099,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1122,7 +1122,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1158,7 +1158,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1178,7 +1178,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "displays the link to the user page" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1201,7 +1201,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "can add the user to the org" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)
@@ -1237,7 +1237,7 @@ describe "Agents can upload user list", :js do
           end
 
           it "does not match the user" do
-            visit new_department_upload_path(department, configuration_id: configuration.id)
+            visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
 
             attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"),
                         make_visible: true)

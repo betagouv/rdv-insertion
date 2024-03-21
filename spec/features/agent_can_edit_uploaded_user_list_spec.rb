@@ -9,14 +9,14 @@ describe "Agents can upload user list", :js do
       department: department,
       rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
       # needed for the organisation users page
-      configurations: [configuration],
+      category_configurations: [category_configuration],
       slug: "org1"
     )
   end
   let!(:motif) { create(:motif, organisation: organisation, motif_category: motif_category) }
 
-  let!(:configuration) do
-    create(:configuration, motif_category: motif_category, file_configuration: file_configuration)
+  let!(:category_configuration) do
+    create(:category_configuration, motif_category: motif_category, file_configuration: file_configuration)
   end
 
   let!(:other_org_from_same_department) { create(:organisation, department: department) }
@@ -39,7 +39,7 @@ describe "Agents can upload user list", :js do
     before { travel_to now }
 
     it "can edit an user infos" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 

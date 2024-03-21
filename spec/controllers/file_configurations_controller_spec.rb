@@ -1,8 +1,8 @@
 describe FileConfigurationsController do
   let!(:organisation) { create(:organisation) }
   let!(:another_organisation) { create(:organisation) }
-  let!(:configuration) { create(:configuration, organisation: organisation) }
-  let!(:file_configuration) { create(:file_configuration, configurations: [configuration]) }
+  let!(:category_configuration) { create(:category_configuration, organisation: organisation) }
+  let!(:file_configuration) { create(:file_configuration, category_configurations: [category_configuration]) }
   let!(:agent) { create(:agent, admin_role_in_organisations: [organisation]) }
   let!(:unauthorized_agent) { create(:agent, admin_role_in_organisations: [another_organisation]) }
 
@@ -142,7 +142,7 @@ describe FileConfigurationsController do
       }
     end
 
-    it "creates the file configuration" do
+    it "creates the file category_configuration" do
       expect { post :create, params: create_params, format: :turbo_stream }.to change(FileConfiguration, :count).by(1)
     end
 
@@ -163,9 +163,9 @@ describe FileConfigurationsController do
         expect(unescaped_response_body).to match(/Le fichier d'import a été créé avec succès/)
       end
 
-      it "adds the file_configuration to the configuration form" do
+      it "adds the file_configuration to the category_configuration form" do
         post :create, params: create_params, format: :turbo_stream
-        expect(unescaped_response_body).to match(/Nouvelle configuration/)
+        expect(unescaped_response_body).to match(/Nouvelle category_configuration/)
       end
     end
 
@@ -229,7 +229,7 @@ describe FileConfigurationsController do
       }
     end
 
-    it "updates the configuration" do
+    it "updates the category_configuration" do
       patch :update, params: update_params, format: :turbo_stream
       expect(file_configuration.reload.sheet_name).to eq("INDEX BENEFICIAIRES")
       expect(file_configuration.reload.title_column).to eq("monsieurmadame")
@@ -309,10 +309,12 @@ describe FileConfigurationsController do
       }
     end
 
-    context "when the file_configuration is linked to many configurations" do
+    context "when the file_configuration is linked to many category_configurations" do
       let!(:organisation2) { create(:organisation) }
-      let!(:configuration2) { create(:configuration, organisation: organisation2) }
-      let!(:file_configuration) { create(:file_configuration, configurations: [configuration, configuration2]) }
+      let!(:category_configuration2) { create(:category_configuration, organisation: organisation2) }
+      let!(:file_configuration) do
+        create(:file_configuration, category_configurations: [category_configuration, category_configuration2])
+      end
 
       it "opens a confirm modal" do
         patch :confirm_update, params: update_params, format: :turbo_stream

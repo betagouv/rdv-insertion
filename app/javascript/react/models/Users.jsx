@@ -14,7 +14,7 @@ class Users {
     this.loading = false;
     this.fileColumnNames = [];
     this.showCarnetColumn = false
-    this.configuration = null
+    this.categoryConfiguration = null
     this.showReferentColumn = false
     this.isDepartmentLevel = false
     this.sourcePage = ""
@@ -169,17 +169,17 @@ class Users {
       },
       {
         name: "Invitation SMS",
-        visible: this.configuration?.invitation_formats?.includes("sms"),
+        visible: this.categoryConfiguration?.invitation_formats?.includes("sms"),
         attributes: { scope: "col-3" }
       },
       {
         name: "Invitation mail",
-        visible: this.configuration?.invitation_formats?.includes("email"),
+        visible: this.categoryConfiguration?.invitation_formats?.includes("email"),
         attributes: { scope: "col-3" }
       },
       {
         name: "Invitation courrier",
-        visible: this.configuration?.invitation_formats?.includes("postal"),
+        visible: this.categoryConfiguration?.invitation_formats?.includes("postal"),
         attributes: { scope: "col-3" }
       }
     ].map(column => ({
@@ -277,8 +277,8 @@ class Users {
   }
 
   canBeInvitedBy(format) {
-    if (!this.configuration) return false;
-    return this.configuration.invitation_formats.includes(format);
+    if (!this.categoryConfiguration) return false;
+    return this.categoryConfiguration.invitation_formats.includes(format);
   }
 }
 

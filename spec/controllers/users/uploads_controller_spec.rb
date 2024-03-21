@@ -29,7 +29,7 @@ describe Users::UploadsController do
       end
 
       context "when agent is authorized" do
-        context "when no configuration is specified" do
+        context "when no category_configuration is specified" do
           it "redirects to category selection" do
             get :new, params: { organisation_id: organisation.id }
             expect(response).to redirect_to(uploads_category_selection_organisation_users_path(organisation))
@@ -60,7 +60,7 @@ describe Users::UploadsController do
       end
 
       context "when agent is authorized" do
-        context "when no configuration is specified" do
+        context "when no category_configuration is specified" do
           it "redirects to category selection" do
             get :new, params: { department_id: department.id }
             expect(response).to redirect_to(uploads_category_selection_department_users_path(department))

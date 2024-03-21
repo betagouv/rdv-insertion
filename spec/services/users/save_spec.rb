@@ -8,7 +8,9 @@ describe Users::Save, type: :service do
     create(:organisation, rdv_solidarites_organisation_id: rdv_solidarites_organisation_id)
   end
   let!(:motif_category) { create(:motif_category) }
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: motif_category) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: motif_category)
+  end
   let!(:user) { create(:user, organisations: [organisation], rdv_solidarites_user_id: nil) }
 
   describe "#call" do

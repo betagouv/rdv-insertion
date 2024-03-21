@@ -1,10 +1,10 @@
 <%= turbo_frame_tag dom_id(rdv_context, :status_tag) do %>
   <div id="js-block-status-<%= rdv_context.motif_category_id %>">
-    <span class="badge rounded-pill <%= badge_background_class(rdv_context, configuration.number_of_days_before_action_required) %>">
+    <span class="badge rounded-pill <%= badge_background_class(rdv_context, category_configuration.number_of_days_before_action_required) %>">
       <% if rdv_context.closed? %>
         <%= "Traité le #{format_date(rdv_context.closed_at)}" %>
       <% else %>
-        <%= display_context_status(rdv_context, configuration.number_of_days_before_action_required) %>
+        <%= display_context_status(rdv_context, category_configuration.number_of_days_before_action_required) %>
       <% end %>
     </span>
   </div>

@@ -12,15 +12,15 @@ describe "Agents can reorder categories from index page", :js do
   let!(:rdv_solidarites_token) { "123456" }
   let!(:rdv_context) { create(:rdv_context, user: user, motif_category: motif_category, status: "rdv_seen") }
   let!(:rdv_context2) { create(:rdv_context, user: user, motif_category: motif_category2, status: "rdv_seen") }
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: motif_category, organisation: organisation, invitation_formats: %w[sms email]
     )
   end
-  let!(:configuration2) do
+  let!(:category_configuration2) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: motif_category2, organisation: organisation, invitation_formats: %w[sms email]
     )
   end
@@ -44,7 +44,7 @@ describe "Agents can reorder categories from index page", :js do
 
       visit current_path
 
-      # Ensure that the configuration order has changed even after a page refresh
+      # Ensure that the category_configuration order has changed even after a page refresh
       expect(find(".draggable li:last-child").text).to eq(first_configuration_text)
       expect(find(".draggable li:first-child").text).to eq(last_configuration_text)
     end

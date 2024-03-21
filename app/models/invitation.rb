@@ -1,7 +1,7 @@
 class Invitation < ApplicationRecord
   NUMBER_OF_DAYS_BEFORE_REMINDER = 3
 
-  include HasCurrentConfiguration
+  include HasCurrentCategoryConfiguration
   include Templatable
   include Sendable
   include WebhookDeliverable
@@ -11,7 +11,7 @@ class Invitation < ApplicationRecord
   belongs_to :rdv_context
   has_and_belongs_to_many :organisations
 
-  has_many :configurations, through: :organisations
+  has_many :category_configurations, through: :organisations
   has_many :webhook_endpoints, through: :organisations
 
   attr_accessor :content

@@ -15,7 +15,7 @@ const UsersBatchActions = observer(
     users,
     usersFromApp,
     organisation,
-    configuration,
+    categoryConfiguration,
     department,
     currentAgent,
     backToUsersListUrl
@@ -30,8 +30,8 @@ const UsersBatchActions = observer(
 
     const setUsersFromApp = () => {
       users.setUsers([]);
-      users.showReferentColumn = configuration?.rdv_with_referents;
-      users.configuration = configuration;
+      users.showReferentColumn = categoryConfiguration?.rdv_with_referents;
+      users.categoryConfiguration = categoryConfiguration;
       users.isDepartmentLevel = !organisation;
       users.sourcePage = "batchActions";
 
@@ -57,7 +57,7 @@ const UsersBatchActions = observer(
           },
           department,
           organisation,
-          configuration,
+          categoryConfiguration,
           currentAgent,
           users
         );

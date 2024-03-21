@@ -5,7 +5,9 @@ describe "Super admin can manage organisations" do
   let!(:agent1) { create(:agent, organisations: [organisation1], super_admin: false) }
   let!(:lieu1) { create(:lieu, organisation: organisation1) }
   let!(:motif_category) { create(:motif_category) }
-  let!(:configuration1) { create(:configuration, organisation: organisation1, motif_category: motif_category) }
+  let!(:category_configuration1) do
+    create(:category_configuration, organisation: organisation1, motif_category: motif_category)
+  end
   let!(:department2) { create(:department) }
   let!(:organisation2) { create(:organisation, department: department2) }
   let!(:agent2) { create(:agent, organisations: [organisation2], super_admin: false) }

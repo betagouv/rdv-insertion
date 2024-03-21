@@ -11,10 +11,10 @@ describe Stat do
     let!(:user1) { create(:user, organisations: [organisation], created_at: date) }
     let!(:user2) { create(:user, organisations: [other_organisation], created_at: date) }
     let!(:organisation) { create(:organisation, department: department) }
-    let!(:configuration) { create(:configuration, organisation: organisation) }
+    let!(:category_configuration) { create(:category_configuration, organisation: organisation) }
     let!(:organisation_with_no_configuration) { create(:organisation, department: department) }
     let!(:other_organisation) { create(:organisation, department: other_department) }
-    let!(:other_configuration) { create(:configuration, organisation: other_organisation) }
+    let!(:other_configuration) { create(:category_configuration, organisation: other_organisation) }
     let!(:motif) { create(:motif, collectif: false) }
     let!(:motif_collectif) { create(:motif, collectif: true) }
     let!(:rdv1) { create(:rdv, organisation: organisation, created_by: "user", motif: motif, starts_at: date) }

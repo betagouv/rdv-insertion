@@ -5,7 +5,9 @@ describe "Agents can close or reopen rdv_context", :js do
   let!(:category_orientation) do
     create(:motif_category, short_name: "rsa_orientation", name: "RSA orientation")
   end
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: category_orientation) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: category_orientation)
+  end
   let!(:user) do
     create(:user, organisations: [organisation])
   end

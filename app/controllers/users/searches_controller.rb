@@ -18,7 +18,7 @@ module Users
           invitations: [rdv_context: :motif_category],
           rdv_contexts: [:participations],
           tags: [:tag_organisations],
-          organisations: [:motif_categories, :department, :configurations]
+          organisations: [:motif_categories, :department, :category_configurations]
         ).distinct
     end
 

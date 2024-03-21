@@ -1,5 +1,5 @@
 class Notification < ApplicationRecord
-  include HasCurrentConfiguration
+  include HasCurrentCategoryConfiguration
   include Templatable
   include Sendable
 
@@ -16,7 +16,7 @@ class Notification < ApplicationRecord
 
   delegate :department, :user, :rdv, :motif_category, :instruction_for_rdv, :rdv_context, to: :participation
   delegate :organisation, to: :rdv, allow_nil: true
-  delegate :messages_configuration, :configurations, to: :organisation
+  delegate :messages_configuration, :category_configurations, to: :organisation
 
   def send_to_user
     case format

@@ -76,7 +76,7 @@ class FileConfigurationsController < ApplicationController
 
   def set_edit_form_url
     @edit_form_url =
-      if @file_configuration.configurations.length > 1
+      if @file_configuration.category_configurations.length > 1
         organisation_file_configuration_confirm_update_path(@organisation, @file_configuration)
       else
         organisation_file_configuration_path(@organisation, @file_configuration)
@@ -85,7 +85,7 @@ class FileConfigurationsController < ApplicationController
 
   def set_edit_form_html_method
     @edit_form_html_method =
-      if @file_configuration.configurations.length > 1
+      if @file_configuration.category_configurations.length > 1
         :get
       else
         :patch

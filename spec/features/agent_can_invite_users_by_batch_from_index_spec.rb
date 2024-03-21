@@ -3,7 +3,9 @@ describe "Agent can invite users by batch from index" do
 
   let!(:organisation) { create(:organisation, department: department) }
   let!(:motif_category) { create(:motif_category) }
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: motif_category) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: motif_category)
+  end
   let!(:motif) { create(:motif, motif_category: motif_category, organisation: organisation) }
 
   let!(:agent) { create(:agent, organisations: [organisation]) }

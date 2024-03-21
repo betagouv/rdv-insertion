@@ -7,8 +7,8 @@ module NavigationHelper
     send(:"#{Current.structure_type}_users_path", { **structure_id_param, **params.compact_blank })
   end
 
-  def structure_configurations_positions_update_path
-    send(:"#{Current.structure_type}_configurations_positions_update_path", structure_id_param)
+  def structure_category_configurations_positions_update_path
+    send(:"#{Current.structure_type}_category_configurations_positions_update_path", structure_id_param)
   end
 
   def edit_structure_user_path(user_id)

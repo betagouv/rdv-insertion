@@ -1,0 +1,4 @@
+<%= simple_form_for(@category_configuration, url: organisation_category_configurations_path(@organisation, @category_configuration), html: { method: :post }) do |f| %>
+  <%= render 'category_configuration_form', f: f, title: "Créer configuration", category_configuration: @category_configuration, return_path: organisation_category_configurations_path(@organisation), current_file_configuration: nil, organisation: @organisation %>
+<% end %>
+

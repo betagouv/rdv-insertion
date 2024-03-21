@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :configuration do
+  factory :category_configuration do
     organisation
     motif_category
     file_configuration

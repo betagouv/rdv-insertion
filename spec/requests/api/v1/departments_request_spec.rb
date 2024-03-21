@@ -18,11 +18,11 @@ describe "Departement API", swagger_doc: "v1/api.json" do
         create(
           :organisation,
           department:, name: "Pôle Parcours", email: "pole-parcours@departement13.fr",
-          configurations: [configuration]
+          category_configurations: [category_configuration]
         )
       end
       let!(:motif) { create(:motif, organisation:, motif_category: category_rsa_orientation) }
-      let!(:configuration) { create(:configuration, motif_category: category_rsa_orientation) }
+      let!(:category_configuration) { create(:category_configuration, motif_category: category_rsa_orientation) }
       let!(:agent) { create(:agent, organisations: [organisation]) }
       let!(:lieu) { create(:lieu, organisation:) }
 

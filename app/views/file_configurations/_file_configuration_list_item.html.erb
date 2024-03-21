@@ -1,20 +1,20 @@
 <div class="d-flex justify-content-between mb-2">
-  <%= radio_button_tag "configuration[file_configuration_id]",
+  <%= radio_button_tag "category_configuration[file_configuration_id]",
       file_configuration.id,
       current_file_configuration&.id == file_configuration.id,
       class: "file-configuration-select",
-      id: "configuration_file_configuration_#{file_configuration.id}"
+      id: "category_configuration_file_configuration_#{file_configuration.id}"
   %>
   <div class="background-blue-light d-flex justify-content-between px-4 pt-2 rounded flex-grow-1">
     <div class="flex-grow-1 d-flex flex-column justify-content-center">
-      <% department_configurations = file_configuration.configurations.select { |configuration| configuration.department == @department } %>
+      <% department_configurations = file_configuration.category_configurations.select { |category_configuration| category_configuration.department == @department } %>
       <% if department_configurations.present? %>
         <p class="mb-0">Utilisé pour :</p>
-        <% department_configurations.group_by(&:motif_category).each do |motif_category, configurations| %>
-          <p class="mb-2">- <strong><%= motif_category.name %></strong> par <strong><%= configurations.map(&:organisation).join(', ') %></strong></p>
+        <% department_configurations.group_by(&:motif_category).each do |motif_category, category_configurations| %>
+          <p class="mb-2">- <strong><%= motif_category.name %></strong> par <strong><%= category_configurations.map(&:organisation).join(', ') %></strong></p>
         <% end %>
       <% elsif department_configurations.blank? %>
-        <p>Nouvelle configuration</p>
+        <p>Nouvelle category_configuration</p>
       <% end %>
     </div>
     <div class="d-flex flex-column justify-content-center">

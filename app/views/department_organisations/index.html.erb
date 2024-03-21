@@ -1,7 +1,7 @@
 <%= render "common/remote_modal", title: "Choisissez une organisation" do %>
   <% @organisations.each do |organisation| %>
     <p>
-      <%= link_to(organisation.name, organisation_configurations_path(organisation), class:"btn btn-blue-out") %>
+      <%= link_to(organisation.name, organisation_category_configurations_path(organisation), class:"btn btn-blue-out") %>
     </p>
   <% end %>
 <% end %>

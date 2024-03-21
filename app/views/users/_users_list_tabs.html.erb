@@ -1,13 +1,13 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <%= link_to "Tous les contacts", structure_users_path, class: "nav-link #{@current_configuration.present? || archived_scope?(@users_scope) ? '' : 'active'}" %>
+    <%= link_to "Tous les contacts", structure_users_path, class: "nav-link #{@current_category_configuration.present? || archived_scope?(@users_scope) ? '' : 'active'}" %>
   </li>
   <li>
-    <ul data-controller="drag" data-drag-url="<%= structure_configurations_positions_update_path %>" class="<%= "draggable" if @current_agent_roles.any?(&:admin?) %> nav">
-    <% @all_configurations.each do |configuration| %>
-      <li class="nav-item" data-id="<%= configuration.id %>">
-        <%= link_to structure_users_path(motif_category_id: configuration.motif_category_id), class: "nav-link d-flex align-items-center #{configuration.id == @current_configuration&.id ? 'active' : ''}" do %>
-          <%= configuration.motif_category_name %>
+    <ul data-controller="drag" data-drag-url="<%= structure_category_configurations_positions_update_path %>" class="<%= "draggable" if @current_agent_roles.any?(&:admin?) %> nav">
+    <% @all_configurations.each do |category_configuration| %>
+      <li class="nav-item" data-id="<%= category_configuration.id %>">
+        <%= link_to structure_users_path(motif_category_id: category_configuration.motif_category_id), class: "nav-link d-flex align-items-center #{category_configuration.id == @current_category_configuration&.id ? 'active' : ''}" do %>
+          <%= category_configuration.motif_category_name %>
           <% if @current_agent_roles.any?(&:admin?) && @all_configurations.size > 1 %>
             <i data-controller="tooltip" data-action="mouseover->tooltip#reOrderCategories" class="fas fa-grip-vertical"></i>
           <% end %>

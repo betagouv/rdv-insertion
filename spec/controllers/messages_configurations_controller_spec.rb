@@ -1,7 +1,7 @@
 describe MessagesConfigurationsController do
   let!(:organisation) { create(:organisation) }
   let!(:another_organisation) { create(:organisation) }
-  let!(:configuration) { create(:configuration, organisation: organisation) }
+  let!(:category_configuration) { create(:category_configuration, organisation: organisation) }
   let!(:messages_configuration) do
     create(:messages_configuration, organisation: organisation,
                                     direction_names: ["DIRECTION GÉNÉRALE DES SERVICES DÉPARTEMENTAUX"],
@@ -216,7 +216,7 @@ describe MessagesConfigurationsController do
     context "when the create succeeds" do
       it "is a success" do
         post :create, params: create_params
-        expect(response).to redirect_to(organisation_configurations_path(organisation))
+        expect(response).to redirect_to(organisation_category_configurations_path(organisation))
         expect(response.body).not_to match(/input/)
       end
     end
@@ -271,7 +271,7 @@ describe MessagesConfigurationsController do
       }
     end
 
-    it "updates the configuration" do
+    it "updates the category_configuration" do
       patch :update, params: update_params
 
       expect(messages_configuration.reload.direction_names).to eq(["Sous-direction à l'insertion"])

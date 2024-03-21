@@ -6,7 +6,7 @@ describe "Agents can edit users tags", :js do
       rdv_solidarites_organisation_id: rdv_solidarites_organisation_id
     )
   end
-  let!(:configuration) { create(:configuration, organisation: organisation) }
+  let!(:category_configuration) { create(:category_configuration, organisation: organisation) }
   let!(:user) do
     create(
       :user,

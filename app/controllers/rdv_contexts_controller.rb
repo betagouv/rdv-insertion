@@ -37,7 +37,7 @@ class RdvContextsController < ApplicationController
     turbo_stream_replace(
       "user_#{@user.id}_motif_category_#{rdv_context_params[:motif_category_id]}",
       "rdv_context_status_cell",
-      { rdv_context: @rdv_context, configuration: nil }
+      { rdv_context: @rdv_context, category_configuration: nil }
     )
   end
 

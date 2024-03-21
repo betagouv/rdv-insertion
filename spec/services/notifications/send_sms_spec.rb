@@ -140,10 +140,10 @@ describe Notifications::SendSms, type: :service do
         end
       end
 
-      context "when the template attributes are overriden by the configuration attributes" do
-        let!(:configuration) do
+      context "when the template attributes are overriden by the category_configuration attributes" do
+        let!(:category_configuration) do
           create(
-            :configuration,
+            :category_configuration,
             organisation:,
             motif_category: category_rsa_orientation,
             template_user_designation_override: "joueur d'échec"

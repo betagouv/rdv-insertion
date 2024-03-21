@@ -8,7 +8,9 @@ describe "Agents can add or remove user from organisations", :js do
       # needed for the organisation users page
     )
   end
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: motif_category) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: motif_category)
+  end
   let!(:motif_category) { create(:motif_category, name: "Entretien SIAE") }
   let!(:rdv_solidarites_user_id) { 243 }
   let!(:user) do
@@ -19,7 +21,7 @@ describe "Agents can add or remove user from organisations", :js do
     )
   end
   let!(:other_org) { create(:organisation, department: department) }
-  let!(:other_config) { create(:configuration, organisation: other_org, motif_category: other_motif_category) }
+  let!(:other_config) { create(:category_configuration, organisation: other_org, motif_category: other_motif_category) }
   let!(:other_motif_category) { create(:motif_category, name: "RSA suivi") }
 
   before do

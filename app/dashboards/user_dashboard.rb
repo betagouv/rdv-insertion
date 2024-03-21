@@ -15,7 +15,7 @@ class UserDashboard < Administrate::BaseDashboard
     birth_date: Field::Date,
     birth_name: Field::String,
     carnet_de_bord_carnet_id: Field::String,
-    configurations: Field::HasMany,
+    category_configurations: Field::HasMany,
     created_through: Field::Select.with_options(
       searchable: false, collection: ->(field) { field.resource.class.send(field.attribute.to_s.pluralize).keys }
     ),

@@ -8,7 +8,9 @@ describe Exporters::GenerateUsersParticipationsCsv, type: :service do
   let!(:organisation) { create(:organisation, name: "Drome RSA", department: department) }
   let!(:organisation_prescripteur) { create(:organisation, name: "Ailleurs", department: department) }
   let!(:structure) { organisation }
-  let!(:configuration) { create(:configuration, organisation: organisation, motif_category: motif_category) }
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: motif_category)
+  end
   let!(:nir) { generate_random_nir }
   let!(:user1) do
     create(

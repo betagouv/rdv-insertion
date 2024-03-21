@@ -8,8 +8,10 @@ describe "Rdv API", swagger_doc: "v1/api.json" do
       include_context "with all existing categories"
 
       let!(:uuid) { SecureRandom.uuid }
-      let!(:organisation) { create(:organisation, configurations: [configuration], motifs: [motif]) }
-      let!(:configuration) { create(:configuration, motif_category: category_rsa_orientation) }
+      let!(:organisation) do
+        create(:organisation, category_configurations: [category_configuration], motifs: [motif])
+      end
+      let!(:category_configuration) { create(:category_configuration, motif_category: category_rsa_orientation) }
       let!(:motif) { create(:motif, motif_category: category_rsa_orientation) }
       let!(:rdv) { create(:rdv, uuid:, organisation:, motif:) }
       let!(:agent) { create(:agent, organisations: [organisation]) }

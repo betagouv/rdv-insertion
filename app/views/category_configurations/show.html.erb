@@ -1,0 +1,47 @@
+<div class="container text-dark-blue h4-as-labels mt-4">
+  <div class="d-flex justify-content-between mb-4">
+    <div>
+      <%= link_to(organisation_category_configurations_path(@organisation)) do %>
+        <button class="btn btn-blue-out">Retour</button>
+      <% end %>
+    </div>
+    <h1 class="h1-form-title d-none d-sm-inline">Contexte "<%= @category_configuration.motif_category_name %>"</h1>
+    <div>
+      <%= link_to edit_organisation_category_configuration_path(@organisation, @category_configuration) do %>
+        <button class="btn btn-blue">Modifier</button>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row d-flex justify-content-start flex-wrap my-5">
+    <div class="col-12 col-md-6 px-5">
+      <h4><%= CategoryConfiguration.human_attribute_name(:invitation_formats) %></h4>
+        <p class="mb-2"><%= @category_configuration.invitation_formats.map { |format| I18n.t("invitation_formats.#{format}") }.join(", ") %></p>
+    </div>
+    <%= render "common/attribute_display", record: @category_configuration, attribute: :convene_user %>
+    <%= render "common/attribute_display", record: @category_configuration, attribute: :number_of_days_before_action_required %>
+    <%= render "common/attribute_display", record: @category_configuration, attribute: :rdv_with_referents %>
+    <%= render "common/attribute_display", record: @category_configuration, attribute: :invite_to_user_organisations_only %>
+    <%= render "common/attribute_display", record: @category_configuration, attribute: :phone_number %>
+  </div>
+
+  <h3>Invitations périodiques</h3>
+  <p>
+    <% if @category_configuration.periodic_invites_activated? %>
+      Les invitations périodiques sont actives et sont envoyées
+        <% if @category_configuration.number_of_days_between_periodic_invites.present? %>
+          tous les <%= @category_configuration.number_of_days_between_periodic_invites == 1 ? '' : @category_configuration.number_of_days_between_periodic_invites %> jours.
+        <% else %>
+          tous les <%= @category_configuration.day_of_the_month_periodic_invites %> du mois.
+        <% end %>
+    <% else %>
+      Les invitations périodiques ne sont pas activées.
+    <% end %>
+  </p>
+
+  <h3>Contenu des messages</h3>
+  <%= render "category_configurations/messages_contents/messages_content", template: @template, category_configuration: @category_configuration %>
+
+  <h3>Fichier d'import</h3>
+  <%= render "file_configurations/file_configuration", file_configuration: @file_configuration %>
+</div>

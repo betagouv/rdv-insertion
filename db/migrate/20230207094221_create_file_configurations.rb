@@ -9,12 +9,12 @@ class CreateFileConfigurations < ActiveRecord::Migration[7.0]
 
     add_reference :configurations, :file_configuration, foreign_key: true
 
-    ::Configuration.find_each do |configuration|
+    ::Configuration.find_each do |_configuration|
       file_configuration = FileConfiguration.find_or_create_by!(
-        sheet_name: configuration.sheet_name,
-        column_names: configuration.column_names
+        sheet_name: category_configuration.sheet_name,
+        column_names: category_configuration.column_names
       )
-      configuration.update! file_configuration_id: file_configuration.id
+      category_configuration.update! file_configuration_id: file_configuration.id
     end
 
     remove_column :configurations, :sheet_name
@@ -27,7 +27,7 @@ class CreateFileConfigurations < ActiveRecord::Migration[7.0]
 
     ::Configuration.find_each do |configuration|
       file_configuration = FileConfiguration.find(configuration.file_configuration_id)
-      configuration.update!(
+      category_configuration.update!(
         sheet_name: file_configuration.sheet_name,
         column_names: file_configuration.column_names
       )

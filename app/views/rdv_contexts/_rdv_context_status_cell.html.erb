@@ -1,6 +1,6 @@
 <td
   id="rdv-context-status-<%= rdv_context.id %>"
-  class="<%= background_class_for_context_status(rdv_context, configuration&.number_of_days_before_action_required) %>"
+  class="<%= background_class_for_context_status(rdv_context, category_configuration&.number_of_days_before_action_required) %>"
 >
-  <%= display_context_status(rdv_context, configuration&.number_of_days_before_action_required) %>
+  <%= display_context_status(rdv_context, category_configuration&.number_of_days_before_action_required) %>
 </td>

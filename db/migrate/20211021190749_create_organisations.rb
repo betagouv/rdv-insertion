@@ -40,7 +40,7 @@ class CreateOrganisations < ActiveRecord::Migration[6.1]
         capital: department.capital,
         phone_number: department.phone_number,
         rdv_solidarites_organisation_id: department.rdv_solidarites_organisation_id,
-        configuration: department.configuration,
+        category_configuration: department.configuration,
         agents: department.agents,
         rdvs: department.rdvs,
         applicants: department.applicants

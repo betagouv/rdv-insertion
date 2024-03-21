@@ -39,7 +39,7 @@ class User < ApplicationRecord
   has_many :rdvs, through: :participations
   has_many :organisations, through: :users_organisations
   has_many :notifications, through: :participations
-  has_many :configurations, through: :organisations
+  has_many :category_configurations, through: :organisations
   has_many :motif_categories, through: :rdv_contexts
   has_many :departments, -> { distinct }, through: :organisations
   has_many :tags, through: :tag_users

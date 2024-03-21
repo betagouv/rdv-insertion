@@ -26,6 +26,8 @@ class StatsController < ApplicationController
   end
 
   def set_display_all_stats
-    @display_all_stats = @department.configurations.none? { |configuration| configuration.invitation_formats.blank? }
+    @display_all_stats = @department.category_configurations.none? do |_configuration|
+      category_configuration.invitation_formats.blank?
+    end
   end
 end

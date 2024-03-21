@@ -5,13 +5,13 @@ describe SendPeriodicInviteJob do
 
   describe "#perform" do
     subject do
-      described_class.new.perform(invitation.id, configuration.id, format)
+      described_class.new.perform(invitation.id, category_configuration.id, format)
     end
 
     let!(:format) { "email" }
     let!(:organisation) { create(:organisation) }
-    let!(:configuration) do
-      create(:configuration,
+    let!(:category_configuration) do
+      create(:category_configuration,
              organisation: organisation,
              number_of_days_between_periodic_invites: 15,
              motif_category: motif_category)
@@ -41,7 +41,7 @@ describe SendPeriodicInviteJob do
         )
 
         expect(invitation.valid_until.end_of_day).to eq(
-          configuration
+          category_configuration
             .number_of_days_before_action_required
             .days
             .from_now

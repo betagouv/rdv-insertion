@@ -16,14 +16,14 @@ module Previews
       @invitation = Invitation.new(
         user: @user, organisations: [@organisation],
         rdv_context: RdvContext.new(motif_category: @motif_category),
-        valid_until: @configuration.number_of_days_before_action_required.days.from_now,
-        help_phone_number: @configuration.phone_number,
+        valid_until: @category_configuration.number_of_days_before_action_required.days.from_now,
+        help_phone_number: @category_configuration.phone_number,
         department: @department,
         uuid: SecureRandom.send(:choose, [*"A".."Z", *"0".."9"], 8)
       )
-      # needed to access @invitation.configurations when the record linking @invitation and @organisation
+      # needed to access @invitation.category_configurations when the record linking @invitation and @organisation
       # is not persisted
-      @invitation.association(:configurations).instance_variable_set("@target", [@configuration])
+      @invitation.association(:category_configurations).instance_variable_set("@target", [@category_configuration])
     end
 
     def set_user_example
@@ -113,7 +113,7 @@ module Previews
       # we want to highlight rdv_title_by_phone before the rdv_title because the rdv_title_by_phone
       # is often the rdv_title with "téléphonique" added, so if we highlighted the rdv_title before,
       # only part of the rdv_title_by_phone would be highlighted. That's why we use sort_by(&:length)
-      ::Configuration.template_override_attributes.sort_by(&:length).reverse.map do |attribute|
+      CategoryConfiguration.template_override_attributes.sort_by(&:length).reverse.map do |attribute|
         @invitation.send(attribute.gsub("template_", "").gsub("_override", ""))
       end.compact
     end

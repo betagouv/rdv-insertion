@@ -1,6 +1,6 @@
 class Participation < ApplicationRecord
   include Notificable
-  include HasCurrentConfiguration
+  include HasCurrentCategoryConfiguration
   include RdvParticipationStatus
 
   belongs_to :rdv
@@ -17,7 +17,7 @@ class Participation < ApplicationRecord
 
   has_one :organisation, through: :rdv
 
-  has_many :configurations, through: :organisation
+  has_many :category_configurations, through: :organisation
 
   validates :status, presence: true
   validates :rdv_solidarites_participation_id, uniqueness: true, allow_nil: true

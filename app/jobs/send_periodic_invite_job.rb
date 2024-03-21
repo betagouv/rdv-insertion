@@ -1,7 +1,7 @@
 class SendPeriodicInviteJob < ApplicationJob
-  def perform(invitation_id, configuration_id, format)
+  def perform(invitation_id, category_configuration_id, format)
     @invitation = Invitation.find(invitation_id)
-    @configuration = Configuration.find(configuration_id)
+    @category_configuration = CategoryConfiguration.find(category_configuration_id)
     @format = format
 
     return if invitation_already_sent_today?
@@ -16,7 +16,7 @@ class SendPeriodicInviteJob < ApplicationJob
 
     new_invitation.format = @format
     new_invitation.reminder = false
-    new_invitation.valid_until = @configuration.number_of_days_before_action_required.days.from_now
+    new_invitation.valid_until = @category_configuration.number_of_days_before_action_required.days.from_now
     new_invitation.organisations = @invitation.organisations
     new_invitation.uuid = nil
     new_invitation.save!

@@ -29,8 +29,8 @@ describe Invitations::Validate, type: :service do
     create(:organisation, motifs: [motif])
   end
 
-  let!(:configuration) do
-    create(:configuration, organisation: organisation, motif_category: category_orientation)
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, motif_category: category_orientation)
   end
 
   let!(:motif) do
@@ -98,8 +98,8 @@ describe Invitations::Validate, type: :service do
     end
 
     context "when the user does not belong to an org for that category" do
-      let!(:configuration) do
-        create(:configuration, organisation: organisation, motif_category: category_accompagnement)
+      let!(:category_configuration) do
+        create(:category_configuration, organisation: organisation, motif_category: category_accompagnement)
       end
 
       it("is a failure") { is_a_failure }

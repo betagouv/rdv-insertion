@@ -14,7 +14,7 @@ class DepartmentDashboard < Administrate::BaseDashboard
     archives: Field::HasMany,
     capital: Field::String,
     carnet_de_bord_deploiement_id: Field::String,
-    configurations: Field::HasMany,
+    category_configurations: Field::HasMany,
     display_in_stats: Field::Boolean,
     email: Field::String,
     file_configurations: Field::HasMany,

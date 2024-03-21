@@ -1,9 +1,9 @@
-describe Configurations::Create, type: :service do
+describe CategoryConfigurations::Create, type: :service do
   subject do
-    described_class.call(configuration:)
+    described_class.call(category_configuration:)
   end
 
-  let!(:configuration) { build(:configuration) }
+  let!(:category_configuration) { build(:category_configuration) }
 
   describe "#call" do
     before do
@@ -18,19 +18,19 @@ describe Configurations::Create, type: :service do
     it "tries to create a motif category territory on rdvs" do
       expect(RdvSolidaritesApi::CreateMotifCategoryTerritory).to receive(:call)
         .with(
-          motif_category_short_name: configuration.motif_category_short_name,
-          organisation_id: configuration.rdv_solidarites_organisation_id
+          motif_category_short_name: category_configuration.motif_category_short_name,
+          organisation_id: category_configuration.rdv_solidarites_organisation_id
         )
       subject
     end
 
-    it "saves the configuration in db" do
+    it "saves the category_configuration in db" do
       subject
-      expect(configuration).to be_persisted
+      expect(category_configuration).to be_persisted
     end
 
     context "when a required attribute is missing" do
-      let!(:configuration) { build(:configuration, file_configuration_id: nil) }
+      let!(:category_configuration) { build(:category_configuration, file_configuration_id: nil) }
 
       it "is a failure" do
         is_a_failure
@@ -40,9 +40,9 @@ describe Configurations::Create, type: :service do
         expect(subject.errors).to eq(["Fichier d'import doit exister"])
       end
 
-      it "does not save the configuration in db" do
+      it "does not save the category_configuration in db" do
         subject
-        expect(configuration).not_to be_persisted
+        expect(category_configuration).not_to be_persisted
       end
     end
 
@@ -60,9 +60,9 @@ describe Configurations::Create, type: :service do
         expect(subject.errors).to eq(["some error"])
       end
 
-      it "does not save the configuration in db" do
+      it "does not save the category_configuration in db" do
         subject
-        expect(configuration).not_to be_persisted
+        expect(category_configuration).not_to be_persisted
       end
     end
   end

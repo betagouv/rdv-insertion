@@ -1,12 +1,12 @@
 # rubocop:disable Metrics/ModuleLength
 
 module UsersHelper
-  def show_convocation?(configuration)
-    configuration.convene_user?
+  def show_convocation?(category_configuration)
+    category_configuration.convene_user?
   end
 
-  def show_invitations?(configuration)
-    configuration.invitation_formats.present?
+  def show_invitations?(category_configuration)
+    category_configuration.invitation_formats.present?
   end
 
   def no_search_results?(users)
@@ -151,11 +151,11 @@ module UsersHelper
       "agent_searches?#{params.to_query}"
   end
 
-  def should_convene_for?(rdv_context, configuration)
-    return false unless configuration.convene_user?
+  def should_convene_for?(rdv_context, category_configuration)
+    return false unless category_configuration.convene_user?
 
     rdv_context.convocable_status? ||
-      rdv_context.time_to_accept_invitation_exceeded?(configuration.number_of_days_before_action_required)
+      rdv_context.time_to_accept_invitation_exceeded?(category_configuration.number_of_days_before_action_required)
   end
 
   def show_parcours?(department)

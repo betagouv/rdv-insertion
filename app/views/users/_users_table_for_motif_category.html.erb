@@ -2,14 +2,14 @@
   <thead class="text-dark-blue">
     <th scope="col">Nom</th>
     <th scope="col">Prénom</th>
-    <% @current_configuration.invitation_formats.each do |invitation_format| %>
+    <% @current_category_configuration.invitation_formats.each do |invitation_format| %>
       <th scope="col" class="d-none d-lg-table-cell"><%= t(".#{invitation_format}_column_title") %></th>
     <% end  %>
-    <% if show_invitations?(@current_configuration) %>
+    <% if show_invitations?(@current_category_configuration) %>
       <th scope="col">Première invitation</th>
       <th scope="col">Dernière invitation</th>
     <% end %>
-    <% if show_convocation?(@current_configuration) %>
+    <% if show_convocation?(@current_category_configuration) %>
       <th scope="col">Dernière convocation envoyée le</th>
     <% end %>
     <th scope="col">Statut</th>
@@ -26,7 +26,7 @@
       >
         <td><%= display_attribute user.last_name %></td>
         <td><%= display_attribute user.first_name %></td>
-        <% @current_configuration.invitation_formats.each do |invitation_format| %>
+        <% @current_category_configuration.invitation_formats.each do |invitation_format| %>
           <td class="d-none d-lg-table-cell">
             <% if rdv_context.rdv_pending? || rdv_context.closed? %>
               <!-- show nothing -->
@@ -38,12 +38,12 @@
           </td>
         <% end %>
         </td>
-        <% if show_invitations?(@current_configuration) %>
+        <% if show_invitations?(@current_category_configuration) %>
           <td id="first-invitation-date-<%= rdv_context.id %>"><%= display_attribute format_date(rdv_context.first_invitation_created_at) %></td>
           <td id="last-invitation-date-<%= rdv_context.id %>"><%= display_attribute(format_date(rdv_context.last_invitation_created_at)) %></td>
         <% end %>
-        <% if show_convocation?(@current_configuration) %>
-          <% if should_convene_for?(rdv_context, @current_configuration) %>
+        <% if show_convocation?(@current_category_configuration) %>
+          <% if should_convene_for?(rdv_context, @current_category_configuration) %>
             <td>
               <%= render "rdv_contexts/convocation_button",
                           user_id: user.id, motif_category_id: @current_motif_category.id,
@@ -53,8 +53,8 @@
             <td><%= display_attribute format_date(rdv_context.last_convocation_created_at) %></td>
           <% end %>
         <% end %>
-        <td id="rdv-context-status-<%= rdv_context.id %>" class="<%= background_class_for_context_status(rdv_context, @current_configuration.number_of_days_before_action_required) %>">
-          <%= display_context_status(rdv_context, @current_configuration.number_of_days_before_action_required) %>
+        <td id="rdv-context-status-<%= rdv_context.id %>" class="<%= background_class_for_context_status(rdv_context, @current_category_configuration.number_of_days_before_action_required) %>">
+          <%= display_context_status(rdv_context, @current_category_configuration.number_of_days_before_action_required) %>
         </td>
         <td class="padding-left-15">
           <%= link_to structure_user_path(user.id) do %>

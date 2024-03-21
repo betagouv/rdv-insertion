@@ -23,7 +23,7 @@ const UsersUploads = observer(
   ({
     users,
     organisation,
-    configuration,
+    categoryConfiguration,
     columnNames,
     tags,
     sheetName,
@@ -40,8 +40,8 @@ const UsersUploads = observer(
     const redirectToUsersList = () => {
       const scope = isDepartmentLevel ? "departments" : "organisations";
       const url = `/${scope}/${(organisation || department).id}/users`;
-      const queryParams = configuration
-        ? `?motif_category_id=${configuration.motif_category_id}`
+      const queryParams = categoryConfiguration
+        ? `?motif_category_id=${categoryConfiguration.motif_category_id}`
         : "";
 
       window.location.href = url + queryParams;
@@ -50,8 +50,8 @@ const UsersUploads = observer(
     const retrieveUsersFromList = async (file) => {
       users.fileColumnNames = parameterizedColumnNames;
       users.showCarnetColumn = !!department.carnet_de_bord_deploiement_id;
-      users.showReferentColumn = configuration?.rdv_with_referents;
-      users.configuration = configuration;
+      users.showReferentColumn = categoryConfiguration?.rdv_with_referents;
+      users.categoryConfiguration = categoryConfiguration;
       users.isDepartmentLevel = isDepartmentLevel;
       users.sourcePage = "upload";
 
@@ -92,7 +92,7 @@ const UsersUploads = observer(
           },
           department,
           organisation,
-          configuration,
+          categoryConfiguration,
           currentAgent,
           users,
           tags,
@@ -172,10 +172,10 @@ const UsersUploads = observer(
               <h3 className="new-users-title">
                 Ajout {isDepartmentLevel ? "au niveau du territoire" : "usagers"}
               </h3>
-              {configuration && (
+              {categoryConfiguration && (
                 <h6>
                   ({motifCategoryName}
-                  {configuration.rdv_with_referents && " avec réferents"})
+                  {categoryConfiguration.rdv_with_referents && " avec réferents"})
                 </h6>
               )}
 

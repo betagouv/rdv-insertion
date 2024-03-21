@@ -12,7 +12,7 @@ class OrganisationDashboard < Administrate::BaseDashboard
     agent_roles: Field::HasMany,
     agents: Field::HasMany,
     archived_users: Field::HasMany,
-    configurations: Field::HasMany,
+    category_configurations: Field::HasMany,
     department: Field::BelongsTo,
     email: Field::String,
     safir_code: Field::String,

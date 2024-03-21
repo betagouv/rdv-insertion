@@ -2,7 +2,7 @@ class ChangeInvitationFormatInConfig < ActiveRecord::Migration[6.1]
   def up
     add_column :configurations, :invitation_formats, :string, array: true, null: false, default: %w[sms email postal]
 
-    Configuration.find_each do |config|
+    CategoryConfiguration.find_each do |config|
       case config.invitation_format
       when 0
         config.invitation_formats = %w[sms]
@@ -25,7 +25,7 @@ class ChangeInvitationFormatInConfig < ActiveRecord::Migration[6.1]
   def down
     add_column :configurations, :invitation_format, :integer
 
-    Configuration.find_each do |config|
+    CategoryConfiguration.find_each do |config|
       case config.invitation_formats
       when ["sms"]
         config.invitation_format = 0

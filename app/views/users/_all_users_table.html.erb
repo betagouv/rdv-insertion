@@ -3,8 +3,8 @@
     <th scope="col">Nom</th>
     <th scope="col">Prénom</th>
     <th scope="col">Date de création</th>
-    <% @all_configurations.each do |configuration| %>
-      <th scope="col"><%= configuration.motif_category_name %></th>
+    <% @all_configurations.each do |category_configuration| %>
+      <th scope="col"><%= category_configuration.motif_category_name %></th>
     <% end %>
     <th scope="col"></th>
   </thead>
@@ -22,12 +22,12 @@
         <% if user.archived_in?(@department) %>
           <td colspan=<%= @all_configurations.count %>>Archivé</td>
         <% else %>
-          <% @all_configurations.each do |configuration| %>
-            <% if rdv_context = user.rdv_context_for(configuration.motif_category) %>
-              <%= render "rdv_contexts/rdv_context_status_cell", rdv_context: rdv_context, configuration: configuration %>
+          <% @all_configurations.each do |category_configuration| %>
+            <% if rdv_context = user.rdv_context_for(category_configuration.motif_category) %>
+              <%= render "rdv_contexts/rdv_context_status_cell", rdv_context: rdv_context, category_configuration: category_configuration %>
             <% else %>
-              <td id=<%= dom_id(configuration.motif_category, "user_#{user.id}") %>>
-                <%= render "rdv_contexts/new_button", user: user, configuration: configuration, organisation: @organisation, department: @department, turbo: true, button_text: "Ajouter" %>
+              <td id=<%= dom_id(category_configuration.motif_category, "user_#{user.id}") %>>
+                <%= render "rdv_contexts/new_button", user: user, category_configuration: category_configuration, organisation: @organisation, department: @department, turbo: true, button_text: "Ajouter" %>
               </td>
             <% end %>
           <% end %>

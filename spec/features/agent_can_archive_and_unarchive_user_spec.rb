@@ -91,8 +91,8 @@ describe "Agents can archive and unarchive user", :js do
   describe "from upload page" do
     include_context "with file configuration"
 
-    let!(:configuration) do
-      create(:configuration, file_configuration: file_configuration, organisation: organisation)
+    let!(:category_configuration) do
+      create(:category_configuration, file_configuration: file_configuration, organisation: organisation)
     end
     let!(:user) do
       create(
@@ -107,7 +107,7 @@ describe "Agents can archive and unarchive user", :js do
     end
 
     it "can unarchive an user" do
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 
@@ -131,7 +131,7 @@ describe "Agents can archive and unarchive user", :js do
       end
 
       it "does not show the user as archived" do
-        visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+        visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
         attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 

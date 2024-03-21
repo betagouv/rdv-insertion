@@ -60,7 +60,7 @@ module InboundWebhooks
       end
 
       def matching_configuration
-        organisation.configurations.find_by(motif_category: motif_category)
+        organisation.category_configurations.find_by(motif_category: motif_category)
       end
 
       def motif_category

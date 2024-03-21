@@ -15,7 +15,7 @@ class Organisation < ApplicationRecord
   belongs_to :department
   has_one :stat, as: :statable, dependent: :destroy
   has_one :messages_configuration, dependent: :destroy
-  has_many :configurations, dependent: :destroy
+  has_many :category_configurations, dependent: :destroy
   has_many :rdvs, dependent: :nullify
   has_many :participations, through: :rdvs
   has_many :lieux, dependent: :nullify
@@ -27,7 +27,7 @@ class Organisation < ApplicationRecord
 
   has_many :users, through: :users_organisations
   has_many :agents, through: :agent_roles
-  has_many :motif_categories, -> { distinct }, through: :configurations
+  has_many :motif_categories, -> { distinct }, through: :category_configurations
   has_many :archived_users, through: :department
   has_many :tags, through: :tag_organisations
 

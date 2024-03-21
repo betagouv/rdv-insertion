@@ -10,9 +10,9 @@ describe "Agents can convene user to rdv", :js do
     )
   end
   let!(:rdv_solidarites_organisation_id) { 444 }
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       organisation: organisation,
       motif_category: motif_category,
       convene_user: true,
@@ -238,8 +238,8 @@ describe "Agents can convene user to rdv", :js do
         end
       end
 
-      context "when the configuration is not set to convene users" do
-        before { configuration.update! convene_user: false }
+      context "when the category_configuration is not set to convene users" do
+        before { category_configuration.update! convene_user: false }
 
         it "does not show a convocation button" do
           visit organisation_users_path(organisation, motif_category_id: motif_category.id)

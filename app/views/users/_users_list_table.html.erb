@@ -3,7 +3,7 @@
     <h4 class="py-4">Aucun usager ne correspond à votre recherche</h4>
   <% elsif archived_scope?(@users_scope) %>
     <%= render "archived_users_table" %>
-  <% elsif @current_configuration %>
+  <% elsif @current_category_configuration %>
     <%= render "users_table_for_motif_category" %>
   <% else %>
     <%= render "all_users_table" %>

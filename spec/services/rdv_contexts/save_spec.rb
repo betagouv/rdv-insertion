@@ -2,8 +2,8 @@ describe RdvContexts::Save do
   subject { described_class.call(rdv_context:) }
 
   let!(:user) { create(:user, organisations: [organisation]) }
-  let!(:organisation) { create(:organisation, configurations: [configuration]) }
-  let!(:configuration) { create(:configuration, motif_category: motif_category) }
+  let!(:organisation) { create(:organisation, category_configurations: [category_configuration]) }
+  let!(:category_configuration) { create(:category_configuration, motif_category: motif_category) }
   let!(:motif_category) { create(:motif_category) }
   let!(:rdv_context) { build(:rdv_context, user: user, motif_category: motif_category) }
 
@@ -13,7 +13,7 @@ describe RdvContexts::Save do
     end
 
     context "when the user does not belong to an organisation with this motif category" do
-      let!(:configuration) { create(:configuration, motif_category: other_motif_category) }
+      let!(:category_configuration) { create(:category_configuration, motif_category: other_motif_category) }
       let!(:other_motif_category) { create(:motif_category, short_name: "rsa_accompagnement") }
 
       it "is a failure" do

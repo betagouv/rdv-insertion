@@ -6,12 +6,14 @@ describe Users::RdvContextsController do
       let!(:department) { create(:department) }
       let!(:agent) { create(:agent, basic_role_in_organisations: [organisation]) }
       let!(:rdv_solidarites_organisation_id) { 888 }
-      let!(:configuration2) do
-        create(:configuration, motif_category: category_accompagnement, invitation_formats: %w[sms email postal])
+      let!(:category_configuration2) do
+        create(:category_configuration, motif_category: category_accompagnement,
+                                        invitation_formats: %w[sms email postal])
       end
       let!(:organisation) do
         create(:organisation, rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
-                              configurations: [configuration, configuration2], department_id: department.id)
+                              category_configurations: [category_configuration, category_configuration2],
+                              department_id: department.id)
       end
       let!(:rdv_context) do
         create(:rdv_context, status: "rdv_seen", user: user, motif_category: category_orientation)
@@ -61,9 +63,9 @@ describe Users::RdvContextsController do
       let!(:category_accompagnement) do
         create(:motif_category, short_name: "rsa_accompagnement", name: "RSA accompagnement")
       end
-      let!(:configuration) do
+      let!(:category_configuration) do
         create(
-          :configuration,
+          :category_configuration,
           motif_category: category_orientation,
           number_of_days_before_action_required: 10
         )
@@ -164,10 +166,10 @@ describe Users::RdvContextsController do
         end
       end
 
-      context "when there is no matching configuration for a rdv_context" do
+      context "when there is no matching category_configuration for a rdv_context" do
         let!(:organisation) do
           create(:organisation, rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
-                                department_id: department.id, configurations: [configuration2])
+                                department_id: department.id, category_configurations: [category_configuration2])
         end
 
         let!(:rdv_context) do

@@ -3,13 +3,14 @@ class ChangeConfigurationOrganisationAssociation < ActiveRecord::Migration[6.1]
     add_reference :organisations, :configuration, foreign_key: true
 
     Organisation.find_each do |organisation|
-      configuration = Configuration.find_by(organisation_id: organisation.id)
-      if configuration.blank?
-        configuration = Configuration.new(organisation_id: organisation.id, invitation_format: "sms_and_email")
-        configuration.save!
+      category_configuration = CategoryConfiguration.find_by(organisation_id: organisation.id)
+      if category_configuration.blank?
+        category_configuration = CategoryConfiguration.new(organisation_id: organisation.id,
+                                                           invitation_format: "sms_and_email")
+        category_configuration.save!
       end
 
-      organisation.update!(configuration_id: configuration.id)
+      organisation.update!(configuration_id: category_configuration.id)
     end
 
     remove_reference :configurations, :organisation, foreign_key: true
@@ -18,7 +19,7 @@ class ChangeConfigurationOrganisationAssociation < ActiveRecord::Migration[6.1]
   def down
     add_reference :configurations, :organisation, foreign_key: true
 
-    Configuration.find_each do |config|
+    CategoryConfiguration.find_each do |config|
       organisation = Organisation.find_by(configuration_id: config.id)
       next unless organisation
 

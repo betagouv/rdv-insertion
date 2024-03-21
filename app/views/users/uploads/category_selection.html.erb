@@ -17,10 +17,10 @@
           </i>
         <% end %>
       </div>
-      <% @all_configurations.each do |configuration| %>
+      <% @all_configurations.each do |category_configuration| %>
         <div>
-          <%= link_to(new_structure_upload_path(configuration_id: configuration.id), class: "btn btn-blue-out") do %>
-            <%= configuration.motif_category_name %>
+          <%= link_to(new_structure_upload_path(category_configuration_id: category_configuration.id), class: "btn btn-blue-out") do %>
+            <%= category_configuration.motif_category_name %>
           <% end %>
         </div>
       <% end %>

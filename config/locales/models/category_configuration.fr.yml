@@ -1,9 +1,9 @@
 fr:
   activerecord:
     models:
-      configuration: Configuration
+      category_configuration: CategoryConfiguration
     attributes:
-      configuration:
+      category_configuration:
         convene_user: Convocation possible
         number_of_days_before_action_required: Délai d'expiration (en jours)
         number_of_days_between_periodic_invites: Délai entre 2 invitations récurrentes (en jours)

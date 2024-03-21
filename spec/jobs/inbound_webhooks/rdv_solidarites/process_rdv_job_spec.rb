@@ -65,8 +65,8 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
   let!(:agent) { create(:agent) }
 
   let!(:motif_category) { create(:motif_category, short_name: "rsa_orientation") }
-  let!(:configuration) do
-    create(:configuration, organisation: organisation, convene_user: false, motif_category: motif_category)
+  let!(:category_configuration) do
+    create(:category_configuration, organisation: organisation, convene_user: false, motif_category: motif_category)
   end
   let!(:organisation) do
     create(
@@ -380,7 +380,7 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
       end
     end
 
-    context "with no matching configuration" do
+    context "with no matching category_configuration" do
       let!(:motif_attributes) { { id: 53, location_type: "public_office", category: "rsa_accompagnement" } }
 
       it "does not call any job" do
@@ -401,8 +401,9 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
             name: "RSA orientation: Convocation"
           }
         end
-        let!(:configuration) do
-          create(:configuration, organisation: organisation, convene_user: true, motif_category: motif_category)
+        let!(:category_configuration) do
+          create(:category_configuration, organisation: organisation, convene_user: true,
+                                          motif_category: motif_category)
         end
 
         it "sets the convocable attribute when upserting the rdv" do
@@ -442,8 +443,8 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
           subject
         end
 
-        context "when the configuration does not handle convocations" do
-          before { configuration.update! convene_user: false }
+        context "when the category_configuration does not handle convocations" do
+          before { category_configuration.update! convene_user: false }
 
           it "sets the convocable attribute when upserting the rdv" do
             expect(UpsertRecordJob).to receive(:perform_async).with(
@@ -513,8 +514,9 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
             name: "RSA orientation", collectif: true
           }
         end
-        let!(:configuration) do
-          create(:configuration, organisation: organisation, convene_user: true, motif_category: motif_category)
+        let!(:category_configuration) do
+          create(:category_configuration, organisation: organisation, convene_user: true,
+                                          motif_category: motif_category)
         end
         let!(:participations_attributes) do
           [
@@ -560,8 +562,8 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
           subject
         end
 
-        context "when the configuration does not handle convocations" do
-          before { configuration.update! convene_user: false }
+        context "when the category_configuration does not handle convocations" do
+          before { category_configuration.update! convene_user: false }
 
           it "sets the convocable attribute when upserting the rdv" do
             expect(UpsertRecordJob).to receive(:perform_async).with(
@@ -631,8 +633,9 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
             name: "RSA orientation", collectif: true
           }
         end
-        let!(:configuration) do
-          create(:configuration, organisation: organisation, convene_user: true, motif_category: motif_category)
+        let!(:category_configuration) do
+          create(:category_configuration, organisation: organisation, convene_user: true,
+                                          motif_category: motif_category)
         end
         let!(:participations_attributes) do
           [

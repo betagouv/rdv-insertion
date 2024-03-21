@@ -9,7 +9,7 @@ class MotifCategoryDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    configurations: Field::HasMany,
+    category_configurations: Field::HasMany,
     leads_to_orientation: Field::Boolean,
     motifs: Field::HasMany,
     name: Field::String,

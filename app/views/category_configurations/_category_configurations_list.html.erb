@@ -1,0 +1,22 @@
+<% category_configurations.each do |category_configuration| %>
+  <%= turbo_frame_tag category_configuration do %>
+    <div class="row card-white d-flex justify-content-around mb-2">
+      <div class="col-12 col-md-6 d-flex align-items-center">
+        <%= link_to(organisation_category_configuration_path(organisation, category_configuration), class: "col-12 col-md-6 d-flex align-items-center", data: { turbo: :false }) do %>
+          <%= category_configuration.motif_category_name %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-end">
+        <%= link_to organisation_category_configuration_path(organisation, category_configuration), data: { turbo: :false } do %>
+          <button class="btn btn-blue-out">Afficher</button>
+        <% end %>
+        <%= link_to edit_organisation_category_configuration_path(organisation, category_configuration), data: { turbo: :false } do %>
+          <button class="btn btn-blue mx-2">Modifier</button>
+        <% end %>
+        <%= button_to organisation_category_configuration_path(organisation, category_configuration), method: :delete, form: { data: { turbo_confirm: "Cette action va supprimer la category_configuration #{category_configuration.motif_category_name} pour votre organisation, êtes-vous sûr de vouloir continuer ?" } } do %>
+          <button class="btn btn-danger">Supprimer</button>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

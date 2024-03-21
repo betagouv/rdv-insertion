@@ -83,10 +83,10 @@ RSpec.describe InvitationMailer do
         end
       end
 
-      context "when template attributes are overriden by configuration attributes" do
-        let!(:configuration) do
+      context "when template attributes are overriden by category_configuration attributes" do
+        let!(:category_configuration) do
           create(
-            :configuration,
+            :category_configuration,
             motif_category: category_rsa_orientation, organisation:,
             template_rdv_title_override: "nouveau type de rendez-vous",
             template_rdv_purpose_override: "tester une nouvelle fonctionnalité"

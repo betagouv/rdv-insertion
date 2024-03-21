@@ -1,6 +1,6 @@
 <div class="row mb-4 card-white justify-content-center">
   <div class="col-4 justify-content-center">
-    <% if @current_configuration.present? %>
+    <% if @current_category_configuration.present? %>
       <div class="mb-1">
         <%=
           select(
@@ -22,16 +22,16 @@
         )
       %>
     </div>
-    <%= render "filter_by_creation_dates_button" if @current_configuration.nil? %>
-    <%= render "filter_by_invitations_dates_button" if @current_configuration.present? || archived_scope?(@users_scope) %>
+    <%= render "filter_by_creation_dates_button" if @current_category_configuration.nil? %>
+    <%= render "filter_by_invitations_dates_button" if @current_category_configuration.present? || archived_scope?(@users_scope) %>
     <%= render "search_form", url: structure_users_path %>
 
     <div class="d-flex justify-content-between mt-1" data-controller="index-filters">
       <div class="text-left mt-2">
-        <% if @tags.any? || @current_configuration.present? %>
+        <% if @tags.any? || @current_category_configuration.present? %>
           <i class="fas fa-filter"></i> Filtrer par :
         <% end %>
-        <% if @current_configuration.present? %>
+        <% if @current_category_configuration.present? %>
           <div class="mt-1">
             <input type="checkbox" name="action_required" class="form-check-input"></input> Usagers avec intervention nécessaire
             <small>
@@ -39,7 +39,7 @@
                 class="fas fa-question-circle"
                 data-controller="tooltip"
                 data-action="mouseover->tooltip#actionRequired"
-                data-number-of-days-before-action-required="<%= @current_configuration&.number_of_days_before_action_required %>"
+                data-number-of-days-before-action-required="<%= @current_category_configuration&.number_of_days_before_action_required %>"
               >
               </i>
             </small>
@@ -125,7 +125,7 @@
           <button class="btn btn-blue-out">Configurer une organisation</button>
         <% end %>
       <% elsif !department_level? && @current_agent_roles.any?(&:admin?) %>
-        <%= link_to(organisation_configurations_path(@organisation), class: "btn btn-blue-out mb-2") do %>
+        <%= link_to(organisation_category_configurations_path(@organisation), class: "btn btn-blue-out mb-2") do %>
           Configurer l'organisation
         <% end %>
       <% end %>
@@ -145,7 +145,7 @@
         </li>
       </ul>
     </div>
-    <% if @current_configuration.present? %>
+    <% if @current_category_configuration.present? %>
       <div class="d-flex flex-column align-items-end dropdown">
         <%= link_to(new_structure_batch_action_path(@current_motif_category.id), class: "btn btn-blue") do %>
           Envoyer des invitations aux non-invités

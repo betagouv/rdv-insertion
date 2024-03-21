@@ -51,8 +51,8 @@ describe "Agents can create a carnet", :js do
   describe "from upload page" do
     include_context "with file configuration"
 
-    let!(:configuration) do
-      create(:configuration, file_configuration: file_configuration, organisation: organisation)
+    let!(:category_configuration) do
+      create(:category_configuration, file_configuration: file_configuration, organisation: organisation)
     end
 
     before { stub_rdv_solidarites_create_user("some-id") }
@@ -68,7 +68,7 @@ describe "Agents can create a carnet", :js do
         }
       ).to_return(body: { "notebookId" => carnet_de_bord_carnet_id }.to_json)
 
-      visit new_organisation_upload_path(organisation, configuration_id: configuration.id)
+      visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
 
       attach_file("users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true)
 

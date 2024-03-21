@@ -11,7 +11,7 @@ class CreateLetterConfigurations < ActiveRecord::Migration[6.1]
     add_reference :organisations, :letter_configuration, foreign_key: true
 
     # assign a default letter_configuration for organisations who already have postal invitations
-    postal_configurations = Configuration.where("invitation_formats && ?", "{postal}")
+    postal_configurations = CategoryConfiguration.where("invitation_formats && ?", "{postal}")
     postal_organisations = Organisation.where(configuration_id: postal_configurations.pluck(:id))
     lc = LetterConfiguration.create!(direction_names: [
                                        "DIRECTION GÉNÉRALE DES SERVICES DÉPARTEMENTAUX",

@@ -10,9 +10,9 @@ describe "Agents can invite from index page", :js do
   let!(:motif_category) { create(:motif_category, short_name: "rsa_follow_up") }
   let!(:rdv_solidarites_token) { "123456" }
   let!(:rdv_context) { create(:rdv_context, user: user, motif_category: motif_category) }
-  let!(:configuration) do
+  let!(:category_configuration) do
     create(
-      :configuration,
+      :category_configuration,
       motif_category: motif_category, organisation: organisation, invitation_formats: %w[sms email]
     )
   end
