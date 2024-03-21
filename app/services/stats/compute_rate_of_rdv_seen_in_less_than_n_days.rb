@@ -1,48 +1,48 @@
 module Stats
   class ComputeRateOfRdvSeenInLessThanNDays < BaseService
-    def initialize(rdv_contexts:, number_of_days:)
-      @rdv_contexts = rdv_contexts
+    def initialize(follow_ups:, number_of_days:)
+      @follow_ups = follow_ups
       @number_of_days = number_of_days
     end
 
     def call
-      result.value = compute_rate_of_rdv_contexts_with_rdv_seen_in_less_than_n_days
+      result.value = compute_rate_of_follow_ups_with_rdv_seen_in_less_than_n_days
     end
 
     private
 
-    # Rate of rdv_contexts with rdv seen in less than n days
-    def compute_rate_of_rdv_contexts_with_rdv_seen_in_less_than_n_days
-      (rdv_contexts_with_rdv_seen_in_less_than_n_days.count / (
-        rdv_contexts_created_more_than_n_days_ago.count.nonzero? || 1
+    # Rate of follow_ups with rdv seen in less than n days
+    def compute_rate_of_follow_ups_with_rdv_seen_in_less_than_n_days
+      (follow_ups_with_rdv_seen_in_less_than_n_days.count / (
+        follow_ups_created_more_than_n_days_ago.count.nonzero? || 1
       ).to_f) * 100
     end
 
-    def rdv_contexts_with_rdv_seen_in_less_than_n_days
-      @rdv_contexts_with_rdv_seen_in_less_than_n_days ||= begin
-        rdv_contexts = []
+    def follow_ups_with_rdv_seen_in_less_than_n_days
+      @follow_ups_with_rdv_seen_in_less_than_n_days ||= begin
+        follow_ups = []
 
-        rdv_contexts_with_rdvs_seen_created_more_than_n_days_ago.find_in_batches(batch_size: 1000) do |batch|
-          rdv_contexts += batch.select { |record| record.rdv_seen_delay_in_days < @number_of_days }
+        follow_ups_with_rdvs_seen_created_more_than_n_days_ago.find_in_batches(batch_size: 1000) do |batch|
+          follow_ups += batch.select { |record| record.rdv_seen_delay_in_days < @number_of_days }
         end
 
-        rdv_contexts
+        follow_ups
       end
     end
 
-    def rdv_contexts_with_rdvs_seen_created_more_than_n_days_ago
-      @rdv_contexts_with_rdvs_seen_created_more_than_n_days_ago ||=
-        # we load the ids of rdv_contexts_created_more_than_n_days_ago to simplify the request
+    def follow_ups_with_rdvs_seen_created_more_than_n_days_ago
+      @follow_ups_with_rdvs_seen_created_more_than_n_days_ago ||=
+        # we load the ids of follow_ups_created_more_than_n_days_ago to simplify the request
         # that is triggered in each batch in the find_in_batches block above
-        RdvContext.where(id: rdv_contexts_created_more_than_n_days_ago)
-                  .joins(:participations)
-                  .where(participations: { status: "seen" })
-                  .distinct
+        FollowUp.where(id: follow_ups_created_more_than_n_days_ago)
+                .joins(:participations)
+                .where(participations: { status: "seen" })
+                .distinct
     end
 
-    def rdv_contexts_created_more_than_n_days_ago
-      @rdv_contexts_created_more_than_n_days_ago ||= @rdv_contexts.where("rdv_contexts.created_at < ?",
-                                                                         @number_of_days.days.ago).to_a
+    def follow_ups_created_more_than_n_days_ago
+      @follow_ups_created_more_than_n_days_ago ||= @follow_ups.where("follow_ups.created_at < ?",
+                                                                     @number_of_days.days.ago).to_a
     end
   end
 end

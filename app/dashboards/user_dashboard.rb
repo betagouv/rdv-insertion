@@ -34,7 +34,7 @@ class UserDashboard < Administrate::BaseDashboard
     participations: Field::HasMany,
     phone_number: Field::String,
     france_travail_id: Field::String,
-    rdv_contexts: Field::HasMany,
+    follow_ups: Field::HasMany,
     rdv_solidarites_user_id: Field::Number,
     rdvs: Field::HasMany,
     referent_assignations: Field::HasMany,

@@ -1,23 +1,23 @@
 describe Stats::ComputeAverageTimeBetweenInvitationAndRdvInDays, type: :service do
-  subject { described_class.call(rdv_contexts: rdv_contexts) }
+  subject { described_class.call(follow_ups: follow_ups) }
 
   let(:date) { Time.zone.parse("17/03/2022 12:00") }
 
-  let!(:rdv_contexts) { RdvContext.where(id: [rdv_context1, rdv_context2]) }
+  let!(:follow_ups) { FollowUp.where(id: [follow_up1, follow_up2]) }
 
-  # First rdv_context : 2 days delay between first invitation and first participation creation
-  let!(:rdv_context1) { create(:rdv_context, created_at: date) }
-  let!(:invitation1) { create(:invitation, created_at: date, rdv_context: rdv_context1) }
+  # First follow_up : 2 days delay between first invitation and first participation creation
+  let!(:follow_up1) { create(:follow_up, created_at: date) }
+  let!(:invitation1) { create(:invitation, created_at: date, follow_up: follow_up1) }
   let!(:participation1) do
-    create(:participation, rdv_context: rdv_context1, created_at: (date + 2.days), status: "seen")
+    create(:participation, follow_up: follow_up1, created_at: (date + 2.days), status: "seen")
   end
   let!(:rdv1) { create(:rdv, created_at: (date + 2.days), participations: [participation1]) }
 
-  # Second rdv_context : 4 days delay between first invitation and first participation creation
-  let!(:rdv_context2) { create(:rdv_context, created_at: date) }
-  let!(:invitation2) { create(:invitation, created_at: date, rdv_context: rdv_context2) }
+  # Second follow_up : 4 days delay between first invitation and first participation creation
+  let!(:follow_up2) { create(:follow_up, created_at: date) }
+  let!(:invitation2) { create(:invitation, created_at: date, follow_up: follow_up2) }
   let!(:participation2) do
-    create(:participation, rdv_context: rdv_context2, created_at: (date + 4.days), status: "seen")
+    create(:participation, follow_up: follow_up2, created_at: (date + 4.days), status: "seen")
   end
   let!(:rdv2) { create(:rdv, created_at: (date + 4.days), participations: [participation2]) }
 
@@ -38,12 +38,12 @@ describe Stats::ComputeAverageTimeBetweenInvitationAndRdvInDays, type: :service 
 
     context "negative values" do
       let!(:participation1) do
-        create(:participation, rdv_context: rdv_context1, created_at: (date - 2.days), status: "seen")
+        create(:participation, follow_up: follow_up1, created_at: (date - 2.days), status: "seen")
       end
       let!(:rdv1) { create(:rdv, created_at: (date - 2.days), participations: [participation1]) }
 
       let!(:participation2) do
-        create(:participation, rdv_context: rdv_context2, created_at: (date + 4.days), status: "seen")
+        create(:participation, follow_up: follow_up2, created_at: (date + 4.days), status: "seen")
       end
       let!(:rdv2) { create(:rdv, created_at: (date + 4.days), participations: [participation2]) }
 
@@ -53,12 +53,12 @@ describe Stats::ComputeAverageTimeBetweenInvitationAndRdvInDays, type: :service 
 
       context "no positive values" do
         let!(:participation1) do
-          create(:participation, rdv_context: rdv_context1, created_at: (date - 2.days), status: "seen")
+          create(:participation, follow_up: follow_up1, created_at: (date - 2.days), status: "seen")
         end
         let!(:rdv1) { create(:rdv, created_at: (date - 2.days), participations: [participation1]) }
 
         let!(:participation2) do
-          create(:participation, rdv_context: rdv_context2, created_at: (date - 4.days), status: "seen")
+          create(:participation, follow_up: follow_up2, created_at: (date - 4.days), status: "seen")
         end
         let!(:rdv2) { create(:rdv, created_at: (date - 4.days), participations: [participation2]) }
 

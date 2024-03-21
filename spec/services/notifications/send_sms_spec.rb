@@ -24,7 +24,7 @@ describe Notifications::SendSms, type: :service do
       region: "Auvergne-Rhône-Alpes"
     )
   end
-  let!(:rdv_context) { create(:rdv_context, motif_category: category_rsa_orientation) }
+  let!(:follow_up) { create(:follow_up, motif_category: category_rsa_orientation) }
   let!(:motif) do
     create(
       :motif, location_type: "public_office",
@@ -44,7 +44,7 @@ describe Notifications::SendSms, type: :service do
     )
   end
   let!(:participation) do
-    create(:participation, user: user, rdv: rdv, rdv_context: rdv_context)
+    create(:participation, user: user, rdv: rdv, follow_up: follow_up)
   end
   let!(:notification) do
     create(:notification, participation: participation, format: "sms", event: "participation_created")
@@ -308,7 +308,7 @@ describe Notifications::SendSms, type: :service do
     describe "RSA accompagnement" do
       %w[category_rsa_accompagnement category_rsa_accompagnement_social category_rsa_accompagnement_sociopro]
         .each do |motif_category|
-        let!(:rdv_context) { create(:rdv_context, motif_category: send(motif_category)) }
+        let!(:follow_up) { create(:follow_up, motif_category: send(motif_category)) }
 
         let!(:content) do
           "M. John DOE,\nVous êtes bénéficiaire du RSA et êtes convoqué à un " \
@@ -423,7 +423,7 @@ describe Notifications::SendSms, type: :service do
 
     describe "RSA CER Signature" do
       let!(:motif) { create(:motif, location_type: "public_office") }
-      let!(:rdv_context) { create(:rdv_context, motif_category: category_rsa_cer_signature) }
+      let!(:follow_up) { create(:follow_up, motif_category: category_rsa_cer_signature) }
 
       let!(:content) do
         "M. John DOE,\nVous êtes bénéficiaire du RSA et êtes convoqué à un " \
@@ -537,7 +537,7 @@ describe Notifications::SendSms, type: :service do
 
     describe "RSA suivi" do
       let!(:motif) { create(:motif, location_type: "public_office") }
-      let!(:rdv_context) { create(:rdv_context, motif_category: category_rsa_follow_up) }
+      let!(:follow_up) { create(:follow_up, motif_category: category_rsa_follow_up) }
 
       let!(:content) do
         "M. John DOE,\nVous êtes bénéficiaire du RSA et êtes convoqué à un " \
@@ -646,7 +646,7 @@ describe Notifications::SendSms, type: :service do
 
     describe "RSA SPIE" do
       let!(:motif) { create(:motif, location_type: "public_office") }
-      let!(:rdv_context) { create(:rdv_context, motif_category: category_rsa_spie) }
+      let!(:follow_up) { create(:follow_up, motif_category: category_rsa_spie) }
 
       let!(:content) do
         "M. John DOE,\nVous êtes demandeur d'emploi et êtes convoqué à un " \

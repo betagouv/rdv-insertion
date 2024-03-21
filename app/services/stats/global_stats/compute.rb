@@ -54,25 +54,25 @@ module Stats
 
       def average_time_between_invitation_and_rdv_in_days
         ComputeAverageTimeBetweenInvitationAndRdvInDays.call(
-          rdv_contexts: @stat.rdv_contexts_with_invitations_and_participations_set
+          follow_ups: @stat.follow_ups_with_invitations_and_participations_set
         ).value
       end
 
       def rate_of_users_oriented_in_less_than_30_days
         ComputeRateOfRdvSeenInLessThanNDays.call(
-          rdv_contexts: @stat.users_first_orientation_rdv_context, number_of_days: 30
+          follow_ups: @stat.users_first_orientation_follow_up, number_of_days: 30
         ).value
       end
 
       def rate_of_users_oriented_in_less_than_15_days
         ComputeRateOfRdvSeenInLessThanNDays.call(
-          rdv_contexts: @stat.users_first_orientation_rdv_context, number_of_days: 15
+          follow_ups: @stat.users_first_orientation_follow_up, number_of_days: 15
         ).value
       end
 
       def rate_of_users_oriented
         ComputeRateOfUsersWithRdvSeen.call(
-          rdv_contexts: @stat.orientation_rdv_contexts_with_invitations
+          follow_ups: @stat.orientation_follow_ups_with_invitations
         ).value
       end
 

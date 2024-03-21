@@ -1,0 +1,5 @@
+<%= link_to follow_up_closings_path(follow_up.id), data: { turbo_frame: "user_page" }, method: :post do %>
+  <button class="btn btn-blue-out" data-controller="tooltip" data-action="mouseover->tooltip#closeFollowUpButton">
+    <i class="fas fa-lock"></i> Clôturer
+  </button>
+<% end %>

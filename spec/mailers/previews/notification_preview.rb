@@ -9,8 +9,8 @@ class NotificationPreview < ActionMailer::Preview
                                                               .where.not(rdv: { lieu_id: nil })
       ).first
     participation = notification.participation
-    rdv_context = RdvContext.new(motif_category: motif_category, user: participation.user)
-    participation.rdv_context = rdv_context
+    follow_up = FollowUp.new(motif_category: motif_category, user: participation.user)
+    participation.follow_up = follow_up
 
     define_method "#{motif_category.short_name}_presential_participation_created" do
       NotificationMailer.with(notification: notification)

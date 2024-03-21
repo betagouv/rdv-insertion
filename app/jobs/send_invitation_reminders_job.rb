@@ -2,17 +2,17 @@ class SendInvitationRemindersJob < ApplicationJob
   def perform
     @sent_reminders_user_ids = []
 
-    rdv_contexts_with_reminder_needed.find_each do |rdv_context|
-      invitation = rdv_context.first_invitation_relative_to_last_participation
+    follow_ups_with_reminder_needed.find_each do |follow_up|
+      invitation = follow_up.first_invitation_relative_to_last_participation
       # we check here that the **first** invitation has been sent Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER
       # number of days ago with that value being set to 3
       next unless invitation_sent_3_days_ago?(invitation)
       next if invitation_related_to_archive?(invitation)
 
-      user = rdv_context.user
+      user = follow_up.user
 
-      SendInvitationReminderJob.perform_async(rdv_context.id, "email") if user.email?
-      SendInvitationReminderJob.perform_async(rdv_context.id, "sms") if user.phone_number_is_mobile?
+      SendInvitationReminderJob.perform_async(follow_up.id, "email") if user.email?
+      SendInvitationReminderJob.perform_async(follow_up.id, "sms") if user.phone_number_is_mobile?
 
       @sent_reminders_user_ids << user.id
     end
@@ -22,14 +22,14 @@ class SendInvitationRemindersJob < ApplicationJob
 
   private
 
-  def rdv_contexts_with_reminder_needed
-    @rdv_contexts_with_reminder_needed ||=
-      RdvContext.invitation_pending
-                .joins(:motif_category)
-                .where(motif_category: MotifCategory.optional_rdv_subscription(false))
-                .where(id: valid_invitations_sent_3_days_ago.pluck(:rdv_context_id))
-                .where(user_id: User.active.select(:id))
-                .distinct
+  def follow_ups_with_reminder_needed
+    @follow_ups_with_reminder_needed ||=
+      FollowUp.invitation_pending
+              .joins(:motif_category)
+              .where(motif_category: MotifCategory.optional_rdv_subscription(false))
+              .where(id: valid_invitations_sent_3_days_ago.pluck(:follow_up_id))
+              .where(user_id: User.active.select(:id))
+              .distinct
   end
 
   def valid_invitations_sent_3_days_ago

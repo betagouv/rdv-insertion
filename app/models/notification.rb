@@ -14,7 +14,7 @@ class Notification < ApplicationRecord
 
   validates :format, :event, :rdv_solidarites_rdv_id, presence: true
 
-  delegate :department, :user, :rdv, :motif_category, :instruction_for_rdv, :rdv_context, to: :participation
+  delegate :department, :user, :rdv, :motif_category, :instruction_for_rdv, :follow_up, to: :participation
   delegate :organisation, to: :rdv, allow_nil: true
   delegate :messages_configuration, :configurations, to: :organisation
 

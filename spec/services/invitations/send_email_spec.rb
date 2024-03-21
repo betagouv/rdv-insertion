@@ -23,7 +23,7 @@ describe Invitations::SendEmail, type: :service do
           :invitation,
           format: "email",
           user: user,
-          rdv_context: build(:rdv_context, motif_category: category_rsa_orientation)
+          follow_up: build(:follow_up, motif_category: category_rsa_orientation)
         )
       end
 
@@ -42,7 +42,7 @@ describe Invitations::SendEmail, type: :service do
             :invitation,
             format: "email",
             user: user,
-            rdv_context: build(:rdv_context, motif_category: category_rsa_orientation),
+            follow_up: build(:follow_up, motif_category: category_rsa_orientation),
             reminder: true
           )
         end
@@ -94,7 +94,7 @@ describe Invitations::SendEmail, type: :service do
           :invitation,
           format: "email",
           user: user,
-          rdv_context: build(:rdv_context, motif_category: category_psychologue)
+          follow_up: build(:follow_up, motif_category: category_psychologue)
         )
       end
 
@@ -112,7 +112,7 @@ describe Invitations::SendEmail, type: :service do
           create(
             :invitation,
             user: user, format: "email",
-            rdv_context: build(:rdv_context, motif_category: category_psychologue),
+            follow_up: build(:follow_up, motif_category: category_psychologue),
             reminder: true
           )
         end
@@ -134,7 +134,7 @@ describe Invitations::SendEmail, type: :service do
           :invitation,
           format: "email",
           user: user,
-          rdv_context: build(:rdv_context, motif_category: category_atelier_enfants_ados)
+          follow_up: build(:follow_up, motif_category: category_atelier_enfants_ados)
         )
       end
 
@@ -152,7 +152,7 @@ describe Invitations::SendEmail, type: :service do
           create(
             :invitation,
             user: user, format: "email",
-            rdv_context: build(:rdv_context, motif_category: category_atelier_enfants_ados),
+            follow_up: build(:follow_up, motif_category: category_atelier_enfants_ados),
             reminder: true
           )
         end
@@ -174,7 +174,7 @@ describe Invitations::SendEmail, type: :service do
           :invitation,
           format: "email",
           user: user,
-          rdv_context: build(:rdv_context, motif_category: category_rsa_orientation_france_travail)
+          follow_up: build(:follow_up, motif_category: category_rsa_orientation_france_travail)
         )
       end
 
@@ -193,7 +193,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_rsa_orientation_on_phone_platform)
+          follow_up: build(:follow_up, motif_category: category_rsa_orientation_on_phone_platform)
         )
       end
 
@@ -211,7 +211,7 @@ describe Invitations::SendEmail, type: :service do
           create(
             :invitation,
             user: user, format: "email",
-            rdv_context: build(:rdv_context, motif_category: category_rsa_orientation_on_phone_platform),
+            follow_up: build(:follow_up, motif_category: category_rsa_orientation_on_phone_platform),
             reminder: true
           )
         end
@@ -233,7 +233,7 @@ describe Invitations::SendEmail, type: :service do
           :invitation,
           format: "email",
           user: user,
-          rdv_context: build(:rdv_context, motif_category: category_rsa_insertion_offer)
+          follow_up: build(:follow_up, motif_category: category_rsa_insertion_offer)
         )
       end
 
@@ -252,7 +252,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_rsa_atelier_competences)
+          follow_up: build(:follow_up, motif_category: category_rsa_atelier_competences)
         )
       end
 
@@ -271,7 +271,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_rsa_atelier_rencontres_pro)
+          follow_up: build(:follow_up, motif_category: category_rsa_atelier_rencontres_pro)
         )
       end
 
@@ -290,7 +290,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_siae_interview)
+          follow_up: build(:follow_up, motif_category: category_siae_interview)
         )
       end
 
@@ -309,7 +309,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_siae_follow_up)
+          follow_up: build(:follow_up, motif_category: category_siae_follow_up)
         )
       end
 
@@ -328,7 +328,7 @@ describe Invitations::SendEmail, type: :service do
         create(
           :invitation,
           user: user, format: "email",
-          rdv_context: build(:rdv_context, motif_category: category_siae_collective_information)
+          follow_up: build(:follow_up, motif_category: category_siae_collective_information)
         )
       end
 

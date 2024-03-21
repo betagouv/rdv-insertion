@@ -9,7 +9,7 @@ describe "Agents can invite from index page", :js do
   end
   let!(:motif_category) { create(:motif_category, short_name: "rsa_follow_up") }
   let!(:rdv_solidarites_token) { "123456" }
-  let!(:rdv_context) { create(:rdv_context, user: user, motif_category: motif_category) }
+  let!(:follow_up) { create(:follow_up, user: user, motif_category: motif_category) }
   let!(:configuration) do
     create(
       :configuration,
@@ -31,8 +31,8 @@ describe "Agents can invite from index page", :js do
 
   context "when no invitations is sent" do
     it "can invite the user" do
-      rdv_context.set_status
-      rdv_context.save!
+      follow_up.set_status
+      follow_up.save!
 
       visit organisation_users_path(organisation, motif_category_id: motif_category.id)
       expect(page).to have_field("sms_invite_for_user_#{user.id}", checked: false, disabled: false)
@@ -55,8 +55,8 @@ describe "Agents can invite from index page", :js do
       end
 
       it "cannot invite the user" do
-        rdv_context.set_status
-        rdv_context.save!
+        follow_up.set_status
+        follow_up.save!
 
         visit organisation_users_path(organisation, motif_category_id: motif_category.id)
         check("email_invite_for_user_#{user.id}")
@@ -74,14 +74,14 @@ describe "Agents can invite from index page", :js do
     let!(:sms_invitation) do
       create(
         :invitation,
-        format: "sms", user: user, rdv_context: rdv_context, rdv_solidarites_token: rdv_solidarites_token,
+        format: "sms", user: user, follow_up: follow_up, rdv_solidarites_token: rdv_solidarites_token,
         created_at: 2.days.ago
       )
     end
 
     it "can invite in the format where invitation has not been sent" do
-      rdv_context.set_status
-      rdv_context.save!
+      follow_up.set_status
+      follow_up.save!
 
       visit organisation_users_path(organisation, motif_category_id: motif_category.id)
       expect(page).to have_field("email_invite_for_user_#{user.id}", checked: false, disabled: false)
@@ -92,8 +92,8 @@ describe "Agents can invite from index page", :js do
     end
 
     it "can re-invite in the format where invitation has been sent" do
-      rdv_context.set_status
-      rdv_context.save!
+      follow_up.set_status
+      follow_up.save!
 
       visit organisation_users_path(organisation, motif_category_id: motif_category.id)
       expect(page).to have_no_field("sms_invite_for_user_#{user.id}")
@@ -110,7 +110,7 @@ describe "Agents can invite from index page", :js do
     let!(:participation) do
       create(
         :participation,
-        rdv: rdv, user: user, rdv_context: rdv_context, status: "seen", created_at: 4.days.ago
+        rdv: rdv, user: user, follow_up: follow_up, status: "seen", created_at: 4.days.ago
       )
     end
 
@@ -118,14 +118,14 @@ describe "Agents can invite from index page", :js do
       let!(:sms_invitation) do
         create(
           :invitation,
-          format: "sms", user: user, rdv_context: rdv_context, created_at: 6.days.ago,
+          format: "sms", user: user, follow_up: follow_up, created_at: 6.days.ago,
           rdv_solidarites_token: rdv_solidarites_token
         )
       end
 
       it "can invite the user in all format" do
-        rdv_context.set_status
-        rdv_context.save!
+        follow_up.set_status
+        follow_up.save!
 
         visit organisation_users_path(organisation, motif_category_id: motif_category.id)
         expect(page).to have_field("sms_invite_for_user_#{user.id}", checked: false, disabled: false)
@@ -148,8 +148,8 @@ describe "Agents can invite from index page", :js do
         end
 
         it "cannot invite the user" do
-          rdv_context.set_status
-          rdv_context.save!
+          follow_up.set_status
+          follow_up.save!
 
           visit organisation_users_path(organisation, motif_category_id: motif_category.id)
           check("email_invite_for_user_#{user.id}")
@@ -167,14 +167,14 @@ describe "Agents can invite from index page", :js do
       let!(:sms_invitation) do
         create(
           :invitation,
-          format: "sms", user: user, rdv_context: rdv_context, created_at: 2.days.ago,
+          format: "sms", user: user, follow_up: follow_up, created_at: 2.days.ago,
           rdv_solidarites_token: rdv_solidarites_token
         )
       end
 
       it "can invite in the format where invitation has not been sent" do
-        rdv_context.set_status
-        rdv_context.save!
+        follow_up.set_status
+        follow_up.save!
 
         visit organisation_users_path(organisation, motif_category_id: motif_category.id)
         expect(page).to have_field("email_invite_for_user_#{user.id}", checked: false, disabled: false)
@@ -185,8 +185,8 @@ describe "Agents can invite from index page", :js do
       end
 
       it "can re-invite in the format where invitation has been sent" do
-        rdv_context.set_status
-        rdv_context.save!
+        follow_up.set_status
+        follow_up.save!
 
         visit organisation_users_path(organisation, motif_category_id: motif_category.id)
         expect(page).to have_no_field("sms_invite_for_user_#{user.id}")
@@ -203,21 +203,21 @@ describe "Agents can invite from index page", :js do
       let!(:participation) do
         create(
           :participation,
-          rdv: rdv, user: user, rdv_context: rdv_context, status: "unknown", created_at: 4.days.ago
+          rdv: rdv, user: user, follow_up: follow_up, status: "unknown", created_at: 4.days.ago
         )
       end
 
       let!(:sms_invitation) do
         create(
           :invitation,
-          format: "sms", user: user, rdv_context: rdv_context, created_at: 2.days.ago,
+          format: "sms", user: user, follow_up: follow_up, created_at: 2.days.ago,
           rdv_solidarites_token: rdv_solidarites_token
         )
       end
 
       it "cannot invite in any format and do not show the invitation fields" do
-        rdv_context.set_status
-        rdv_context.save!
+        follow_up.set_status
+        follow_up.save!
 
         visit organisation_users_path(organisation, motif_category_id: motif_category.id)
         expect(page).to have_no_field("sms_invite_for_user_#{user.id}")

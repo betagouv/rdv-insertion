@@ -11,8 +11,8 @@ module Participations
         @participation.update!(@participation_params)
 
         if @participation_params[:status].present?
-          @participation.rdv_context.set_status
-          @participation.rdv_context.save!
+          @participation.follow_up.set_status
+          @participation.follow_up.save!
         end
       end
     end

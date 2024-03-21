@@ -1,7 +1,7 @@
 # rails runner scripts/create_users_and_rdvs.rb
 # Ce script est hors seeds car les records créés ainsi ne sont pas liés à rdv-solidarités
 # Il crée 350 bénéficiaires sur un an, un par jour
-# Pour chacun, un rdv_context d'orientation, une invitation et un rdv est créé
+# Pour chacun, un follow_up d'orientation, une invitation et un rdv est créé
 # 90% des rdvs sont marqués comme honorés, 10% comme noshow ; les délais de rdv sont aléatoires
 # Peut être utile pour tester des fonctionnalités, par exemple les statistiques
 
@@ -23,7 +23,7 @@ date = 1.year.ago
   )
   user.organisation_ids = [1]
   user.save!
-  rc = RdvContext.create!(
+  rc = FollowUp.create!(
     context: "rsa_orientation",
     created_at: date,
     updated_at: date,
@@ -38,7 +38,7 @@ date = 1.year.ago
     rdv_solidarites_token: "sometoken#{i}",
     link: "http://www.test.com/test&id=#{i}",
     department_id: 1,
-    rdv_context_id: rc.id
+    follow_up_id: rc.id
   )
   invitation.organisation_ids = [1]
   invitation.save!
@@ -55,7 +55,7 @@ date = 1.year.ago
   )
   rdv.status = i.to_s.ends_with?("1") ? "noshow" : "seen"
   rdv.user_ids = [user.id]
-  rdv.rdv_context_ids = [rc.id]
+  rdv.follow_up_ids = [rc.id]
   rdv.save!
   date += 1.day
 end

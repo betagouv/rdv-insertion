@@ -2,7 +2,7 @@ RSpec.describe NotificationMailer do
   include_context "with all existing categories"
 
   let!(:notification) { create(:notification, participation: participation) }
-  let!(:participation) { create(:participation, user: user, rdv: rdv, rdv_context: rdv_context) }
+  let!(:participation) { create(:participation, user: user, rdv: rdv, follow_up: follow_up) }
   let!(:user) { create(:user, email: "someone@gmail.com", title: "monsieur", phone_number: "0607070707") }
   let!(:motif) do
     create(
@@ -23,7 +23,7 @@ RSpec.describe NotificationMailer do
   end
   let!(:lieu) { create(:lieu, name: "DINUM", address: "20 avenue de ségur 75007 Paris", phone_number: "0101010101") }
   let!(:signature_lines) { ["Signé par la DINUM"] }
-  let!(:rdv_context) { create(:rdv_context, motif_category: motif_category) }
+  let!(:follow_up) { create(:follow_up, motif_category: motif_category) }
   let!(:motif_category) { category_rsa_orientation }
 
   describe "#presential_participation_created" do

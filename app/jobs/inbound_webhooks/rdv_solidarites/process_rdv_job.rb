@@ -157,7 +157,7 @@ module InboundWebhooks
           created_by: rdv_solidarites_participation.created_by,
           user_id: user.id,
           rdv_solidarites_participation_id: rdv_solidarites_participation.id,
-          rdv_context_id: rdv_context_for(user).id,
+          follow_up_id: follow_up_for(user).id,
           rdv_solidarites_agent_prescripteur_id:
             retrieve_rdv_solidarites_agent_prescripteur_id(rdv_solidarites_participation)
         }
@@ -180,8 +180,8 @@ module InboundWebhooks
         rdv_solidarites_participation.created_by_id
       end
 
-      def rdv_context_for(user)
-        rdv_contexts.find { _1.user_id == user.id }
+      def follow_up_for(user)
+        follow_ups.find { _1.user_id == user.id }
       end
 
       def organisation
@@ -227,8 +227,8 @@ module InboundWebhooks
       def invitations_to_invalidate
         # we don't invalidate invitations when the participation is optional
         @invitations_to_invalidate ||=
-          Invitation.valid.where(rdv_context_id: rdv_context_ids)
-                    .joins(rdv_context: :motif_category)
+          Invitation.valid.where(follow_up_id: follow_up_ids)
+                    .joins(follow_up: :motif_category)
                     .where(motif_categories: { optional_rdv_subscription: false })
       end
 
@@ -236,17 +236,17 @@ module InboundWebhooks
         invitations_to_invalidate.each { |invitation| InvalidateInvitationJob.perform_async(invitation.id) }
       end
 
-      def rdv_contexts
-        @rdv_contexts ||=
+      def follow_ups
+        @follow_ups ||=
           @users.map do |user|
-            RdvContext.with_advisory_lock "setting_rdv_context_for_user_#{user.id}" do
-              RdvContext.find_or_create_by!(user: user, motif_category: motif_category)
+            FollowUp.with_advisory_lock "setting_follow_up_for_user_#{user.id}" do
+              FollowUp.find_or_create_by!(user: user, motif_category: motif_category)
             end
           end
       end
 
-      def rdv_context_ids
-        rdv_contexts.map(&:id)
+      def follow_up_ids
+        follow_ups.map(&:id)
       end
     end
     # rubocop:enable Metrics/ClassLength

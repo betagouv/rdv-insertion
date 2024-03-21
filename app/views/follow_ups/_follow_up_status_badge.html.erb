@@ -1,0 +1,11 @@
+<%= turbo_frame_tag dom_id(follow_up, :status_tag) do %>
+  <div id="js-block-status-<%= follow_up.motif_category_id %>">
+    <span class="badge rounded-pill <%= badge_background_class(follow_up, configuration.number_of_days_before_action_required) %>">
+      <% if follow_up.closed? %>
+        <%= "Traité le #{format_date(follow_up.closed_at)}" %>
+      <% else %>
+        <%= display_follow_up_status(follow_up, configuration.number_of_days_before_action_required) %>
+      <% end %>
+    </span>
+  </div>
+<% end %>

@@ -11,7 +11,7 @@ class InviteUser < BaseService
 
   def call
     set_current_configuration
-    find_or_create_rdv_context
+    find_or_create_follow_up
     set_invitation_organisations
     set_invitation
     result.invitation = @invitation
@@ -26,7 +26,7 @@ class InviteUser < BaseService
       user: @user,
       department: department,
       organisations: @invitation_organisations,
-      rdv_context: @rdv_context,
+      follow_up: @follow_up,
       # the validity of an invitation is equal to the number of days before an action is required,
       # then the organisation usually convene the user
       valid_until: @current_configuration.number_of_days_before_action_required.days.from_now,
@@ -56,12 +56,12 @@ class InviteUser < BaseService
   end
 
   def invitation_already_sent_today?
-    @rdv_context.invitations.where(format: @invitation.format).where("created_at > ?", 24.hours.ago).present?
+    @follow_up.invitations.where(format: @invitation.format).where("created_at > ?", 24.hours.ago).present?
   end
 
-  def find_or_create_rdv_context
-    RdvContext.with_advisory_lock "setting_rdv_context_for_user_#{@user.id}" do
-      @rdv_context = RdvContext.find_or_create_by!(motif_category: @current_configuration.motif_category, user: @user)
+  def find_or_create_follow_up
+    FollowUp.with_advisory_lock "setting_follow_up_for_user_#{@user.id}" do
+      @follow_up = FollowUp.find_or_create_by!(motif_category: @current_configuration.motif_category, user: @user)
     end
   end
 

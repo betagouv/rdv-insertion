@@ -21,7 +21,7 @@ describe InviteUser, type: :service do
   let!(:invitation_attributes) { { format: "sms", rdv_solidarites_lieu_id: 2 } }
   let!(:motif_category) { create(:motif_category, **motif_category_attributes) }
   let!(:motif_category_attributes) { { short_name: "rsa_accompagnement" } }
-  let!(:rdv_context) { create(:rdv_context, user:, motif_category:) }
+  let!(:follow_up) { create(:follow_up, user:, motif_category:) }
 
   let!(:invitation) { build(:invitation) }
   let!(:now) { Time.zone.parse("24/12/2022") }
@@ -41,7 +41,7 @@ describe InviteUser, type: :service do
     it "instanciates an invitation" do
       expect(Invitation).to receive(:new)
         .with(
-          organisations: [organisation], user:, department:, rdv_context:, valid_until: 5.days.from_now,
+          organisations: [organisation], user:, department:, follow_up:, valid_until: 5.days.from_now,
           rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
           help_phone_number: organisation.phone_number
         )
@@ -65,7 +65,7 @@ describe InviteUser, type: :service do
         it "instanciates an invitation" do
           expect(Invitation).to receive(:new)
             .with(
-              organisations: [organisation], user:, department:, rdv_context:, valid_until: 5.days.from_now,
+              organisations: [organisation], user:, department:, follow_up:, valid_until: 5.days.from_now,
               rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
               help_phone_number: organisation.phone_number
             )
@@ -113,7 +113,7 @@ describe InviteUser, type: :service do
           it "invites to the user org only" do
             expect(Invitation).to receive(:new)
               .with(
-                organisations: [organisation], user:, department:, rdv_context:, valid_until: 5.days.from_now,
+                organisations: [organisation], user:, department:, follow_up:, valid_until: 5.days.from_now,
                 rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
                 help_phone_number: organisation.phone_number
               )
@@ -134,7 +134,7 @@ describe InviteUser, type: :service do
           it "invites with the proper phone number" do
             expect(Invitation).to receive(:new)
               .with(
-                organisations: [organisation], user:, department:, rdv_context:, valid_until: 5.days.from_now,
+                organisations: [organisation], user:, department:, follow_up:, valid_until: 5.days.from_now,
                 rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
                 help_phone_number: phone_number
               )
@@ -152,7 +152,7 @@ describe InviteUser, type: :service do
           it "invites to all the orgs" do
             expect(Invitation).to receive(:new)
               .with(
-                organisations:, user:, department:, rdv_context:, valid_until: 5.days.from_now,
+                organisations:, user:, department:, follow_up:, valid_until: 5.days.from_now,
                 rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
                 help_phone_number: organisation.phone_number
               )
@@ -167,7 +167,7 @@ describe InviteUser, type: :service do
       end
 
       context "when there is already a sent invitation today" do
-        let!(:existing_invitation) { create(:invitation, format: "sms", created_at: 4.hours.ago, rdv_context:) }
+        let!(:existing_invitation) { create(:invitation, format: "sms", created_at: 4.hours.ago, follow_up:) }
 
         it "is a failure" do
           is_a_failure
@@ -183,7 +183,7 @@ describe InviteUser, type: :service do
         end
 
         context "when the format is postal" do
-          let!(:existing_invitation) { create(:invitation, format: "postal", created_at: 4.hours.ago, rdv_context:) }
+          let!(:existing_invitation) { create(:invitation, format: "postal", created_at: 4.hours.ago, follow_up:) }
 
           it "is a success" do
             is_a_success

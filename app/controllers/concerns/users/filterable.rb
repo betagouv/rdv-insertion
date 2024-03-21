@@ -32,14 +32,14 @@ module Users::Filterable
   def filter_users_by_status
     return if params[:status].blank?
 
-    @users = @users.joins(:rdv_contexts).where(rdv_contexts: @rdv_contexts.status(params[:status]))
+    @users = @users.joins(:follow_ups).where(follow_ups: @follow_ups.status(params[:status]))
   end
 
   def filter_users_by_action_required
     return unless params[:action_required] == "true"
 
-    @users = @users.joins(:rdv_contexts).where(
-      rdv_contexts: @rdv_contexts.action_required(@current_configuration.number_of_days_before_action_required)
+    @users = @users.joins(:follow_ups).where(
+      follow_ups: @follow_ups.action_required(@current_configuration.number_of_days_before_action_required)
     )
   end
 
@@ -77,7 +77,7 @@ module Users::Filterable
   def filter_users_by_first_invitations
     return if [first_invitation_date_before, first_invitation_date_after].all?(&:blank?)
 
-    relevant_invitations = invitations_belonging_to_rdv_contexts(users_first_invitations, @rdv_contexts)
+    relevant_invitations = invitations_belonging_to_follow_ups(users_first_invitations, @follow_ups)
     filter_users_by_invitation_dates(
       relevant_invitations, first_invitation_date_before, first_invitation_date_after
     )
@@ -86,7 +86,7 @@ module Users::Filterable
   def filter_users_by_last_invitations
     return if [last_invitation_date_before, last_invitation_date_after].all?(&:blank?)
 
-    relevant_invitations = invitations_belonging_to_rdv_contexts(users_last_invitations, @rdv_contexts)
+    relevant_invitations = invitations_belonging_to_follow_ups(users_last_invitations, @follow_ups)
     filter_users_by_invitation_dates(
       relevant_invitations, last_invitation_date_before, last_invitation_date_after
     )
@@ -134,13 +134,13 @@ module Users::Filterable
                                           .values
   end
 
-  def invitations_belonging_to_rdv_contexts(invitations, rdv_contexts)
-    if rdv_contexts.blank?
+  def invitations_belonging_to_follow_ups(invitations, follow_ups)
+    if follow_ups.blank?
       invitations
     else
       invitation_ids = invitations.pluck(:id)
-      rdv_context_ids = rdv_contexts.pluck(:id)
-      Invitation.where(id: invitation_ids, rdv_context_id: rdv_context_ids)
+      follow_up_ids = follow_ups.pluck(:id)
+      Invitation.where(id: invitation_ids, follow_up_id: follow_up_ids)
     end
   end
 end

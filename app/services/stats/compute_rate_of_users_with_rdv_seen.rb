@@ -1,7 +1,7 @@
 module Stats
   class ComputeRateOfUsersWithRdvSeen < BaseService
-    def initialize(rdv_contexts:)
-      @rdv_contexts = rdv_contexts
+    def initialize(follow_ups:)
+      @follow_ups = follow_ups
     end
 
     def call
@@ -17,7 +17,7 @@ module Stats
     end
 
     def users
-      @users ||= User.joins(:rdv_contexts).where(rdv_contexts: @rdv_contexts).distinct
+      @users ||= User.joins(:follow_ups).where(follow_ups: @follow_ups).distinct
     end
 
     def users_with_rdv_seen
@@ -25,7 +25,7 @@ module Stats
     end
 
     def participations_with_rdv_seen
-      @participations_with_rdv_seen ||= Participation.where(rdv_context: @rdv_contexts).seen
+      @participations_with_rdv_seen ||= Participation.where(follow_up: @follow_ups).seen
     end
   end
 end

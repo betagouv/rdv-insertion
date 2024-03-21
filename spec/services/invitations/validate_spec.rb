@@ -16,7 +16,7 @@ describe Invitations::Validate, type: :service do
     build(
       :invitation,
       user: user,
-      rdv_context: build(:rdv_context, motif_category: category_orientation),
+      follow_up: build(:follow_up, motif_category: category_orientation),
       organisations: [organisation]
     )
   end

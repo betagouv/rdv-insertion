@@ -9,43 +9,43 @@ describe Stats::ComputeRateOfAutonomousUsers, type: :service do
   # First user : created 1 month ago, has a rdv taken in autonomy
   let!(:user1) { create(:user, created_at: date) }
   let!(:invitation1) do
-    create(:invitation, created_at: date, rdv_context: rdv_context1, user: user1)
+    create(:invitation, created_at: date, follow_up: follow_up1, user: user1)
   end
-  let!(:rdv_context1) { create(:rdv_context, created_at: date, user: user1) }
+  let!(:follow_up1) { create(:follow_up, created_at: date, user: user1) }
   let!(:rdv1) { create(:rdv, created_at: date, created_by: "user") }
   let!(:participation1) do
-    create(:participation, rdv_context: rdv_context1, user: user1, rdv: rdv1, created_at: date)
+    create(:participation, follow_up: follow_up1, user: user1, rdv: rdv1, created_at: date)
   end
 
   # Second user : created 1 month ago, has a rdv not taken in autonomy
   let!(:user2) { create(:user, created_at: date) }
   let!(:invitation2) do
-    create(:invitation, created_at: date, rdv_context: rdv_context2, user: user2)
+    create(:invitation, created_at: date, follow_up: follow_up2, user: user2)
   end
-  let!(:rdv_context2) { create(:rdv_context, created_at: date, user: user2) }
+  let!(:follow_up2) { create(:follow_up, created_at: date, user: user2) }
   let!(:rdv2) { create(:rdv, created_at: date, created_by: "agent") }
   let!(:participation2) do
-    create(:participation, rdv_context: rdv_context2, user: user2, rdv: rdv2, created_at: date)
+    create(:participation, follow_up: follow_up2, user: user2, rdv: rdv2, created_at: date)
   end
 
   # Third user : created 1 month ago, has a participation to a rdv taken in autonomy
   let!(:user3) { create(:user, created_at: date) }
   let!(:invitation3) do
-    create(:invitation, created_at: date, rdv_context: rdv_context3, user: user3)
+    create(:invitation, created_at: date, follow_up: follow_up3, user: user3)
   end
-  let!(:rdv_context3) { create(:rdv_context, created_at: date, user: user3) }
+  let!(:follow_up3) { create(:follow_up, created_at: date, user: user3) }
   let!(:rdv3) { create(:rdv, created_at: date, created_by: "agent") }
   let!(:participation3) do
-    create(:participation, rdv_context: rdv_context3, user: user3,
+    create(:participation, follow_up: follow_up3, user: user3,
                            rdv: rdv3, created_at: date, created_by: "user")
   end
 
   # Fourth user : created 1 month ago, has been invited but has not take any rdv
   let!(:user4) { create(:user, created_at: date) }
   let!(:invitation4) do
-    create(:invitation, created_at: date, rdv_context: rdv_context4, user: user4)
+    create(:invitation, created_at: date, follow_up: follow_up4, user: user4)
   end
-  let!(:rdv_context4) { create(:rdv_context, created_at: date, user: user4) }
+  let!(:follow_up4) { create(:follow_up, created_at: date, user: user4) }
 
   describe "#call" do
     let!(:result) { subject }

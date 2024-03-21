@@ -3,8 +3,8 @@ class InvitationPreview < ActionMailer::Preview
   MotifCategory.find_each do |motif_category|
     invitation = Invitation.format_email.last
     user = invitation.user
-    rdv_context = RdvContext.new(motif_category: motif_category, user: user)
-    invitation.rdv_context = rdv_context
+    follow_up = FollowUp.new(motif_category: motif_category, user: user)
+    invitation.follow_up = follow_up
 
     define_method motif_category.short_name do
       InvitationMailer.with(invitation: invitation, user: invitation.user)

@@ -335,38 +335,38 @@ describe UsersController do
       create(
         :user,
         created_at: Time.zone.parse("2023-03-10 12:30"),
-        organisations: [organisation], last_name: "Chabat", rdv_contexts: [rdv_context1]
+        organisations: [organisation], last_name: "Chabat", follow_ups: [follow_up1]
       )
     end
-    let!(:rdv_context1) { build(:rdv_context, motif_category: category_orientation, status: "rdv_seen") }
+    let!(:follow_up1) { build(:follow_up, motif_category: category_orientation, status: "rdv_seen") }
 
     let!(:user2) do
       create(
         :user,
         created_at: Time.zone.parse("2023-04-10 12:30"),
-        organisations: [organisation], last_name: "Baer", rdv_contexts: [rdv_context2]
+        organisations: [organisation], last_name: "Baer", follow_ups: [follow_up2]
       )
     end
-    let!(:rdv_context2) { build(:rdv_context, motif_category: category_orientation, status: "invitation_pending") }
+    let!(:follow_up2) { build(:follow_up, motif_category: category_orientation, status: "invitation_pending") }
 
     let!(:user3) do
       create(
         :user,
         created_at: Time.zone.parse("2023-05-10 12:30"),
-        organisations: [organisation], last_name: "Darmon", rdv_contexts: [rdv_context3]
+        organisations: [organisation], last_name: "Darmon", follow_ups: [follow_up3]
       )
     end
-    let!(:rdv_context3) { build(:rdv_context, motif_category: category_accompagnement, status: "invitation_pending") }
+    let!(:follow_up3) { build(:follow_up, motif_category: category_accompagnement, status: "invitation_pending") }
     let!(:configuration2) { create(:configuration, motif_category: category_accompagnement) }
 
     let!(:archived_user) do
       create(
         :user,
-        organisations: [organisation], last_name: "Barthelemy", rdv_contexts: [rdv_context4]
+        organisations: [organisation], last_name: "Barthelemy", follow_ups: [follow_up4]
       )
     end
     let!(:archive) { create(:archive, user: archived_user, department: department) }
-    let!(:rdv_context4) { build(:rdv_context, motif_category: category_orientation, status: "invitation_pending") }
+    let!(:follow_up4) { build(:follow_up, motif_category: category_orientation, status: "invitation_pending") }
 
     let!(:index_params) { { organisation_id: organisation.id, motif_category_id: category_orientation.id } }
 
@@ -386,18 +386,18 @@ describe UsersController do
       expect(response.body).not_to match(/Configurer l'organisation/)
     end
 
-    context "when there is all types of rdv_contexts statuses" do
+    context "when there is all types of follow_ups statuses" do
       before do
-        RdvContext.statuses.each_key do |status|
-          create(:rdv_context, motif_category: category_orientation,
-                               status: status,
-                               user: create(:user, organisations: [organisation]))
+        FollowUp.statuses.each_key do |status|
+          create(:follow_up, motif_category: category_orientation,
+                             status: status,
+                             user: create(:user, organisations: [organisation]))
         end
       end
 
       it "displays all statuses in the filter list except closed" do
         get :index, params: index_params.merge(motif_category_id: category_orientation.id)
-        RdvContext.statuses.each_key do |status|
+        FollowUp.statuses.each_key do |status|
           if status == "closed"
             expect(response.body).not_to match(/"#{status}"/)
           else
@@ -555,18 +555,18 @@ describe UsersController do
     context "when invitations dates are passed" do
       let!(:invitation1) do
         create(
-          :invitation, created_at: Time.zone.parse("2022-06-01 12:00"), rdv_context: rdv_context1,
+          :invitation, created_at: Time.zone.parse("2022-06-01 12:00"), follow_up: follow_up1,
                        user: user
         )
       end
       let!(:invitation2) do
         create(
-          :invitation, created_at: Time.zone.parse("2022-06-08 12:00"), rdv_context: rdv_context2, user: user2
+          :invitation, created_at: Time.zone.parse("2022-06-08 12:00"), follow_up: follow_up2, user: user2
         )
       end
       let!(:invitation3) do
         create(
-          :invitation, created_at: Time.zone.parse("2022-06-15 12:00"), rdv_context: rdv_context3, user: user3
+          :invitation, created_at: Time.zone.parse("2022-06-15 12:00"), follow_up: follow_up3, user: user3
         )
       end
 
@@ -587,15 +587,15 @@ describe UsersController do
       context "for last invitations" do
         let!(:invitation4) do
           create(:invitation, created_at: Time.zone.parse("2022-06-19 12:00"),
-                              rdv_context: rdv_context1, user: user)
+                              follow_up: follow_up1, user: user)
         end
         let!(:invitation5) do
           create(:invitation, created_at: Time.zone.parse("2022-06-16 12:00"),
-                              rdv_context: rdv_context2, user: user2)
+                              follow_up: follow_up2, user: user2)
         end
         let!(:invitation6) do
           create(:invitation, created_at: Time.zone.parse("2022-06-17 12:00"),
-                              rdv_context: rdv_context3, user: user3)
+                              follow_up: follow_up3, user: user3)
         end
 
         let!(:index_params) do
@@ -619,7 +619,7 @@ describe UsersController do
       let!(:number_of_days_before_action_required) { 6 }
 
       context "when the invitation has been sent before the number of days before action required" do
-        let!(:invitation) { create(:invitation, user: user2, rdv_context: rdv_context2, created_at: 7.days.ago) }
+        let!(:invitation) { create(:invitation, user: user2, follow_up: follow_up2, created_at: 7.days.ago) }
 
         it "filters by action required" do
           get :index, params: index_params
@@ -629,7 +629,7 @@ describe UsersController do
       end
 
       context "when the invitation has been sent after the number of days defined in the configuration 3 days ago" do
-        let!(:invitation) { create(:invitation, user: user2, rdv_context: rdv_context2, created_at: 3.days.ago) }
+        let!(:invitation) { create(:invitation, user: user2, follow_up: follow_up2, created_at: 3.days.ago) }
 
         it "filters by action required" do
           get :index, params: index_params
@@ -661,7 +661,7 @@ describe UsersController do
     context "when the organisation convene users" do
       before do
         configuration.update!(convene_user: true)
-        rdv_context2.update!(motif_category: category_accompagnement)
+        follow_up2.update!(motif_category: category_accompagnement)
       end
 
       let!(:rdv) { create(:rdv) }
@@ -671,7 +671,7 @@ describe UsersController do
           rdv: rdv,
           user: user,
           status: "unknown",
-          rdv_context: rdv_context1
+          follow_up: follow_up1
         )
       end
       let!(:rdv2) { create(:rdv) }
@@ -681,7 +681,7 @@ describe UsersController do
           rdv: rdv2,
           user: user,
           status: "unknown",
-          rdv_context: rdv_context2
+          follow_up: follow_up2
         )
       end
       let!(:notification) do
@@ -783,10 +783,10 @@ describe UsersController do
           let!(:index_params) { { department_id: department.id, motif_category_id: category_orientation.id } }
 
           before do
-            user.rdv_contexts.first.update!(motif_category: category_orientation, created_at: 1.year.ago)
+            user.follow_ups.first.update!(motif_category: category_orientation, created_at: 1.year.ago)
           end
 
-          it "orders by rdv_context creation" do
+          it "orders by follow_up creation" do
             get :index, params: index_params
 
             ordered_table = Nokogiri::XML(response.body).css("td").map(&:text)

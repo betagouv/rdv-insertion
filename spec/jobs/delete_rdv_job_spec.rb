@@ -4,8 +4,8 @@ describe DeleteRdvJob do
   end
 
   let!(:rdv_solidarites_rdv_id) { { id: 1 } }
-  let!(:rdv) { create(:rdv, participations: [create(:participation, rdv_context: rdv_context)]) }
-  let!(:rdv_context) { create(:rdv_context) }
+  let!(:rdv) { create(:rdv, participations: [create(:participation, follow_up: follow_up)]) }
+  let!(:follow_up) { create(:follow_up) }
 
   describe "#perform" do
     before do
@@ -14,7 +14,7 @@ describe DeleteRdvJob do
         .with(rdv_solidarites_rdv_id: rdv_solidarites_rdv_id)
         .and_return(rdv)
       allow(rdv).to receive(:destroy!)
-      allow(RefreshRdvContextStatusesJob).to receive(:perform_async)
+      allow(RefreshFollowUpStatusesJob).to receive(:perform_async)
     end
 
     it "finds the matching rdv" do
@@ -29,8 +29,8 @@ describe DeleteRdvJob do
     end
 
     it "enqueues a refresh status job" do
-      expect(RefreshRdvContextStatusesJob).to receive(:perform_async)
-        .with([rdv_context.id])
+      expect(RefreshFollowUpStatusesJob).to receive(:perform_async)
+        .with([follow_up.id])
       subject
     end
   end

@@ -19,16 +19,14 @@ export default class extends Controller {
 
   csvExportUsers() {
     tippy(this.element, {
-      content:
-        "Les usagers correspondant aux filtres actuels seront exportés",
+      content: "Les usagers correspondant aux filtres actuels seront exportés",
       placement: "bottom",
     });
   }
 
   csvExportParticipations() {
     tippy(this.element, {
-      content:
-        "Les RDVs des usagers correspondant aux filtres actuels seront exportés",
+      content: "Les RDVs des usagers correspondant aux filtres actuels seront exportés",
       placement: "bottom",
     });
   }
@@ -99,15 +97,15 @@ export default class extends Controller {
     });
   }
 
-  closeRdvContextButton() {
+  closeFollowUpButton() {
     tippy(this.element, {
       content:
-        "Le statut du bénéficiaire dans ce contexte passera en «Dossier traité» et ses invitations seront désactivées. Il n'apparaîtra plus dans la liste de suivi de ce contexte, mais restera visible dans l'onglet «Tous les contacts».",
+        "Le statut du bénéficiaire pour cette catégorie passera en «Dossier traité» et ses invitations seront désactivées. Il n'apparaîtra plus dans la liste de suivi de cette catégorie, mais restera visible dans l'onglet «Tous les contacts».",
       placement: "bottom",
     });
   }
 
-  reopenRdvContextButton() {
+  reopenFollowUpButton() {
     tippy(this.element, {
       content: "Le bénéficiaire pourra de nouveau être invité et suivi dans ce contexte",
       placement: "bottom",

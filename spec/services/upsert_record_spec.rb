@@ -17,7 +17,7 @@ describe UpsertRecord, type: :service do
             created_by: created_by,
             user_id: user_id,
             rdv_solidarites_participation_id: 998,
-            rdv_context_id: rdv_context.id
+            follow_up_id: follow_up.id
           }
         ],
         lieu_id: lieu.id,
@@ -34,7 +34,7 @@ describe UpsertRecord, type: :service do
         status: status, created_by: created_by }
     end
     let!(:user) { create(:user, id: user_id) }
-    let!(:rdv_context) { create(:rdv_context) }
+    let!(:follow_up) { create(:follow_up) }
     let!(:lieu) { create(:lieu) }
     let!(:motif) { create(:motif) }
     let!(:starts_at) { Time.zone.parse("2021-09-08 12:00:00") }
@@ -61,7 +61,7 @@ describe UpsertRecord, type: :service do
           expect(participation.user_id).to eq(user.id)
           expect(participation.rdv_id).to eq(rdv.id)
           expect(participation.created_by).to eq("user")
-          expect(participation.rdv_context_id).to eq(rdv_context.id)
+          expect(participation.follow_up_id).to eq(follow_up.id)
         end
 
         context "when it is an old update" do
@@ -101,7 +101,7 @@ describe UpsertRecord, type: :service do
           participation = Participation.order(:created_at).last
           expect(participation.user_id).to eq(user.id)
           expect(participation.rdv_id).to eq(new_rdv.id)
-          expect(participation.rdv_context_id).to eq(rdv_context.id)
+          expect(participation.follow_up_id).to eq(follow_up.id)
         end
       end
     end

@@ -43,14 +43,14 @@ module Exporters
         if @motif_category
           User.preload(
             :archives, :organisations, :tags, :referents, :rdvs,
-            participations: [:organisation, :rdv_context],
-            rdv_contexts: [:invitations, :motif_category, :notifications, { rdvs: [:motif, :participations, :users] }]
+            participations: [:organisation, :follow_up],
+            follow_ups: [:invitations, :motif_category, :notifications, { rdvs: [:motif, :participations, :users] }]
           ).find(@user_ids)
         else
           User.preload(
             :invitations, :notifications, :archives, :organisations, :tags, :referents,
-            rdv_contexts: [:motif_category, :participations, :rdvs],
-            participations: [:organisation, :rdv, { rdv_context: :motif_category }],
+            follow_ups: [:motif_category, :participations, :rdvs],
+            participations: [:organisation, :rdv, { follow_up: :motif_category }],
             rdvs: [:motif, :participations]
           ).find(@user_ids)
         end
@@ -80,7 +80,7 @@ module Exporters
        "Nature du dernier RDV",
        "Dernier RDV pris en autonomie ?",
        Rdv.human_attribute_name(:status),
-       *(RdvContext.human_attribute_name(:status) if @motif_category),
+       *(FollowUp.human_attribute_name(:status) if @motif_category),
        "Rendez-vous d'orientation (RSA) honoré en - moins de 30 jours?",
        "Rendez-vous d'orientation (RSA) honoré en - moins de 15 jours?",
        "Date d'orientation",
@@ -116,7 +116,7 @@ module Exporters
        last_rdv_type(user),
        rdv_taken_in_autonomy?(user),
        human_last_participation_status(user),
-       *(human_rdv_context_status(user) if @motif_category),
+       *(human_follow_up_status(user) if @motif_category),
        oriented_in_less_than_n_days?(user, 30),
        oriented_in_less_than_n_days?(user, 15),
        orientation_date(user),
@@ -134,15 +134,15 @@ module Exporters
       last_participation(user).human_status
     end
 
-    def human_rdv_context_status(user)
-      return "" if @motif_category.nil? || rdv_context_for_export(user).nil?
+    def human_follow_up_status(user)
+      return "" if @motif_category.nil? || follow_up_for_export(user).nil?
 
-      rdv_context_for_export(user).human_status + display_context_status_notice(rdv_context_for_export(user))
+      follow_up_for_export(user).human_status + display_follow_up_status_notice(follow_up_for_export(user))
     end
 
-    def display_context_status_notice(rdv_context)
-      if @structure.present? && rdv_context.invited_before_time_window?(number_of_days_before_action_required) &&
-         rdv_context.invitation_pending?
+    def display_follow_up_status_notice(follow_up)
+      if @structure.present? && follow_up.invited_before_time_window?(number_of_days_before_action_required) &&
+         follow_up.invitation_pending?
         " (Délai dépassé)"
       else
         ""
@@ -165,7 +165,7 @@ module Exporters
 
     def first_invitation_date(user)
       if @motif_category.present?
-        rdv_context_for_export(user)&.first_invitation_created_at
+        follow_up_for_export(user)&.first_invitation_created_at
       else
         user.first_invitation_created_at
       end
@@ -173,14 +173,14 @@ module Exporters
 
     def last_invitation_date(user)
       if @motif_category.present?
-        rdv_context_for_export(user)&.last_invitation_created_at
+        follow_up_for_export(user)&.last_invitation_created_at
       else
         user.last_invitation_created_at
       end
     end
 
     def last_notification_date(user)
-      return rdv_context_for_export(user)&.last_convocation_created_at if @motif_category.present?
+      return follow_up_for_export(user)&.last_convocation_created_at if @motif_category.present?
 
       user.last_convocation_created_at
     end
@@ -190,7 +190,7 @@ module Exporters
     end
 
     def last_rdv(user)
-      rdvs = @motif_category.present? ? rdv_context_for_export(user)&.rdvs : user.rdvs
+      rdvs = @motif_category.present? ? follow_up_for_export(user)&.rdvs : user.rdvs
       return if rdvs.blank?
 
       rdvs.select { |rdv| Pundit.policy!(agent, rdv).show? }.max_by(&:starts_at)
@@ -227,14 +227,14 @@ module Exporters
     def oriented_in_less_than_n_days?(user, number_of_days)
       return "Non calculable" if user.in_many_departments?
 
-      rdv_context = user.first_orientation_rdv_context
-      result = rdv_context.present? && rdv_context.rdv_seen_delay_in_days.present? &&
-               rdv_context.rdv_seen_delay_in_days < number_of_days
+      follow_up = user.first_orientation_follow_up
+      result = follow_up.present? && follow_up.rdv_seen_delay_in_days.present? &&
+               follow_up.rdv_seen_delay_in_days < number_of_days
       I18n.t("boolean.#{result}")
     end
 
-    def rdv_context_for_export(user)
-      user.rdv_context_for(@motif_category)
+    def follow_up_for_export(user)
+      user.follow_up_for(@motif_category)
     end
   end
 end

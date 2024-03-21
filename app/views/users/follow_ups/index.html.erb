@@ -1,0 +1,41 @@
+<%= render 'users/archive_banner' if @user.archived_in?(@department) %>
+
+<div class="container text-dark-blue h4-as-labels mt-4">
+  <%= render "users/user_page_header" %>
+
+  <%= turbo_frame_tag "user_page_body" do %>
+    <%= render "users/user_tabs", user: @user, tab: "rdvs" %>
+    <% @all_configurations.each do |configuration| %>
+      <% follow_up = @follow_ups.find { |rc| rc.motif_category_id == configuration.motif_category_id } %>
+      <% if follow_up %>
+        <%=
+          render(
+            "follow_ups/follow_up",
+            follow_up: follow_up, organisation: @organisation, user: @user, department: @department,
+            participations: follow_up.participations, user_organisations: @user_organisations,
+            convocable_participations: follow_up.participations.select(&:convocable?),
+            configuration: configuration, invitations: follow_up.invitations
+          )
+        %>
+      <% else %>
+        <div class="m-4">
+          <div class="card my-3 mx-auto w-75">
+            <div class="card-header py-3 blue-out">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5>
+                    <strong><%= configuration.motif_category_name %></strong>
+                    <small><%= configuration.rdv_with_referents? ? " (avec référents)" : "" %></small>
+                  </h5>
+                </div>
+                <div>
+                  <%= render "follow_ups/new_button", user: @user, configuration: configuration, turbo: false, button_text: "Ouvrir un suivi" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

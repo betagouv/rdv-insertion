@@ -90,14 +90,14 @@ describe Rdv do
 
   describe "nested participation creation" do
     let!(:user) { create(:user) }
-    let!(:rdv_context) { create(:rdv_context) }
+    let!(:follow_up) { create(:follow_up) }
 
     context "when id is nil and participation does not exist" do
       let!(:rdv_count_before) { described_class.count }
       let!(:participation_count_before) { Participation.count }
       let!(:participation_attributes) do
         {
-          id: nil, user: user, rdv_context: rdv_context,
+          id: nil, user: user, follow_up: follow_up,
           created_by: "agent", rdv_solidarites_participation_id: 17
         }
       end
@@ -115,7 +115,7 @@ describe Rdv do
       end
       let!(:participation_attributes) do
         {
-          id: nil, user: user, rdv_context: rdv_context,
+          id: nil, user: user, follow_up: follow_up,
           created_by: "agent", rdv_solidarites_participation_id: 18
         }
       end

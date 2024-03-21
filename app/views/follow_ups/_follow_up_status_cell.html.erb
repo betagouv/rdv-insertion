@@ -1,0 +1,6 @@
+<td
+  id="follow-up-status-<%= follow_up.id %>"
+  class="<%= background_class_for_follow_up_status(follow_up, configuration&.number_of_days_before_action_required) %>"
+>
+  <%= display_follow_up_status(follow_up, configuration&.number_of_days_before_action_required) %>
+</td>

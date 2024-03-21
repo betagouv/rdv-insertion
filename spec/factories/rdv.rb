@@ -15,7 +15,7 @@ FactoryBot.define do
     after(:build) do |rdv|
       if rdv.participations.blank?
         rdv.users = [create(:user)]
-        rdv.participations.first.rdv_context = create(:rdv_context)
+        rdv.participations.first.follow_up = create(:follow_up)
         rdv.participations.first.created_by = "user"
       end
     end

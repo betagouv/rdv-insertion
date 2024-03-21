@@ -17,11 +17,11 @@ describe SendPeriodicInviteJob do
              motif_category: motif_category)
     end
     let!(:motif_category) { create(:motif_category, optional_rdv_subscription: false) }
-    let!(:rdv_context) { create(:rdv_context, motif_category: motif_category) }
+    let!(:follow_up) { create(:follow_up, motif_category: motif_category) }
     let!(:invitation) do
       create(
         :invitation,
-        rdv_context: rdv_context,
+        follow_up: follow_up,
         created_at: 15.days.ago,
         valid_until: 1.day.ago,
         organisations: [organisation]
@@ -34,7 +34,7 @@ describe SendPeriodicInviteJob do
         invitation = Invitation.last
 
         expect(invitation).to have_attributes(
-          rdv_context: invitation.rdv_context,
+          follow_up: invitation.follow_up,
           motif_category: invitation.motif_category,
           user: invitation.user,
           format: "email"
@@ -56,7 +56,7 @@ describe SendPeriodicInviteJob do
       end
 
       context "when the user has already been invited in this category less than 1 day ago" do
-        let!(:other_invitation) { create(:invitation, rdv_context:, format:, created_at: 2.hours.ago) }
+        let!(:other_invitation) { create(:invitation, follow_up:, format:, created_at: 2.hours.ago) }
 
         it "does not send an invitation" do
           expect(Invitations::SaveAndSend).not_to receive(:call)

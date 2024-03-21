@@ -25,7 +25,7 @@ class SendPeriodicInviteJob < ApplicationJob
   end
 
   def invitation_already_sent_today?
-    @invitation.rdv_context.invitations
+    @invitation.follow_up.invitations
                .where(format: @format)
                .where("created_at > ?", 24.hours.ago)
                .any?

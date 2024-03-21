@@ -27,7 +27,7 @@ class DepartmentDashboard < Administrate::BaseDashboard
     participations: Field::HasMany,
     phone_number: Field::String,
     pronoun: Field::String,
-    rdv_contexts: Field::HasMany,
+    follow_ups: Field::HasMany,
     rdvs: Field::HasMany,
     region: Field::String,
     stat: Field::HasOne,

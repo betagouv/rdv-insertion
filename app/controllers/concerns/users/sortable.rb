@@ -3,7 +3,7 @@ module Users::Sortable
     if archived_scope?
       archived_order
     elsif @current_motif_category
-      order_by_rdv_contexts
+      order_by_follow_ups
     else
       order_by_created_at
     end
@@ -13,9 +13,9 @@ module Users::Sortable
     @users = @users.order("archives.created_at desc")
   end
 
-  def order_by_rdv_contexts
-    @users = @users.select("users.*, rdv_contexts.created_at")
-                   .order("rdv_contexts.created_at desc")
+  def order_by_follow_ups
+    @users = @users.select("users.*, follow_ups.created_at")
+                   .order("follow_ups.created_at desc")
   end
 
   def order_by_created_at

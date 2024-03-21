@@ -2,20 +2,20 @@ class SendPeriodicInvitesJob < ApplicationJob
   def perform
     @sent_invites_user_ids = []
 
-    RdvContext
+    FollowUp
       .joins(:invitations)
       .preload(invitations: [{ organisations: :configurations }, :user])
       .where(invitations: Invitation.valid)
       .distinct
-      .find_each do |rdv_context|
-      send_invite(rdv_context)
+      .find_each do |follow_up|
+      send_invite(follow_up)
     end
 
     notify_on_mattermost
   end
 
-  def send_invite(rdv_context)
-    last_invitation = rdv_context.last_invitation
+  def send_invite(follow_up)
+    last_invitation = follow_up.last_invitation
     configuration = last_invitation&.current_configuration
 
     return if configuration.blank?

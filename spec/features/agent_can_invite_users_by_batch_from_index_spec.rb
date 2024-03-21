@@ -9,13 +9,13 @@ describe "Agent can invite users by batch from index" do
   let!(:agent) { create(:agent, organisations: [organisation]) }
 
   let!(:user1) { create(:user, last_name: "Dhobb", organisations: [organisation]) }
-  let!(:rdv_context1) { create(:rdv_context, user: user1, motif_category: motif_category) }
+  let!(:follow_up1) { create(:follow_up, user: user1, motif_category: motif_category) }
   let!(:user2) { create(:user, last_name: "Blanc", organisations: [organisation]) }
-  let!(:rdv_context2) { create(:rdv_context, user: user2, motif_category: motif_category) }
+  let!(:follow_up2) { create(:follow_up, user: user2, motif_category: motif_category) }
   let!(:user3) { create(:user, last_name: "Villeneuve", organisations: [organisation]) }
-  let!(:rdv_context3) { create(:rdv_context, user: user3, motif_category: motif_category) }
+  let!(:follow_up3) { create(:follow_up, user: user3, motif_category: motif_category) }
   let!(:invitation3) do
-    create(:invitation, rdv_context: rdv_context3, user: user3, department: department,
+    create(:invitation, follow_up: follow_up3, user: user3, department: department,
                         organisations: [organisation], created_at: Time.zone.now, format: "sms")
   end
   let!(:user4) { create(:user, last_name: "Neuville", organisations: [organisation]) }
@@ -37,12 +37,12 @@ describe "Agent can invite users by batch from index" do
       /#{Regexp.quote(ENV['RDV_SOLIDARITES_URL'])}\/api\/rdvinsertion\/invitations\/creneau_availability.*/
     ).to_return(status: 200, body: { "creneau_availability" => true }.to_json, headers: {})
     stub_brevo
-    rdv_context1.set_status
-    rdv_context1.save!
-    rdv_context2.set_status
-    rdv_context2.save!
-    rdv_context3.set_status
-    rdv_context3.save!
+    follow_up1.set_status
+    follow_up1.save!
+    follow_up2.set_status
+    follow_up2.save!
+    follow_up3.set_status
+    follow_up3.save!
   end
 
   context "when agent is at organisation level" do

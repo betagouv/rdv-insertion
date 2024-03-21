@@ -4,6 +4,6 @@ class InvitationPolicy < ApplicationPolicy
   end
 
   def show?
-    record.rdv_context.motif_category_id.in?(pundit_user.motif_category_ids)
+    record.follow_up.motif_category_id.in?(pundit_user.motif_category_ids)
   end
 end

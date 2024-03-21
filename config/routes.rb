@@ -47,7 +47,7 @@ Rails.application.routes.draw do
         end
       end
       scope module: :users do
-        resources :rdv_contexts, only: [:index]
+        resources :follow_ups, only: [:index]
       end
       resources :invitations, only: [:create]
       resources :tag_assignations, only: [:index, :create] do
@@ -87,9 +87,9 @@ Rails.application.routes.draw do
   resources :convocations, only: [:new]
 
   resources :participations, only: [:update]
-  resources :rdv_contexts, only: [:create]
+  resources :follow_ups, only: [:create]
 
-  resources :rdv_contexts, module: :rdv_contexts, only: [] do
+  resources :follow_ups, module: :follow_ups, only: [] do
     resource :closings, only: [:create, :destroy]
   end
 
@@ -134,7 +134,7 @@ Rails.application.routes.draw do
         get :default_list
       end
       scope module: :users do
-        resources :rdv_contexts, only: [:index]
+        resources :follow_ups, only: [:index]
       end
       resources :invitations, only: [:create]
       resources :tag_assignations, only: [:index, :create] do

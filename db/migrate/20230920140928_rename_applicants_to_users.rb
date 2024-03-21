@@ -12,7 +12,7 @@ class RenameApplicantsToUsers < ActiveRecord::Migration[7.0]
     rename_column :configurations, :template_applicant_designation_override, :template_user_designation_override
     rename_column :invitations, :applicant_id, :user_id
     rename_column :participations, :applicant_id, :user_id
-    rename_column :rdv_contexts, :applicant_id, :user_id
+    rename_column :follow_ups, :applicant_id, :user_id
     rename_column :referent_assignations, :applicant_id, :user_id
     rename_column :stats, :applicants_count, :users_count
     rename_column :stats, :applicants_count_grouped_by_month, :users_count_grouped_by_month

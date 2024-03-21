@@ -34,7 +34,7 @@ export default class extends Controller {
     // We have to use JSON instead of Turbostream because postal invitation return raw data as pdfs
     const body = Object.fromEntries(event.detail.formSubmission.fetchRequest.entries);
     event.detail.formSubmission.stop();
-    const { userId, departmentId, organisationId, rdvContextId } = this.element.dataset;
+    const { userId, departmentId, organisationId, followUpId } = this.element.dataset;
 
     const isDepartmentLevel = !organisationId;
     const result = await handleUserInvitation(
@@ -53,9 +53,9 @@ export default class extends Controller {
     if (result.success) {
       checkbox.disabled = true;
       checkbox.classList = "";
-      this.updateFirstInvitationDate(rdvContextId);
-      this.updateLastInvitationDate(rdvContextId);
-      this.updateStatus(rdvContextId);
+      this.updateFirstInvitationDate(followUpId);
+      this.updateLastInvitationDate(followUpId);
+      this.updateStatus(followUpId);
     } else {
       checkbox.checked = false;
       if (checkbox.labels[0]) {
@@ -64,20 +64,20 @@ export default class extends Controller {
     }
   }
 
-  updateFirstInvitationDate(rdvContextId) {
-    const firstInvitationDate = document.getElementById(`first-invitation-date-${rdvContextId}`);
+  updateFirstInvitationDate(followUpId) {
+    const firstInvitationDate = document.getElementById(`first-invitation-date-${followUpId}`);
     if (firstInvitationDate.innerHTML === " - ") {
       firstInvitationDate.innerHTML = getFrenchFormatDateString(todaysDateString());
     }
   }
 
-  updateLastInvitationDate(rdvContextId) {
-    const lastInvitationDate = document.getElementById(`last-invitation-date-${rdvContextId}`);
+  updateLastInvitationDate(followUpId) {
+    const lastInvitationDate = document.getElementById(`last-invitation-date-${followUpId}`);
     lastInvitationDate.innerHTML = getFrenchFormatDateString(todaysDateString());
   }
 
-  updateStatus(rdvContextId) {
-    const status = document.getElementById(`rdv-context-status-${rdvContextId}`);
+  updateStatus(followUpId) {
+    const status = document.getElementById(`follow-up-status-${followUpId}`);
     status.classList = [];
     status.innerHTML = "Invitation en attente de réponse";
   }

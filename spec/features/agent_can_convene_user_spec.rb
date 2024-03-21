@@ -30,10 +30,10 @@ describe "Agents can convene user to rdv", :js do
   end
   let!(:rdv_solidarites_user_id) { 555 }
 
-  let!(:rdv_context) do
-    create(:rdv_context, status: "invitation_pending", user: user, motif_category: motif_category)
+  let!(:follow_up) do
+    create(:follow_up, status: "invitation_pending", user: user, motif_category: motif_category)
   end
-  let!(:invitation) { create(:invitation, rdv_context: rdv_context, created_at: 5.days.ago) }
+  let!(:invitation) { create(:invitation, follow_up: follow_up, created_at: 5.days.ago) }
 
   let!(:motif) do
     create(
@@ -184,7 +184,7 @@ describe "Agents can convene user to rdv", :js do
 
     describe "button visbility" do
       context "when invitation is pending and the time to accept invitation has not exceeded" do
-        let!(:invitation) { create(:invitation, rdv_context: rdv_context, created_at: 3.days.ago) }
+        let!(:invitation) { create(:invitation, follow_up: follow_up, created_at: 3.days.ago) }
 
         it "does not show a convocation button" do
           visit organisation_users_path(organisation, motif_category_id: motif_category.id)
@@ -194,20 +194,20 @@ describe "Agents can convene user to rdv", :js do
 
       context "when there is a pending rdv" do
         let!(:participation) do
-          create(:participation, rdv_context: rdv_context, user: user, created_at: 1.day.ago)
+          create(:participation, follow_up: follow_up, user: user, created_at: 1.day.ago)
         end
 
         it "does not show a convocation button" do
-          rdv_context.set_status
-          rdv_context.save!
+          follow_up.set_status
+          follow_up.save!
           visit organisation_users_path(organisation, motif_category_id: motif_category.id)
           expect(page).to have_no_content("📅 Convoquer")
         end
       end
 
       context "when there is a noshow rdv" do
-        let!(:rdv_context) do
-          create(:rdv_context, status: "rdv_noshow", user: user, motif_category: motif_category)
+        let!(:follow_up) do
+          create(:follow_up, status: "rdv_noshow", user: user, motif_category: motif_category)
         end
 
         it "shows a link to convene the user" do
@@ -217,8 +217,8 @@ describe "Agents can convene user to rdv", :js do
       end
 
       context "when there is an excused rdv" do
-        let!(:rdv_context) do
-          create(:rdv_context, status: "rdv_excused", user: user, motif_category: motif_category)
+        let!(:follow_up) do
+          create(:follow_up, status: "rdv_excused", user: user, motif_category: motif_category)
         end
 
         it "shows a link to convene the user" do
@@ -228,8 +228,8 @@ describe "Agents can convene user to rdv", :js do
       end
 
       context "when multiple rdvs were canceled" do
-        let!(:rdv_context) do
-          create(:rdv_context, status: "multiple_rdvs_cancelled", user: user, motif_category: motif_category)
+        let!(:follow_up) do
+          create(:follow_up, status: "multiple_rdvs_cancelled", user: user, motif_category: motif_category)
         end
 
         it "shows a link to convene the user" do
@@ -260,9 +260,9 @@ describe "Agents can convene user to rdv", :js do
     end
   end
 
-  describe "from users#rdv_contexts" do
+  describe "from users#follow_ups" do
     it "can also convene an user" do
-      visit organisation_user_rdv_contexts_path(organisation_id: organisation.id, user_id: user.id)
+      visit organisation_user_follow_ups_path(organisation_id: organisation.id, user_id: user.id)
       expect(page).to have_link("📅 Convoquer")
       new_window = window_opened_by { click_link("📅 Convoquer") }
       within_window new_window do

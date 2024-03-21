@@ -19,9 +19,9 @@ class UserBlueprint < Blueprinter::Base
       end
     end
 
-    association :rdv_contexts, blueprint: RdvContextBlueprint do |user, _options|
-      user.rdv_contexts.select do |rdv_context|
-        Pundit.policy!(Current.agent, rdv_context).show?
+    association :follow_ups, blueprint: FollowUpBlueprint do |user, _options|
+      user.follow_ups.select do |follow_up|
+        Pundit.policy!(Current.agent, follow_up).show?
       end
     end
 

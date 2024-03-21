@@ -14,7 +14,7 @@ class MotifCategoryDashboard < Administrate::BaseDashboard
     motifs: Field::HasMany,
     name: Field::String,
     optional_rdv_subscription: Field::Boolean,
-    rdv_contexts: Field::HasMany,
+    follow_ups: Field::HasMany,
     rdv_solidarites_motif_category_id: Field::Number,
     short_name: Field::String,
     template: Field::BelongsTo,

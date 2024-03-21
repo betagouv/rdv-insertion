@@ -21,18 +21,18 @@ describe Stat do
     let!(:rdv2) { create(:rdv, organisation: other_organisation, created_by: "user", motif: motif) }
     let!(:invitation1) do
       create(:invitation, user: user1, department: department, organisations: [organisation],
-                          created_at: date, rdv_context: rdv_context1)
+                          created_at: date, follow_up: follow_up1)
     end
     let!(:invitation2) do
       create(:invitation, user: user2, department: other_department, organisations: [other_organisation],
-                          created_at: date, rdv_context: rdv_context2)
+                          created_at: date, follow_up: follow_up2)
     end
     let!(:agent1) { create(:agent, organisations: [organisation], last_sign_in_at: Time.zone.now) }
     let!(:agent2) { create(:agent, organisations: [other_organisation], last_sign_in_at: Time.zone.now) }
-    let!(:participation1) { create(:participation, rdv: rdv1, user: user1, rdv_context: rdv_context1) }
-    let!(:participation2) { create(:participation, rdv: rdv2, user: user2, rdv_context: rdv_context2) }
-    let!(:rdv_context1) { create(:rdv_context, user: user1, motif_category: category_rsa_orientation) }
-    let!(:rdv_context2) { create(:rdv_context, user: user2, motif_category: category_rsa_orientation) }
+    let!(:participation1) { create(:participation, rdv: rdv1, user: user1, follow_up: follow_up1) }
+    let!(:participation2) { create(:participation, rdv: rdv2, user: user2, follow_up: follow_up2) }
+    let!(:follow_up1) { create(:follow_up, user: user1, motif_category: category_rsa_orientation) }
+    let!(:follow_up2) { create(:follow_up, user: user2, motif_category: category_rsa_orientation) }
     let!(:structure_type) { "Department" }
     let!(:structure_id) { department.id }
 
@@ -85,7 +85,7 @@ describe Stat do
         let!(:rdv5) { create(:rdv, organisation: organisation, created_by: "user", motif: motif) }
         let(:invitation_for_participation5) do
           create(:invitation, user: user1, department: department, organisations: [organisation],
-                              created_at: date, rdv_context: rdv_context1)
+                              created_at: date, follow_up: follow_up1)
         end
         let!(:notification_for_participation5) { create(:notification, participation: participation5) }
 
@@ -156,38 +156,38 @@ describe Stat do
         end
       end
 
-      describe "#rdv_contexts_with_invitations_and_participations_set" do
+      describe "#follow_ups_with_invitations_and_participations_set" do
         let!(:user3) { create(:user, organisations: [organisation]) }
         let!(:rdv3) { create(:rdv, organisation: organisation) }
-        let!(:participation3) { create(:participation, rdv: rdv3, rdv_context: rdv_context3) }
-        let!(:rdv_context3) { create(:rdv_context, user: user3) }
+        let!(:participation3) { create(:participation, rdv: rdv3, follow_up: follow_up3) }
+        let!(:follow_up3) { create(:follow_up, user: user3) }
         let!(:user4) { create(:user, organisations: [organisation]) }
-        let!(:invitation4) { create(:invitation, rdv_context: rdv_context4) }
+        let!(:invitation4) { create(:invitation, follow_up: follow_up4) }
         let!(:rdv4) { create(:rdv, organisation: organisation) }
-        let!(:participation4) { create(:participation, rdv: rdv4, rdv_context: rdv_context4) }
-        let!(:rdv_context4) { create(:rdv_context, user: user4) }
+        let!(:participation4) { create(:participation, rdv: rdv4, follow_up: follow_up4) }
+        let!(:follow_up4) { create(:follow_up, user: user4) }
         let!(:user5) { create(:user, organisations: [organisation]) }
-        let!(:invitation5) { create(:invitation, rdv_context: rdv_context5) }
-        let!(:rdv_context5) { create(:rdv_context, user: user5) }
+        let!(:invitation5) { create(:invitation, follow_up: follow_up5) }
+        let!(:follow_up5) { create(:follow_up, user: user5) }
         let!(:user6) do
           create(:user, organisations: [organisation_with_no_configuration])
         end
-        let!(:invitation6) { create(:invitation, created_at: date, rdv_context: rdv_context6) }
+        let!(:invitation6) { create(:invitation, created_at: date, follow_up: follow_up6) }
         let!(:rdv6) { create(:rdv, organisation: organisation) }
-        let!(:participation6) { create(:participation, rdv: rdv6, rdv_context: rdv_context6) }
-        let!(:rdv_context6) { create(:rdv_context, user: user6) }
+        let!(:participation6) { create(:participation, rdv: rdv6, follow_up: follow_up6) }
+        let!(:follow_up6) { create(:follow_up, user: user6) }
 
         it "scopes the collection to the department" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).to include(rdv_context1)
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context2)
+          expect(stat.follow_ups_with_invitations_and_participations_set).to include(follow_up1)
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up2)
         end
 
-        it "does not include rdv_contexts with no invitations" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context3)
+        it "does not include follow_ups with no invitations" do
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up3)
         end
 
-        it "does not include rdv_contexts with no rdvs" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context5)
+        it "does not include follow_ups with no rdvs" do
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up5)
         end
       end
 
@@ -234,7 +234,7 @@ describe Stat do
         end
       end
 
-      describe "#users_first_orientation_rdv_context" do
+      describe "#users_first_orientation_follow_up" do
         let!(:first_user) do
           create(:user, organisations: [organisation])
         end
@@ -242,58 +242,58 @@ describe Stat do
         let!(:third_user) do
           create(:user, organisations: [organisation])
         end
-        let!(:first_user_first_orientation_rdv_context) do
+        let!(:first_user_first_orientation_follow_up) do
           create(
-            :rdv_context,
+            :follow_up,
             user: first_user,
             motif_category: create(:motif_category, leads_to_orientation: true)
           )
         end
-        let!(:first_user_second_orientation_rdv_context) do
+        let!(:first_user_second_orientation_follow_up) do
           create(
-            :rdv_context,
+            :follow_up,
             user: first_user,
             motif_category: create(:motif_category, leads_to_orientation: true)
           )
         end
 
-        let!(:second_user_orientation_rdv_context) do
+        let!(:second_user_orientation_follow_up) do
           create(
-            :rdv_context,
+            :follow_up,
             user: second_user,
             motif_category: create(:motif_category, leads_to_orientation: true)
           )
         end
 
-        let!(:third_user_rdv_context_not_orientation) do
+        let!(:third_user_follow_up_not_orientation) do
           create(
-            :rdv_context,
+            :follow_up,
             user: third_user,
             motif_category: create(:motif_category, leads_to_orientation: false)
           )
         end
 
-        it "retrieves the first orientation rdv_context of each user" do
-          expect(stat.users_first_orientation_rdv_context).to include(first_user_first_orientation_rdv_context)
-          expect(stat.users_first_orientation_rdv_context).to include(second_user_orientation_rdv_context)
-          expect(stat.users_first_orientation_rdv_context).not_to include(first_user_second_orientation_rdv_context)
-          expect(stat.users_first_orientation_rdv_context).not_to include(third_user_rdv_context_not_orientation)
+        it "retrieves the first orientation follow_up of each user" do
+          expect(stat.users_first_orientation_follow_up).to include(first_user_first_orientation_follow_up)
+          expect(stat.users_first_orientation_follow_up).to include(second_user_orientation_follow_up)
+          expect(stat.users_first_orientation_follow_up).not_to include(first_user_second_orientation_follow_up)
+          expect(stat.users_first_orientation_follow_up).not_to include(third_user_follow_up_not_orientation)
         end
       end
 
-      describe "#orientation_rdv_contexts_with_invitations" do
+      describe "#orientation_follow_ups_with_invitations" do
         let!(:user3) { create(:user, organisations: [organisation], created_at: date) }
-        let!(:rdv_context3) do
-          create(:rdv_context, user: user3, motif_category: category_rsa_cer_signature)
+        let!(:follow_up3) do
+          create(:follow_up, user: user3, motif_category: category_rsa_cer_signature)
         end
 
         it "scopes the collection to the department" do
-          expect(stat.orientation_rdv_contexts_with_invitations).to include(rdv_context1)
-          expect(stat.orientation_rdv_contexts_with_invitations).not_to include(rdv_context2)
+          expect(stat.orientation_follow_ups_with_invitations).to include(follow_up1)
+          expect(stat.orientation_follow_ups_with_invitations).not_to include(follow_up2)
         end
 
-        it "does not include the rdv_contexts with no motif category for a first rdv RSA" do
-          expect(stat.orientation_rdv_contexts_with_invitations).not_to include(rdv_context3)
+        it "does not include the follow_ups with no motif category for a first rdv RSA" do
+          expect(stat.orientation_follow_ups_with_invitations).not_to include(follow_up3)
         end
       end
     end
@@ -387,42 +387,42 @@ describe Stat do
         end
       end
 
-      describe "#rdv_contexts_with_invitations_and_participations_set" do
+      describe "#follow_ups_with_invitations_and_participations_set" do
         let!(:user3) { create(:user, organisations: [organisation]) }
         let!(:rdv3) { create(:rdv, organisation: organisation) }
-        let!(:participation3) { create(:participation, rdv: rdv3, rdv_context: rdv_context3) }
-        let!(:rdv_context3) { create(:rdv_context, user: user3) }
+        let!(:participation3) { create(:participation, rdv: rdv3, follow_up: follow_up3) }
+        let!(:follow_up3) { create(:follow_up, user: user3) }
         let!(:user4) { create(:user, organisations: [organisation]) }
-        let!(:invitation4) { create(:invitation, rdv_context: rdv_context4) }
+        let!(:invitation4) { create(:invitation, follow_up: follow_up4) }
         let!(:rdv4) { create(:rdv, organisation: organisation) }
-        let!(:participation4) { create(:participation, rdv: rdv4, rdv_context: rdv_context4) }
-        let!(:rdv_context4) { create(:rdv_context, user: user4) }
+        let!(:participation4) { create(:participation, rdv: rdv4, follow_up: follow_up4) }
+        let!(:follow_up4) { create(:follow_up, user: user4) }
         let!(:user5) { create(:user, organisations: [organisation]) }
-        let!(:invitation5) { create(:invitation, rdv_context: rdv_context5) }
-        let!(:rdv_context5) { create(:rdv_context, user: user5) }
+        let!(:invitation5) { create(:invitation, follow_up: follow_up5) }
+        let!(:follow_up5) { create(:follow_up, user: user5) }
         let!(:user6) do
           create(:user, organisations: [organisation_with_no_configuration])
         end
-        let!(:invitation6) { create(:invitation, created_at: date, rdv_context: rdv_context6) }
+        let!(:invitation6) { create(:invitation, created_at: date, follow_up: follow_up6) }
         let!(:rdv6) { create(:rdv, organisation: organisation) }
-        let!(:participation6) { create(:participation, rdv: rdv6, rdv_context: rdv_context6) }
-        let!(:rdv_context6) { create(:rdv_context, user: user6) }
+        let!(:participation6) { create(:participation, rdv: rdv6, follow_up: follow_up6) }
+        let!(:follow_up6) { create(:follow_up, user: user6) }
 
         it "scopes the collection to the organisation" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).to include(rdv_context1)
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context2)
+          expect(stat.follow_ups_with_invitations_and_participations_set).to include(follow_up1)
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up2)
         end
 
-        it "does not include rdv_contexts with no invitations" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context3)
+        it "does not include follow_ups with no invitations" do
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up3)
         end
 
-        it "does not include rdv_contexts with no rdvs" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context5)
+        it "does not include follow_ups with no rdvs" do
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up5)
         end
 
-        it "does not include the rdv_contexts of users from irrelevant organisations" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).not_to include(rdv_context6)
+        it "does not include the follow_ups of users from irrelevant organisations" do
+          expect(stat.follow_ups_with_invitations_and_participations_set).not_to include(follow_up6)
         end
       end
 
@@ -473,35 +473,35 @@ describe Stat do
         end
       end
 
-      describe "#users_first_orientation_rdv_context" do
+      describe "#users_first_orientation_follow_up" do
         let!(:user3) { create(:user, organisations: [organisation], created_at: date) }
-        let!(:rdv_context3) do
-          create(:rdv_context, user: user3, motif_category: category_rsa_cer_signature)
+        let!(:follow_up3) do
+          create(:follow_up, user: user3, motif_category: category_rsa_cer_signature)
         end
 
         it "scopes the collection to the organisation" do
-          expect(stat.users_first_orientation_rdv_context).to include(rdv_context1)
-          expect(stat.users_first_orientation_rdv_context).not_to include(rdv_context2)
+          expect(stat.users_first_orientation_follow_up).to include(follow_up1)
+          expect(stat.users_first_orientation_follow_up).not_to include(follow_up2)
         end
 
-        it "does not include the rdv_context that do not lead to orientation" do
-          expect(stat.users_first_orientation_rdv_context).not_to include(rdv_context3)
+        it "does not include the follow_up that do not lead to orientation" do
+          expect(stat.users_first_orientation_follow_up).not_to include(follow_up3)
         end
       end
 
-      describe "#orientation_rdv_contexts_with_invitations" do
+      describe "#orientation_follow_ups_with_invitations" do
         let!(:user3) { create(:user, organisations: [organisation], created_at: date) }
-        let!(:rdv_context3) do
-          create(:rdv_context, user: user3, motif_category: category_rsa_cer_signature)
+        let!(:follow_up3) do
+          create(:follow_up, user: user3, motif_category: category_rsa_cer_signature)
         end
 
         it "scopes the collection to the organisation" do
-          expect(stat.orientation_rdv_contexts_with_invitations).to include(rdv_context1)
-          expect(stat.orientation_rdv_contexts_with_invitations).not_to include(rdv_context2)
+          expect(stat.orientation_follow_ups_with_invitations).to include(follow_up1)
+          expect(stat.orientation_follow_ups_with_invitations).not_to include(follow_up2)
         end
 
-        it "does not include the rdv_contexts with no motif category for a first rdv RSA" do
-          expect(stat.orientation_rdv_contexts_with_invitations).not_to include(rdv_context3)
+        it "does not include the follow_ups with no motif category for a first rdv RSA" do
+          expect(stat.orientation_follow_ups_with_invitations).not_to include(follow_up3)
         end
       end
     end
@@ -552,9 +552,9 @@ describe Stat do
         end
       end
 
-      describe "#rdv_contexts_with_invitations_and_participations_set" do
+      describe "#follow_ups_with_invitations_and_participations_set" do
         it "does not scope the collection to the department" do
-          expect(stat.rdv_contexts_with_invitations_and_participations_set).to include(rdv_context2)
+          expect(stat.follow_ups_with_invitations_and_participations_set).to include(follow_up2)
         end
       end
 
@@ -566,13 +566,13 @@ describe Stat do
 
       describe "#users_with_orientation_category_set" do
         it "does not scope the collection to the department" do
-          expect(stat.users_first_orientation_rdv_context).to include(rdv_context2)
+          expect(stat.users_first_orientation_follow_up).to include(follow_up2)
         end
       end
 
-      describe "#orientation_rdv_contexts_with_invitations" do
+      describe "#orientation_follow_ups_with_invitations" do
         it "does not scope the collection to the department" do
-          expect(stat.orientation_rdv_contexts_with_invitations).to include(rdv_context2)
+          expect(stat.orientation_follow_ups_with_invitations).to include(follow_up2)
         end
       end
     end

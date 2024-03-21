@@ -18,8 +18,8 @@ describe TransferEmailReplyJob do
                   first_name: "Bénédicte", last_name: "Ficiaire", organisations: [organisation])
   end
   let(:rdv_uuid) { "8fae4d5f-4d63-4f60-b343-854d939881a3" }
-  let!(:rdv_context) { create(:rdv_context, user: user) }
-  let!(:participation) { create(:participation, convocable: true, rdv_context: rdv_context, user: user) }
+  let!(:follow_up) { create(:follow_up, user: user) }
+  let!(:participation) { create(:participation, convocable: true, follow_up: follow_up, user: user) }
   let!(:rdv) do
     create(:rdv, uuid: rdv_uuid, organisation: organisation, participations: [participation])
   end

@@ -1,14 +1,14 @@
 describe SendInvitationReminderJob do
   subject do
-    described_class.new.perform(rdv_context_id, invitation_format)
+    described_class.new.perform(follow_up_id, invitation_format)
   end
 
-  let!(:rdv_context_id) { 3333 }
+  let!(:follow_up_id) { 3333 }
   let!(:invitation_format) { "sms" }
-  let!(:rdv_context) do
+  let!(:follow_up) do
     create(
-      :rdv_context,
-      id: rdv_context_id,
+      :follow_up,
+      id: follow_up_id,
       user: user,
       status: "invitation_pending",
       motif_category: create(:motif_category, name: "RSA accompagnement")
@@ -23,7 +23,7 @@ describe SendInvitationReminderJob do
     create(
       :invitation,
       valid_until: Time.zone.parse("2022-05-15 15:05"), created_at: Time.zone.parse("2022-05-01 14:01"),
-      user: user, organisations: [organisation], rdv_context: rdv_context, rdv_solidarites_token: "123",
+      user: user, organisations: [organisation], follow_up: follow_up, rdv_solidarites_token: "123",
       link: "www.rdv-solidarités.fr/prendre_rdv",
       help_phone_number: "0101010101",
       rdv_solidarites_lieu_id: nil, department: department, rdv_with_referents: false
@@ -47,7 +47,7 @@ describe SendInvitationReminderJob do
         user: user,
         department: department,
         organisations: [organisation],
-        rdv_context: rdv_context,
+        follow_up: follow_up,
         format: invitation_format,
         help_phone_number: "0101010101",
         rdv_solidarites_lieu_id: nil,
@@ -104,8 +104,8 @@ describe SendInvitationReminderJob do
     end
   end
 
-  context "when the rdv context status is not invitation_pending" do
-    before { rdv_context.update! status: "rdv_pending" }
+  context "when the follow-up status is not invitation_pending" do
+    before { follow_up.update! status: "rdv_pending" }
 
     it "does not instanciate an invitation" do
       expect(Invitation).not_to receive(:new)
@@ -125,7 +125,7 @@ describe SendInvitationReminderJob do
   end
 
   context "when an invitation has already been sent in the last 24hrs in the same format" do
-    let!(:invitation) { create(:invitation, created_at: Time.zone.parse("2022-05-04 08:00"), rdv_context: rdv_context) }
+    let!(:invitation) { create(:invitation, created_at: Time.zone.parse("2022-05-04 08:00"), follow_up: follow_up) }
 
     it "does not instanciate an invitation" do
       expect(Invitation).not_to receive(:new)

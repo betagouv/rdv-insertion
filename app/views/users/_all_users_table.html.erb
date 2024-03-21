@@ -23,11 +23,11 @@
           <td colspan=<%= @all_configurations.count %>>Archivé</td>
         <% else %>
           <% @all_configurations.each do |configuration| %>
-            <% if rdv_context = user.rdv_context_for(configuration.motif_category) %>
-              <%= render "rdv_contexts/rdv_context_status_cell", rdv_context: rdv_context, configuration: configuration %>
+            <% if follow_up = user.follow_up_for(configuration.motif_category) %>
+              <%= render "follow_ups/follow_up_status_cell", follow_up: follow_up, configuration: configuration %>
             <% else %>
               <td id=<%= dom_id(configuration.motif_category, "user_#{user.id}") %>>
-                <%= render "rdv_contexts/new_button", user: user, configuration: configuration, organisation: @organisation, department: @department, turbo: true, button_text: "Ajouter" %>
+                <%= render "follow_ups/new_button", user: user, configuration: configuration, organisation: @organisation, department: @department, turbo: true, button_text: "Ajouter" %>
               </td>
             <% end %>
           <% end %>

@@ -15,7 +15,7 @@ module Previews
     def set_invitation_example
       @invitation = Invitation.new(
         user: @user, organisations: [@organisation],
-        rdv_context: RdvContext.new(motif_category: @motif_category),
+        follow_up: FollowUp.new(motif_category: @motif_category),
         valid_until: @configuration.number_of_days_before_action_required.days.from_now,
         help_phone_number: @configuration.phone_number,
         department: @department,

@@ -38,9 +38,9 @@ describe "Agents can update user through form", :js do
       setup_agent_session(agent)
       stub_sync_with_rdv_solidarites_user(rdv_solidarites_user_id)
       # Somehow the tests fail on CI if we do not put this line, the before_save :set_status callback is not
-      # triggered on the rdv contexts when we create them (in Users::Save) and so there is an error when redirected
+      # triggered on the follow-ups when we create them (in Users::Save) and so there is an error when redirected
       # to show page after update
-      allow_any_instance_of(RdvContext).to receive(:status).and_return("not_invited")
+      allow_any_instance_of(FollowUp).to receive(:status).and_return("not_invited")
     end
 
     it "can update the user" do

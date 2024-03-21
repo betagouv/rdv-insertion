@@ -21,14 +21,14 @@ describe Invitations::ComputeLink, type: :service do
     create(:user, address: address)
   end
   let!(:motif_category) { create(:motif_category, short_name: "rsa_accompagnement") }
-  let!(:rdv_context) { build(:rdv_context, motif_category: motif_category) }
+  let!(:follow_up) { build(:follow_up, motif_category: motif_category) }
   let!(:invitation) do
     create(
       :invitation,
       department: department,
       organisations: [organisation1, organisation2],
       user: user,
-      rdv_context: rdv_context,
+      follow_up: follow_up,
       rdv_solidarites_token: rdv_solidarites_token
     )
   end
@@ -106,7 +106,7 @@ describe Invitations::ComputeLink, type: :service do
           department: department,
           organisations: [organisation1, organisation2],
           user: user,
-          rdv_context: rdv_context,
+          follow_up: follow_up,
           rdv_solidarites_token: rdv_solidarites_token,
           rdv_solidarites_lieu_id: 5
         )

@@ -1,25 +1,25 @@
 describe Stats::ComputeRateOfUsersWithRdvSeen, type: :service do
-  subject { described_class.call(rdv_contexts: rdv_contexts) }
+  subject { described_class.call(follow_ups: follow_ups) }
 
-  let!(:rdv_contexts) { RdvContext.where(id: [rdv_context1, rdv_context2, rdv_context3, rdv_context4]) }
+  let!(:follow_ups) { FollowUp.where(id: [follow_up1, follow_up2, follow_up3, follow_up4]) }
 
   let!(:user1) { create(:user) }
-  let!(:rdv_context1) { create(:rdv_context, user: user1, status: "rdv_seen") }
+  let!(:follow_up1) { create(:follow_up, user: user1, status: "rdv_seen") }
   let!(:rdv1) { create(:rdv, status: "seen") }
-  let!(:participation1) { create(:participation, rdv: rdv1, rdv_context: rdv_context1, status: "seen") }
+  let!(:participation1) { create(:participation, rdv: rdv1, follow_up: follow_up1, status: "seen") }
 
   let!(:user2) { create(:user) }
-  let!(:rdv_context2) { create(:rdv_context, user: user2, status: "rdv_pending") }
+  let!(:follow_up2) { create(:follow_up, user: user2, status: "rdv_pending") }
   let!(:rdv2) { create(:rdv, status: "unknown") }
-  let!(:participation2) { create(:participation, rdv: rdv2, rdv_context: rdv_context2, status: "unknown") }
+  let!(:participation2) { create(:participation, rdv: rdv2, follow_up: follow_up2, status: "unknown") }
 
   let!(:user3) { create(:user) }
-  let!(:rdv_context3) { create(:rdv_context, user: user3, status: "rdv_noshow") }
+  let!(:follow_up3) { create(:follow_up, user: user3, status: "rdv_noshow") }
   let!(:rdv3) { create(:rdv, status: "noshow") }
-  let!(:participation3) { create(:participation, rdv: rdv3, rdv_context: rdv_context3, status: "noshow") }
+  let!(:participation3) { create(:participation, rdv: rdv3, follow_up: follow_up3, status: "noshow") }
 
   let!(:user4) { create(:user) }
-  let!(:rdv_context4) { create(:rdv_context, user: user4, status: "not_invited") }
+  let!(:follow_up4) { create(:follow_up, user: user4, status: "not_invited") }
 
   describe "#call" do
     let!(:result) { subject }

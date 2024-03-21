@@ -51,8 +51,8 @@ class ConfigurationsController < ApplicationController
   end
 
   def destroy
-    @configuration.destroy
-    flash.now[:success] = "Le contexte a été supprimé avec succès"
+    @configuration.destroy!
+    flash.now[:success] = "La configuration a été supprimée avec succès"
   end
 
   private

@@ -50,7 +50,7 @@ class Stat < ApplicationRecord
   # We filter participations to keep only invitations
   def participations_after_invitations_set
     participations_set.where.missing(:notifications)
-                      .joins(:rdv_context_invitations)
+                      .joins(:follow_up_invitations)
                       .select("participations.id, participations.status")
                       .distinct
   end
@@ -64,13 +64,13 @@ class Stat < ApplicationRecord
     @invited_users_set ||= users_set.with_sent_invitations.distinct
   end
 
-  # We filter the rdv_contexts to keep those where the users were invited and created a rdv/participation
-  def rdv_contexts_with_invitations_and_participations_set
-    RdvContext.preload(:participations, :invitations)
-              .where(user_id: users_set)
-              .where.associated(:participations)
-              .with_sent_invitations
-              .distinct
+  # We filter the follow_ups to keep those where the users were invited and created a rdv/participation
+  def follow_ups_with_invitations_and_participations_set
+    FollowUp.preload(:participations, :invitations)
+            .where(user_id: users_set)
+            .where.associated(:participations)
+            .with_sent_invitations
+            .distinct
   end
 
   # We filter the users by organisations and retrieve deleted or archived users
@@ -100,18 +100,18 @@ class Stat < ApplicationRecord
 
   # To compute the rate of users oriented, we only consider the users who have been invited
   # because the users that are directly convocated do not benefit from our added value
-  def orientation_rdv_contexts_with_invitations
-    RdvContext.orientation.preload(:participations, :invitations)
-              .where(user: users_set)
-              .with_sent_invitations
-              .distinct
+  def orientation_follow_ups_with_invitations
+    FollowUp.orientation.preload(:participations, :invitations)
+            .where(user: users_set)
+            .with_sent_invitations
+            .distinct
   end
 
-  def users_first_orientation_rdv_context
+  def users_first_orientation_follow_up
     # we consider minimum(:id) being the same as minimum(:created_at) as the id increases with created_at
-    RdvContext.where(user: users_set)
-              .where(id: RdvContext.orientation.group(:user_id).minimum(:id).values)
-              .preload(participations: :rdv)
-              .distinct
+    FollowUp.where(user: users_set)
+            .where(id: FollowUp.orientation.group(:user_id).minimum(:id).values)
+            .preload(participations: :rdv)
+            .distinct
   end
 end

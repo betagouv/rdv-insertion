@@ -1,7 +1,7 @@
 module Stats
   class ComputeAverageTimeBetweenInvitationAndRdvInDays < BaseService
-    def initialize(rdv_contexts:)
-      @rdv_contexts = rdv_contexts
+    def initialize(follow_ups:)
+      @follow_ups = follow_ups
     end
 
     def call
@@ -14,13 +14,13 @@ module Stats
     def compute_average_time_between_invitation_and_rdv_in_days
       invitation_delays = []
 
-      @rdv_contexts.find_each do |rdv_context|
-        # Some rdv_contexts might have negative values when users have had
+      @follow_ups.find_each do |follow_up|
+        # Some follow_ups might have negative values when users have had
         # rdvs on Rdv-Solidarités prior to being imported in the app.
         # We don't want to take those values into account.
-        next if rdv_context.time_between_invitation_and_rdv_in_days.negative?
+        next if follow_up.time_between_invitation_and_rdv_in_days.negative?
 
-        invitation_delays << rdv_context.time_between_invitation_and_rdv_in_days
+        invitation_delays << follow_up.time_between_invitation_and_rdv_in_days
       end
 
       return 0.0 if invitation_delays.empty?

@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     :uid, :role, :first_name, :last_name, :nir, :france_travail_id, :birth_date, :email, :phone_number,
     :birth_name, :address, :affiliation_number, :department_internal_id, :title,
     :status, :rights_opening_date,
-    { rdv_contexts_attributes: [:motif_category_id], tag_users_attributes: [:tag_id] }
+    { follow_ups_attributes: [:motif_category_id], tag_users_attributes: [:tag_id] }
   ].freeze
 
   include BackToListConcern
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   before_action :set_organisation, :set_department, :set_organisations, :set_all_configurations,
                 :set_current_agent_roles, :set_users_scope,
                 :set_current_configuration, :set_current_motif_category,
-                :set_users, :set_rdv_contexts, :set_filterable_tags, :set_referents_list,
+                :set_users, :set_follow_ups, :set_filterable_tags, :set_referents_list,
                 :filter_users, :order_users,
                 for: :index
   before_action :set_user, :set_organisation, :set_department, :set_all_configurations,
@@ -242,18 +242,18 @@ class UsersController < ApplicationController
              .where(department_level? ? { organisations: @organisations } : { organisations: @organisation })
     return if request.format == "csv"
 
-    @users = @users.preload(:archives, rdv_contexts: [:invitations])
+    @users = @users.preload(:archives, follow_ups: [:invitations])
   end
 
   def set_users_for_motif_category
     @users = policy_scope(User)
-             .preload(:organisations, rdv_contexts: [:notifications, :invitations])
+             .preload(:organisations, follow_ups: [:notifications, :invitations])
              .active.distinct
              .where(department_level? ? { organisations: @organisations } : { organisations: @organisation })
              .where.not(id: @department.archived_users.ids)
-             .joins(:rdv_contexts)
-             .where(rdv_contexts: { motif_category: @current_motif_category })
-             .where.not(rdv_contexts: { status: "closed" })
+             .joins(:follow_ups)
+             .where(follow_ups: { motif_category: @current_motif_category })
+             .where.not(follow_ups: { status: "closed" })
   end
 
   def set_archived_users
@@ -265,13 +265,13 @@ class UsersController < ApplicationController
              .where(department_level? ? { organisations: @organisations } : { organisations: @organisation })
   end
 
-  def set_rdv_contexts
+  def set_follow_ups
     return if archived_scope?
 
-    @rdv_contexts = RdvContext.where(
+    @follow_ups = FollowUp.where(
       user_id: @users.ids, motif_category: @current_motif_category
     )
-    @statuses_count = @rdv_contexts.group(:status).count
+    @statuses_count = @follow_ups.group(:status).count
   end
 
   def set_referents_list

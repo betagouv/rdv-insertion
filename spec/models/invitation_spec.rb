@@ -3,11 +3,11 @@ describe Invitation do
     let!(:department) { create(:department) }
     let!(:organisation) { create(:organisation, department: department) }
     let!(:user) { create(:user) }
-    let!(:rdv_context) { build(:rdv_context) }
+    let!(:follow_up) { build(:follow_up) }
     let!(:invitation) do
       build(
         :invitation,
-        organisations: [organisation], department: department, rdv_context: rdv_context,
+        organisations: [organisation], department: department, follow_up: follow_up,
         help_phone_number: "0101010101", user: user, rdv_solidarites_token: "rdv_solidarites_token",
         link: "https://www.rdv-solidarites.fr"
       )

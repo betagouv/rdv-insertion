@@ -260,7 +260,7 @@ RSpec.configure do |config|
             },
             required: %w[id name email phone_number department_number rdv_solidarites_organisation_id motif_categories]
           },
-          rdv_context: {
+          follow_up: {
             type: "object",
             properties: {
               id: { type: "integer" },

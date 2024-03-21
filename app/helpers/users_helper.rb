@@ -25,7 +25,7 @@ module UsersHelper
     ordered_statuses_count(statuses_count).map do |status, count|
       next if count.nil?
 
-      ["#{I18n.t("activerecord.attributes.rdv_context.statuses.#{status}")} (#{count})", status]
+      ["#{I18n.t("activerecord.attributes.follow_up.statuses.#{status}")} (#{count})", status]
     end.compact
   end
 
@@ -44,30 +44,30 @@ module UsersHelper
     ]
   end
 
-  def background_class_for_context_status(context, number_of_days_before_action_required)
-    return "" if context.nil?
+  def background_class_for_follow_up_status(follow_up, number_of_days_before_action_required)
+    return "" if follow_up.nil?
 
-    if context.action_required_status?
+    if follow_up.action_required_status?
       "bg-danger border-danger"
     elsif number_of_days_before_action_required &&
-          context.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
+          follow_up.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
       "bg-warning border-warning"
-    elsif context.rdv_seen? || context.closed?
+    elsif follow_up.rdv_seen? || follow_up.closed?
       "bg-success border-success"
     else
       ""
     end
   end
 
-  def badge_background_class(context, number_of_days_before_action_required)
-    return "blue-out border border-blue" if context.nil?
+  def badge_background_class(follow_up, number_of_days_before_action_required)
+    return "blue-out border border-blue" if follow_up.nil?
 
-    if context.action_required_status?
+    if follow_up.action_required_status?
       "bg-danger border-danger"
     elsif number_of_days_before_action_required &&
-          context.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
+          follow_up.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
       "bg-warning border-warning"
-    elsif context.rdv_seen? || context.closed?
+    elsif follow_up.rdv_seen? || follow_up.closed?
       "bg-success border-success"
     else
       "blue-out border border-blue"
@@ -75,7 +75,7 @@ module UsersHelper
   end
 
   def background_class_for_participation_status(participation)
-    return "" if participation.rdv_context.closed?
+    return "" if participation.follow_up.closed?
 
     if participation.seen?
       "bg-success border-success"
@@ -108,18 +108,18 @@ module UsersHelper
     I18n.t("activerecord.attributes.rdv.unknown_statuses.detailed.#{temporal_unknown_status}")
   end
 
-  def display_context_status(context, number_of_days_before_action_required)
-    return "Non rattaché" if context.nil?
+  def display_follow_up_status(follow_up, number_of_days_before_action_required)
+    return "Non rattaché" if follow_up.nil?
 
-    I18n.t("activerecord.attributes.rdv_context.statuses.#{context.status}") +
-      display_context_status_notice(context, number_of_days_before_action_required)
+    I18n.t("activerecord.attributes.follow_up.statuses.#{follow_up.status}") +
+      display_follow_up_status_notice(follow_up, number_of_days_before_action_required)
   end
 
-  def display_context_status_notice(context, number_of_days_before_action_required)
-    return if context.nil?
+  def display_follow_up_status_notice(follow_up, number_of_days_before_action_required)
+    return if follow_up.nil?
 
     if number_of_days_before_action_required &&
-       context.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
+       follow_up.time_to_accept_invitation_exceeded?(number_of_days_before_action_required)
       " (Délai dépassé)"
     else
       ""
@@ -151,11 +151,11 @@ module UsersHelper
       "agent_searches?#{params.to_query}"
   end
 
-  def should_convene_for?(rdv_context, configuration)
+  def should_convene_for?(follow_up, configuration)
     return false unless configuration.convene_user?
 
-    rdv_context.convocable_status? ||
-      rdv_context.time_to_accept_invitation_exceeded?(configuration.number_of_days_before_action_required)
+    follow_up.convocable_status? ||
+      follow_up.time_to_accept_invitation_exceeded?(configuration.number_of_days_before_action_required)
   end
 
   def show_parcours?(department)

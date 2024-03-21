@@ -17,7 +17,7 @@
   </thead>
   <tbody class="align-middle">
     <% @users.each do |user| %>
-      <% rdv_context = user.rdv_context_for(@current_motif_category) %>
+      <% follow_up = user.follow_up_for(@current_motif_category) %>
       <tr
         class="clickable"
         data-controller="user-link"
@@ -28,10 +28,10 @@
         <td><%= display_attribute user.first_name %></td>
         <% @current_configuration.invitation_formats.each do |invitation_format| %>
           <td class="d-none d-lg-table-cell">
-            <% if rdv_context.rdv_pending? || rdv_context.closed? %>
+            <% if follow_up.rdv_pending? || follow_up.closed? %>
               <!-- show nothing -->
             <% elsif user.can_be_invited_through?(invitation_format) %>
-              <%= render "invitations/checkbox_form", user: user, invitation_format: invitation_format, motif_category: @current_motif_category, rdv_context: rdv_context, checked: checked = rdv_context.first_invitation_relative_to_last_participation_by(invitation_format).present?, disabled: checked || user.deleted? %>
+              <%= render "invitations/checkbox_form", user: user, invitation_format: invitation_format, motif_category: @current_motif_category, follow_up: follow_up, checked: checked = follow_up.first_invitation_relative_to_last_participation_by(invitation_format).present?, disabled: checked || user.deleted? %>
             <% else %>
               -
             <% end %>
@@ -39,22 +39,22 @@
         <% end %>
         </td>
         <% if show_invitations?(@current_configuration) %>
-          <td id="first-invitation-date-<%= rdv_context.id %>"><%= display_attribute format_date(rdv_context.first_invitation_created_at) %></td>
-          <td id="last-invitation-date-<%= rdv_context.id %>"><%= display_attribute(format_date(rdv_context.last_invitation_created_at)) %></td>
+          <td id="first-invitation-date-<%= follow_up.id %>"><%= display_attribute format_date(follow_up.first_invitation_created_at) %></td>
+          <td id="last-invitation-date-<%= follow_up.id %>"><%= display_attribute(format_date(follow_up.last_invitation_created_at)) %></td>
         <% end %>
         <% if show_convocation?(@current_configuration) %>
-          <% if should_convene_for?(rdv_context, @current_configuration) %>
+          <% if should_convene_for?(follow_up, @current_configuration) %>
             <td>
-              <%= render "rdv_contexts/convocation_button",
+              <%= render "follow_ups/convocation_button",
                           user_id: user.id, motif_category_id: @current_motif_category.id,
                           organisation_ids: department_level? ? (@organisations.map(&:id) & user.organisation_ids) : [@organisation.id] %>
             </td>
           <% else %>
-            <td><%= display_attribute format_date(rdv_context.last_convocation_created_at) %></td>
+            <td><%= display_attribute format_date(follow_up.last_convocation_created_at) %></td>
           <% end %>
         <% end %>
-        <td id="rdv-context-status-<%= rdv_context.id %>" class="<%= background_class_for_context_status(rdv_context, @current_configuration.number_of_days_before_action_required) %>">
-          <%= display_context_status(rdv_context, @current_configuration.number_of_days_before_action_required) %>
+        <td id="follow-up-status-<%= follow_up.id %>" class="<%= background_class_for_follow_up_status(follow_up, @current_configuration.number_of_days_before_action_required) %>">
+          <%= display_follow_up_status(follow_up, @current_configuration.number_of_days_before_action_required) %>
         </td>
         <td class="padding-left-15">
           <%= link_to structure_user_path(user.id) do %>

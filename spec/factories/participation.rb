@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :participation do
     user
     rdv
-    rdv_context
+    follow_up
     sequence(:rdv_solidarites_participation_id)
 
     after(:build) do |participation|

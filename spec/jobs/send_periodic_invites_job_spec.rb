@@ -13,11 +13,11 @@ describe SendPeriodicInvitesJob do
     end
 
     let!(:motif_category) { create(:motif_category, optional_rdv_subscription: true) }
-    let!(:rdv_context) { create(:rdv_context, motif_category: motif_category) }
+    let!(:follow_up) { create(:follow_up, motif_category: motif_category) }
     let!(:invitation) do
       create(
         :invitation,
-        rdv_context: rdv_context,
+        follow_up: follow_up,
         created_at: 15.days.ago,
         valid_until: 1.day.from_now,
         organisations: [organisation]
@@ -38,7 +38,7 @@ describe SendPeriodicInvitesJob do
           let!(:invitation) do
             create(
               :invitation,
-              rdv_context: rdv_context,
+              follow_up: follow_up,
               created_at: 3.days.ago,
               valid_until: 1.day.from_now,
               organisations: [organisation]
@@ -89,7 +89,7 @@ describe SendPeriodicInvitesJob do
         let!(:invitation) do
           create(
             :invitation,
-            rdv_context: rdv_context,
+            follow_up: follow_up,
             created_at: nil,
             valid_until: 1.day.from_now,
             organisations: [organisation]

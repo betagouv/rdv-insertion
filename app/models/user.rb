@@ -26,7 +26,7 @@ class User < ApplicationRecord
   before_validation :generate_uid
   before_save :format_phone_number
 
-  has_many :rdv_contexts, dependent: :destroy
+  has_many :follow_ups, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :participations, dependent: :destroy
   has_many :archives, dependent: :destroy
@@ -40,11 +40,11 @@ class User < ApplicationRecord
   has_many :organisations, through: :users_organisations
   has_many :notifications, through: :participations
   has_many :configurations, through: :organisations
-  has_many :motif_categories, through: :rdv_contexts
+  has_many :motif_categories, through: :follow_ups
   has_many :departments, -> { distinct }, through: :organisations
   has_many :tags, through: :tag_users
 
-  accepts_nested_attributes_for :rdv_contexts, reject_if: :rdv_context_category_handled_already?
+  accepts_nested_attributes_for :follow_ups, reject_if: :follow_up_category_handled_already?
   accepts_nested_attributes_for :tag_users
 
   validates :last_name, :first_name, presence: true
@@ -61,8 +61,8 @@ class User < ApplicationRecord
 
   scope :active, -> { where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
-  scope :without_rdv_contexts, lambda { |motif_categories|
-    where.not(id: joins(:rdv_contexts).where(rdv_contexts: { motif_category: motif_categories }).ids)
+  scope :without_follow_ups, lambda { |motif_categories|
+    where.not(id: joins(:follow_ups).where(follow_ups: { motif_category: motif_categories }).ids)
   }
   scope :with_sent_invitations, -> { where.associated(:invitations) }
 
@@ -78,8 +78,8 @@ class User < ApplicationRecord
     organisations.delete(organisation)
   end
 
-  def rdv_context_for(motif_category)
-    rdv_contexts.to_a.find { |rc| rc.motif_category_id == motif_category.id }
+  def follow_up_for(motif_category)
+    follow_ups.to_a.find { |rc| rc.motif_category_id == motif_category.id }
   end
 
   def deleted?
@@ -107,7 +107,7 @@ class User < ApplicationRecord
   end
 
   def assign_motif_category(motif_category_id)
-    assign_attributes(rdv_contexts_attributes: [{ motif_category_id: motif_category_id }])
+    assign_attributes(follow_ups_attributes: [{ motif_category_id: motif_category_id }])
   end
 
   def phone_number_formatted
@@ -126,8 +126,8 @@ class User < ApplicationRecord
     organisations.map(&:motif_category_ids).flatten
   end
 
-  def first_orientation_rdv_context
-    rdv_contexts.select(&:orientation?).min_by(&:created_at)
+  def first_orientation_follow_up
+    follow_ups.select(&:orientation?).min_by(&:created_at)
   end
 
   def in_many_departments?
@@ -136,8 +136,8 @@ class User < ApplicationRecord
 
   private
 
-  def rdv_context_category_handled_already?(rdv_context_attributes)
-    rdv_context_attributes.deep_symbolize_keys[:motif_category_id]&.to_i.in?(motif_categories.map(&:id))
+  def follow_up_category_handled_already?(follow_up_attributes)
+    follow_up_attributes.deep_symbolize_keys[:motif_category_id]&.to_i.in?(motif_categories.map(&:id))
   end
 
   def generate_uid

@@ -1,6 +1,6 @@
 class CreateRdvContexts < ActiveRecord::Migration[6.1]
   def change # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    create_table :rdv_contexts do |t|
+    create_table :follow_ups do |t|
       t.integer :context
       t.integer :status
       t.references :applicant, null: false, foreign_key: true
@@ -8,26 +8,26 @@ class CreateRdvContexts < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    create_join_table :rdvs, :rdv_contexts do |t|
-      t.index([:rdv_id, :rdv_context_id], unique: true)
+    create_join_table :rdvs, :follow_ups do |t|
+      t.index([:rdv_id, :follow_up_id], unique: true)
     end
 
-    add_reference :invitations, :rdv_context, foreign_key: true
+    add_reference :invitations, :follow_up, foreign_key: true
 
-    add_index "rdv_contexts", ["context"]
-    add_index "rdv_contexts", ["status"]
+    add_index "follow_ups", ["context"]
+    add_index "follow_ups", ["status"]
 
     up_only do
       Applicant.find_each do |applicant|
         next if applicant.not_invited?
 
-        rdv_context = RdvContext.new(applicant: applicant, context: "rsa_orientation")
-        rdv_context.save!
+        follow_up = FollowUp.new(applicant: applicant, context: "rsa_orientation")
+        follow_up.save!
 
-        rdv_context.rdvs = applicant.rdvs
-        rdv_context.invitations = applicant.invitations
+        follow_up.rdvs = applicant.rdvs
+        follow_up.invitations = applicant.invitations
 
-        rdv_context.save!
+        follow_up.save!
       end
     end
   end

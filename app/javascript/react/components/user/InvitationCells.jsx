@@ -27,9 +27,9 @@ export default function InvitationCells({ user }) {
           <i className="fas fa-question-circle" />
         </Tippy>
       </td>
-    ) : user.currentContextStatus === "rdv_pending" ? (
+    ) : user.currentFollowUpStatus === "rdv_pending" ? (
       <>
-        <td colSpan={user.list.invitationsColspan}>{user.currentRdvContext.human_status}</td>
+        <td colSpan={user.list.invitationsColspan}>{user.currentFollowUp.human_status}</td>
       </>
     ) : (
       /* ----------------------------- Enabled invitations cases --------------------------- */

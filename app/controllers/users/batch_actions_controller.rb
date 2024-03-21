@@ -5,8 +5,8 @@ module Users
 
     before_action :set_organisation, :set_department, :set_all_configurations, :set_current_configuration,
                   :set_current_motif_category, :set_organisations, :set_motif_category_name, :set_users,
-                  :set_rdv_contexts, :set_back_to_users_list_url, :filter_users_by_non_invited_status,
-                  :order_by_rdv_contexts, for: :new
+                  :set_follow_ups, :set_back_to_users_list_url, :filter_users_by_non_invited_status,
+                  :order_by_follow_ups, for: :new
 
     def new; end
 
@@ -58,25 +58,25 @@ module Users
       @current_motif_category = @current_configuration&.motif_category
     end
 
-    def set_rdv_contexts
-      @rdv_contexts = RdvContext.where(
+    def set_follow_ups
+      @follow_ups = FollowUp.where(
         user_id: @users.ids, motif_category: @current_motif_category
       )
     end
 
     def filter_users_by_non_invited_status
-      @users = @users.joins(:rdv_contexts).where(rdv_contexts: @rdv_contexts.status("not_invited"))
+      @users = @users.joins(:follow_ups).where(follow_ups: @follow_ups.status("not_invited"))
     end
 
     def set_users
       @users = policy_scope(User)
-               .preload({ organisations: [:motif_categories], rdv_contexts: [:participations] })
+               .preload({ organisations: [:motif_categories], follow_ups: [:participations] })
                .active.distinct
                .where(department_level? ? { organisations: @organisations } : { organisations: @organisation })
                .where.not(id: @department.archived_users.ids)
-               .joins(:rdv_contexts)
-               .where(rdv_contexts: { motif_category: @current_motif_category })
-               .where.not(rdv_contexts: { status: "closed" })
+               .joins(:follow_ups)
+               .where(follow_ups: { motif_category: @current_motif_category })
+               .where.not(follow_ups: { status: "closed" })
     end
   end
 end

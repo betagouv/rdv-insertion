@@ -1,7 +1,7 @@
 describe InvitationsController do
   describe "#create" do
-    let!(:user_id) { "24" }
-    let!(:organisation_id) { "22" }
+    let!(:user_id) { "24213123" }
+    let!(:organisation_id) { "22232" }
     let!(:department) { create(:department) }
     let!(:organisation) { create(:organisation, id: organisation_id, department: department) }
     let!(:other_org) { create(:organisation, department: department) }

@@ -8,14 +8,14 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
   let!(:organisation) { create(:organisation) }
   let!(:organisation_id) { organisation.id }
   let!(:agent) { create(:agent, admin_role_in_organisations: [organisation]) }
-  let!(:rdv_context_without_creneau) { create(:rdv_context, motif_category: category_rsa_orientation) }
-  let!(:rdv_context_without_creneau_for_user_without_address) do
-    create(:rdv_context, motif_category: category_rsa_orientation)
+  let!(:follow_up_without_creneau) { create(:follow_up, motif_category: category_rsa_orientation) }
+  let!(:follow_up_without_creneau_for_user_without_address) do
+    create(:follow_up, motif_category: category_rsa_orientation)
   end
-  let!(:rdv_context2_without_creneau) { create(:rdv_context, motif_category: category_rsa_orientation) }
-  let!(:rdv_context_with_creneau) { create(:rdv_context, motif_category: category_rsa_accompagnement_sociopro) }
-  let!(:rdv_context_with_referent_without_creneau) do
-    create(:rdv_context, motif_category: category_rsa_accompagnement_social)
+  let!(:follow_up2_without_creneau) { create(:follow_up, motif_category: category_rsa_orientation) }
+  let!(:follow_up_with_creneau) { create(:follow_up, motif_category: category_rsa_accompagnement_sociopro) }
+  let!(:follow_up_with_referent_without_creneau) do
+    create(:follow_up, motif_category: category_rsa_accompagnement_social)
   end
   let!(:user1) do
     create(
@@ -55,7 +55,7 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
       organisations: [organisation],
       link: "https://www.rdv-solidarites.fr/prendre_rdv?address=1RueTest&city_code=12255&departement=12&invitation_token=AIXR0X2T&latitude=44.0&longitude=2.0&motif_category_short_name=rsa_orientation&organisation_ids%5B%5D=#{organisation_id}&street_ban_id=12255_0070",
       format: "email",
-      rdv_context: rdv_context_without_creneau_for_user_without_address
+      follow_up: follow_up_without_creneau_for_user_without_address
     )
   end
   let!(:invitation_with_no_creneau_no_user_address_relevant_params) do
@@ -77,7 +77,7 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
       organisations: [organisation],
       link: "https://www.rdv-solidarites.fr/prendre_rdv?address=1RueTest&city_code=12255&departement=12&invitation_token=XIXR0X2T&latitude=44.0&longitude=2.0&motif_category_short_name=rsa_orientation&organisation_ids%5B%5D=#{organisation_id}&street_ban_id=12255_0070",
       format: "email",
-      rdv_context: rdv_context_without_creneau
+      follow_up: follow_up_without_creneau
     )
   end
   let!(:invitation_with_no_creneau_relevant_params) do
@@ -99,7 +99,7 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
       organisations: [organisation],
       link: "https://www.rdv-solidarites.fr/prendre_rdv?address=1bRueTest&city_code=12255&departement=12&invitation_token=ZIXR0X2T&latitude=44.0&longitude=2.0&motif_category_short_name=rsa_orientation&organisation_ids%5B%5D=#{organisation_id}&street_ban_id=12255_0070",
       format: "email",
-      rdv_context: rdv_context2_without_creneau
+      follow_up: follow_up2_without_creneau
     )
   end
   let!(:invitation2_with_no_creneau_relevant_params) do
@@ -121,7 +121,7 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
       organisations: [organisation],
       link: "https://www.rdv-solidarites.fr/prendre_rdv?address=2RueTest&city_code=12000&departement=12&invitation_token=JIXR0X2T&latitude=44.0&longitude=2.0&motif_category_short_name=rsa_accompagnement_sociopro&organisation_ids%5B%5D=#{organisation_id}&street_ban_id=12000_0000",
       format: "email",
-      rdv_context: rdv_context_with_creneau
+      follow_up: follow_up_with_creneau
     )
   end
   let!(:invitation_with_creneau_relevant_params) do
@@ -143,7 +143,7 @@ describe Invitations::VerifyOrganisationCreneauxAvailability, type: :service do
       organisations: [organisation],
       link: "https://www.rdv-solidarites.fr/prendre_rdv?address=3RueTest&city_code=10000&departement=12&invitation_token=UIXR0X2T&latitude=44.0&longitude=2.0&motif_category_short_name=rsa_accompagnement_sociopro&organisation_ids%5B%5D=#{organisation_id}&street_ban_id=12000_0000&referent_ids%5B%5D=1",
       format: "email",
-      rdv_context: rdv_context_with_referent_without_creneau
+      follow_up: follow_up_with_referent_without_creneau
     )
   end
   let!(:invitation_with_referent_without_creneau_relevant_params) do

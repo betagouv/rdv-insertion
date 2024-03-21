@@ -13,12 +13,12 @@ describe "Agents can update a participation status", :js do
     create(:rdv, organisation: organisation)
   end
 
-  let(:rdv_context) do
-    create(:rdv_context, status: "rdv_seen", user: user, motif_category: category_orientation)
+  let(:follow_up) do
+    create(:follow_up, status: "rdv_seen", user: user, motif_category: category_orientation)
   end
 
   let(:participation) do
-    create(:participation, rdv_context: rdv_context, user: user, rdv: rdv, status: "seen")
+    create(:participation, follow_up: follow_up, user: user, rdv: rdv, status: "seen")
   end
 
   let(:rdvs_participation_id) { participation.rdv_solidarites_participation_id }
@@ -32,7 +32,7 @@ describe "Agents can update a participation status", :js do
   context "when user has rdvs" do
     context "rdv is in the past" do
       it "can edit a participation status" do
-        visit organisation_user_rdv_contexts_path(organisation_id: organisation.id, user_id: user.id)
+        visit organisation_user_follow_ups_path(organisation_id: organisation.id, user_id: user.id)
         page.execute_script("window.scrollBy(0, 500)")
         status_update_button = find_by_id("toggle-rdv-status")
         expect(status_update_button).to have_content("Rendez-vous honoré")
@@ -51,7 +51,7 @@ describe "Agents can update a participation status", :js do
       end
 
       it "does not display the toggle button" do
-        visit organisation_user_rdv_contexts_path(organisation_id: organisation.id, user_id: user.id)
+        visit organisation_user_follow_ups_path(organisation_id: organisation.id, user_id: user.id)
         page.execute_script("window.scrollBy(0, 500)")
         expect(page).to have_content("RDV honoré")
 

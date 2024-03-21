@@ -66,11 +66,11 @@ describe Exporters::GenerateUsersParticipationsCsv, type: :service do
   let!(:notification) do
     create(:notification, participation: participation_rdv, format: "email", created_at: Time.zone.parse("2022-06-22"))
   end
-  let!(:rdv_context) do
+  let!(:follow_up) do
     create(
-      :rdv_context, invitations: [first_invitation, last_invitation],
-                    motif_category: motif_category, participations: [participation_rdv],
-                    user: user1, status: "rdv_needs_status_update"
+      :follow_up, invitations: [first_invitation, last_invitation],
+                  motif_category: motif_category, participations: [participation_rdv],
+                  user: user1, status: "rdv_needs_status_update"
     )
   end
   let!(:referent) do

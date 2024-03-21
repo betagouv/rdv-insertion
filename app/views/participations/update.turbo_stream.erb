@@ -1,6 +1,6 @@
 <% if @success %>
   <%= turbo_stream.replace dom_id(@participation, :status), partial: "participations/participation_status", locals: { participation: @participation } %>
-  <%= turbo_stream.replace dom_id(@participation.rdv_context, :status_tag), partial: "rdv_contexts/rdv_context_status_badge", locals: { rdv_context: @participation.rdv_context, configuration: @participation.current_configuration } %>
+  <%= turbo_stream.replace dom_id(@participation.follow_up, :status_tag), partial: "follow_ups/follow_up_status_badge", locals: { follow_up: @participation.follow_up, configuration: @participation.current_configuration } %>
 <% else %>
   <%= render_turbo_stream_flash_messages %>
 <% end %>

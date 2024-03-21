@@ -25,7 +25,7 @@ module Exporters
           :agent_prescripteur,
           :organisation,
           {
-            rdv_context: [
+            follow_up: [
               :invitations,
               :notifications,
               { rdvs: [:motif, :organisation, :participations, :users] }
@@ -122,8 +122,8 @@ module Exporters
       participation.human_status
     end
 
-    def human_rdv_context_status(participation)
-      participation.rdv_context.human_status + display_context_status_notice(participation.rdv_context)
+    def human_follow_up_status(participation)
+      participation.follow_up.human_status + display_follow_up_status_notice(participation.follow_up)
     end
   end
 end

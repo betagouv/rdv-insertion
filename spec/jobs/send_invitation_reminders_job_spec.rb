@@ -13,26 +13,26 @@ describe SendInvitationRemindersJob do
     end
     let!(:user6) { create(:user, email: "camille6@gouv.fr", phone_number: "0649031935") }
 
-    let!(:rdv_context1) { create(:rdv_context, status: "invitation_pending", user: user1) }
-    let!(:rdv_context2) { create(:rdv_context, status: "invitation_pending", user: user2) }
-    let!(:rdv_context3) { create(:rdv_context, status: "invitation_pending", user: user3) }
-    let!(:rdv_context4) { create(:rdv_context, status: "rdv_pending", user: user4) }
-    let!(:rdv_context5) { create(:rdv_context, status: "invitation_pending", user: user5) }
-    let!(:rdv_context6) do
+    let!(:follow_up1) { create(:follow_up, status: "invitation_pending", user: user1) }
+    let!(:follow_up2) { create(:follow_up, status: "invitation_pending", user: user2) }
+    let!(:follow_up3) { create(:follow_up, status: "invitation_pending", user: user3) }
+    let!(:follow_up4) { create(:follow_up, status: "rdv_pending", user: user4) }
+    let!(:follow_up5) { create(:follow_up, status: "invitation_pending", user: user5) }
+    let!(:follow_up6) do
       create(
-        :rdv_context,
+        :follow_up,
         status: "invitation_pending",
         motif_category: create(:motif_category, optional_rdv_subscription: true),
         user: user6
       )
     end
-    let!(:rdv_context7) { create(:rdv_context, status: "invitation_pending", user: user1) }
+    let!(:follow_up7) { create(:follow_up, status: "invitation_pending", user: user1) }
 
     # OK
     let!(:invitation1) do
       create(
         :invitation,
-        user: user1, rdv_context: rdv_context1,
+        user: user1, follow_up: follow_up1,
         created_at: 3.days.ago, valid_until: 4.days.from_now
       )
     end
@@ -41,7 +41,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation2) do
       create(
         :invitation,
-        user: user2, rdv_context: rdv_context2,
+        user: user2, follow_up: follow_up2,
         created_at: 4.days.ago, valid_until: 4.days.from_now
       )
     end
@@ -50,7 +50,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation3) do
       create(
         :invitation,
-        user: user3, rdv_context: rdv_context3,
+        user: user3, follow_up: follow_up3,
         created_at: 3.days.ago, valid_until: 4.hours.from_now
       )
     end
@@ -59,7 +59,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation4) do
       create(
         :invitation,
-        user: user4, rdv_context: rdv_context4,
+        user: user4, follow_up: follow_up4,
         created_at: 3.days.ago, valid_until: 4.days.from_now
       )
     end
@@ -68,7 +68,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation5) do
       create(
         :invitation,
-        user: user5, rdv_context: rdv_context5,
+        user: user5, follow_up: follow_up5,
         created_at: 3.days.ago, valid_until: 4.days.from_now
       )
     end
@@ -78,7 +78,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation6) do
       create(
         :invitation,
-        user: user6, rdv_context: rdv_context6,
+        user: user6, follow_up: follow_up6,
         created_at: 3.days.ago, valid_until: 4.days.from_now
       )
     end
@@ -87,7 +87,7 @@ describe SendInvitationRemindersJob do
     let!(:invitation7) do
       create(
         :invitation,
-        user: user1, rdv_context: rdv_context7,
+        user: user1, follow_up: follow_up7,
         created_at: 3.days.ago, valid_until: 4.days.from_now,
         reminder: true
       )
@@ -100,33 +100,33 @@ describe SendInvitationRemindersJob do
 
     it "enqueues reminder jobs for the eligible contexts only" do
       expect(SendInvitationReminderJob).to receive(:perform_async)
-        .with(rdv_context1.id, "sms")
+        .with(follow_up1.id, "sms")
       expect(SendInvitationReminderJob).to receive(:perform_async)
-        .with(rdv_context1.id, "email")
+        .with(follow_up1.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context2.id, "sms")
+        .with(follow_up2.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context2.id, "email")
+        .with(follow_up2.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context3.id, "sms")
+        .with(follow_up3.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context3.id, "email")
+        .with(follow_up3.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context4.id, "sms")
+        .with(follow_up4.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context4.id, "email")
+        .with(follow_up4.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context5.id, "sms")
+        .with(follow_up5.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context5.id, "email")
+        .with(follow_up5.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context6.id, "sms")
+        .with(follow_up6.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context6.id, "email")
+        .with(follow_up6.id, "email")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context7.id, "sms")
+        .with(follow_up7.id, "sms")
       expect(SendInvitationReminderJob).not_to receive(:perform_async)
-        .with(rdv_context7.id, "email")
+        .with(follow_up7.id, "email")
       subject
     end
 
@@ -145,13 +145,13 @@ describe SendInvitationRemindersJob do
 
       it "does not enqueue reminder jobs" do
         expect(SendInvitationReminderJob).not_to receive(:perform_async)
-          .with(rdv_context1.id, "sms")
+          .with(follow_up1.id, "sms")
         expect(SendInvitationReminderJob).not_to receive(:perform_async)
-          .with(rdv_context2.id, "sms")
+          .with(follow_up2.id, "sms")
         expect(SendInvitationReminderJob).not_to receive(:perform_async)
-          .with(rdv_context1.id, "email")
+          .with(follow_up1.id, "email")
         expect(SendInvitationReminderJob).not_to receive(:perform_async)
-          .with(rdv_context1.id, "email")
+          .with(follow_up1.id, "email")
         subject
       end
     end

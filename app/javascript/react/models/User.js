@@ -268,11 +268,11 @@ export default class User {
     }
     this.tags = upToDateUser.tags.map((tag) => tag.value);
     if (this.currentConfiguration) {
-      this.currentRdvContext = upToDateUser.rdv_contexts.find(
+      this.currentFollowUp = upToDateUser.follow_ups.find(
         (rc) => rc.motif_category_id === this.currentConfiguration.motif_category_id
       );
-      this.currentContextStatus = this.currentRdvContext && this.currentRdvContext.status;
-      this.participations = this.currentRdvContext?.participations || [];
+      this.currentFollowUpStatus = this.currentFollowUp && this.currentFollowUp.status;
+      this.participations = this.currentFollowUp?.participations || [];
       this.lastSmsInvitationSentAt = retrieveLastInvitationDate(
         upToDateUser.invitations,
         "sms",
@@ -437,9 +437,7 @@ export default class User {
       ...(this.nir && { nir: this.nir }),
       ...(this.franceTravailId && { france_travail_id: this.franceTravailId }),
       ...(this.currentConfiguration && {
-        rdv_contexts_attributes: [
-          { motif_category_id: this.currentConfiguration.motif_category_id },
-        ],
+        follow_ups_attributes: [{ motif_category_id: this.currentConfiguration.motif_category_id }],
       }),
     };
   }

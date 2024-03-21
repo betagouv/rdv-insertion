@@ -12,8 +12,8 @@ describe Notifications::GenerateLetter, type: :service do
     create(:user, title: "monsieur", organisations: [organisation], address: address, phone_number: "+33607070707")
   end
   let!(:department) { create(:department) }
-  let!(:rdv_context) { create(:rdv_context, motif_category: category_rsa_orientation) }
-  let!(:participation) { create(:participation, rdv_context: rdv_context, rdv: rdv, user: user) }
+  let!(:follow_up) { create(:follow_up, motif_category: category_rsa_orientation) }
+  let!(:participation) { create(:participation, follow_up: follow_up, rdv: rdv, user: user) }
   let!(:notification) do
     create(:notification, participation: participation, event: "participation_created", format: "postal")
   end
