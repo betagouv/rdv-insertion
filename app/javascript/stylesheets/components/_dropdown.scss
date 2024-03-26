@@ -4,7 +4,7 @@
     width: 260px;
   }
 }
-.dropdown-toggle:focus {
+.dropdown-toggle:not(.accessible):focus {
   box-shadow: none !important;
 }
 

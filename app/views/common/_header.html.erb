@@ -6,8 +6,9 @@
         <%= image_tag "logos/rdv-insertion.svg", class: "rdvi-logo", alt: "Logo rdv insertion" %>
       <% end %>
     </div>
-    <div class="nav justify-content-around">
+    <div class="nav justify-content-around align-items-center">
       <% if current_agent %>
+        <%= render "common/header_help_menu" %>
         <div class="text-center mx-3 col">
           <%= link_to sign_out_path, method: :delete do %>
             <button class="btn btn-default btn-logout w-100">
