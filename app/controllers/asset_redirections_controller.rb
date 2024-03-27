@@ -11,9 +11,9 @@ class AssetRedirectionsController < ApplicationController
 
     return if logo_name.blank?
 
-    asset_path = AssetHelper.retrieve_asset_path("logos/#{logo_name}.#{logo_format}")
-    return unless asset_path
+    blob = ActiveStorage::Blob.find_by(filename: "#{logo_name}.#{logo_format}")
+    return unless blob
 
-    redirect_to "#{ENV['HOST']}/assets/#{asset_path}", status: :moved_permanently
+    redirect_to blob.url, status: :moved_permanently
   end
 end
