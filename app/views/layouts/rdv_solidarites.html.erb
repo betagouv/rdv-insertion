@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <%= stylesheet_link_tag 'mail' %>
+  </head>
+  <body>
+    <table class="body-wrap">
+      <tr align="center" class="d-block py-2">
+        <%# width attribute is used because Outlook sometimes ignores the CSS %>
+        <td class="logo d-block rdvi-logo" width="215">
+          <%= image_tag "logos/rdv-solidarites.png", alt: "Logo rdv solidarités", class: "rdvi-logo", width: "215" %>
+        </td>
+        <td class="container">
+          <table class="main content" width="100%">
+            <tr align="left" >
+              <td class="content-wrap">
+                <table width="100%">
+                  <tbody>
+                    <%= yield %>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <table width="100%" class="footer">
+            <tr>
+              <td align="center" class="content-block">
+                <%= link_to mentions_legales_url do %>
+                  <span>Informations légales</span>
+                <% end %>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+

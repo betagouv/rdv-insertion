@@ -114,7 +114,9 @@ module Invitations
     end
 
     def redirect_sms_link
-      host = ENV["HOST"].gsub("www.", "").gsub("https://", "")
+      host = ENV["RDV_SOLIDARITES_URL"].gsub("www.", "").gsub("https://", "")
+      host << "/rdvi"
+
       path = Rails.application.routes.url_helpers.redirect_invitation_shortcut_path(uuid: @invitation.uuid)
       host + path
     end

@@ -1,4 +1,6 @@
 class InvitationMailer < ApplicationMailer
+  include ActsAsRdvSolidaritesConcern
+
   before_action :set_invitation, :set_user, :set_department, :set_signature_lines,
                 :set_organisation_logo_path, :set_department_logo_path
 
