@@ -40,6 +40,7 @@ RSpec.configure do |config|
   config.include JsonRequestHelper
   config.include MotifCategoriesHelper
   config.include NirHelper
+  config.include SortingHelper
   config.include StubHelper
   config.include UploadHelper
   config.include DownloadHelper

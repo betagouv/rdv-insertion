@@ -1,7 +1,7 @@
 <table class="table table-hover table-responsive">
-  <thead class="text-dark-blue">
-    <th scope="col">Nom</th>
-    <th scope="col">Prénom</th>
+  <thead class="text-dark-blue" data-controller="index-table-sorting">
+    <th scope="col" class="sortable-table-header" id="last_name_header">Nom</th>
+    <th scope="col" class="sortable-table-header" id="first_name_header">Prénom</th>
     <th scope="col">Date de création</th>
     <% @all_configurations.each do |configuration| %>
       <th scope="col"><%= configuration.motif_category_name %></th>
