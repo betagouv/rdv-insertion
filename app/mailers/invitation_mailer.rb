@@ -10,6 +10,8 @@ class InvitationMailer < ApplicationMailer
   default to: -> { @user.email }, reply_to: -> { "invitation+#{@invitation.uuid}@reply.rdv-insertion.fr" }
 
   def standard_invitation
+    # Le champ "X-Mailin-custom" remonte dans les webhooks
+    headers["X-Mailin-custom"] = { "invitation_id" => "#{@invitation.id}" }.to_json
     mail(
       subject: "[#{@rdv_subject.upcase}]: Votre #{@rdv_title} dans le cadre de votre #{@rdv_subject}"
     )

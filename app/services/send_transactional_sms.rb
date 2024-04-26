@@ -27,11 +27,27 @@ class SendTransactionalSms < BaseService
   end
 
   def transactional_sms
+    # L'id de l'invitation est un tag qui permet de suivre les envois de sms via l'API Sendinblue
+    # Il n'y a pas de webhook, il faudra donc aller chercher les informations
+    # opts = { tag: "invitation_id_1234" }
+    # api_instance.get_transac_aggregated_sms_report(opts)
+    # #<SibApiV3Sdk::GetTransacAggregatedSmsReport:0x000000014d23caa0
+    #  @accepted=1,
+    #  @blocked=0,
+    #  @delivered=1, <- 1 sms envoyé et bien reçu
+    #  @hard_bounces=0,
+    #  @range="2024-04-25|2024-04-25",
+    #  @rejected=0,
+    #  @replied=0,
+    #  @requests=1,
+    #  @soft_bounces=0,
+    #  @unsubscribed=0>
     SibApiV3Sdk::SendTransacSms.new(
       sender: @sender_name,
       recipient: @phone_number,
       content: formatted_content,
-      type: "transactional"
+      type: "transactional",
+      tag: "invitation_id_1234"
     )
   end
 
