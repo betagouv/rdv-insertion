@@ -28,20 +28,26 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  config.hosts << "998c-78-127-132-23.ngrok-free.app"
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  config.action_mailer.raise_delivery_errors = true
-
   config.action_mailer.perform_caching = false
-
-  config.action_mailer.delivery_method = :letter_opener_web
-
-  config.action_mailer.perform_deliveries = true
 
   config.action_mailer.default_url_options = { host: "localhost:8000", utm_source: "dev", utm_medium: "email",
                                                utm_campaign: "default" }
-  config.action_mailer.asset_host = "http://localhost:8000"
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp-relay.sendinblue.com",
+    port: "587",
+    authentication: "login",
+    enable_starttls_auto: true,
+    user_name: ENV["BREVO_USERNAME"],
+    password: ENV["BREVO_PASSWORD"],
+    domain: "rdv-insertion.fr"
+  }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.asset_host = ENV["HOST"]
 
   config.action_controller.asset_host = "http://localhost:8000"
 

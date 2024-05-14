@@ -10,7 +10,10 @@ class InvitationMailer < ApplicationMailer
   default to: -> { @user.email }, reply_to: -> { "invitation+#{@invitation.uuid}@reply.rdv-insertion.fr" }
 
   def standard_invitation
-    # Le champ "X-Mailin-custom" remonte dans les webhooks
+    # Le champ "X-Mailin-custom" remonte dans les webhooks et permettra de faire la liaison entre
+    #  l'invitation et la réponse de brevo avec le status de deliverabilité de l'email:
+    #  On doit ajouter ce champ dans toutes les invitations envoyées par mail
+
     headers["X-Mailin-custom"] = { "invitation_id" => "#{@invitation.id}" }.to_json
     mail(
       subject: "[#{@rdv_subject.upcase}]: Votre #{@rdv_title} dans le cadre de votre #{@rdv_subject}"
