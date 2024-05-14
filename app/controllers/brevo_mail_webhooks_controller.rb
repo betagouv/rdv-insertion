@@ -7,7 +7,7 @@ class BrevoMailWebhooksController < ApplicationController
     # Exemple de webhooks de brevo pour un mail deliveré correctement :
     #   {
     #     :id => 1_050_528,
-    #     :email => "mvilleneuve.pro+coucou2@gmail.com",
+    #     :email => "emailvalide@gmail.com",
     #     :"message-id" =>
     # "<66435dc2760aa_15f7fe9ac24458@MacBook-Pro-de-Romain.local.mail>",
     #     :date => "2024-05-14 14:49:07",
@@ -26,7 +26,7 @@ class BrevoMailWebhooksController < ApplicationController
 
     # {
     #   :id => 1_050_528,
-    #   :email => "mvilleneuve.pro+coucou2@gmail.com",
+    #   :email => "emailvalide@gmail.com",
     #   :"message-id" =>
     #   "<66435dc2760aa_15f7fe9ac24458@MacBook-Pro-de-Romain.local.mail>",
     #   :date => "2024-05-14 14:49:19",

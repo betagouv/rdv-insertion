@@ -41,7 +41,7 @@ class BrevoSmsWebhooksController < ApplicationController
     #   :status => "OK",
     #   :msg_status => "accepted",
     #   :description => "accepted",
-    #   :to => "33677748967",
+    #   :to => "XXXXXXXX (numéro valide)",
     #   :reference => { "1" => "a7rch8swpmdm7ethjc" },
     #   :ts_event => 1_715_689_794,
     #   :date => "2024-05-14 14:29:55",
@@ -50,7 +50,7 @@ class BrevoSmsWebhooksController < ApplicationController
     # }
     #
     # {
-    #   :to=>"0033677748967",
+    #   :to=>"00XXXXXXXX (numéro valide)",
     #   :status=>"ok",
     #   :number_sent=>1,
     #   :sms_count=>1,
@@ -67,7 +67,7 @@ class BrevoSmsWebhooksController < ApplicationController
     #   :status => "OK",
     #   :msg_status => "delivered", <- C'est ce status qui nous interesse
     #   :description => "delivered",
-    #   :to => "33677748967",
+    #   :to => "XXXXXXXX (numéro valide)",
     #   :reference => { "1" => "januhxi6v5vu7ethjc" },
     #   :ts_event => 1_715_689_662,
     #   :date => "2024-05-14 14:27:42",
