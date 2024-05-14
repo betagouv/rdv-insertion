@@ -35,7 +35,6 @@ class SendTransactionalSms < BaseService
       recipient: @phone_number,
       content: formatted_content,
       type: "transactional",
-      tag: "invitation_id_1234",
       webUrl: "#{ENV['HOST']}/brevo_sms_webhooks/invitation_id_1234567"
     )
   end
