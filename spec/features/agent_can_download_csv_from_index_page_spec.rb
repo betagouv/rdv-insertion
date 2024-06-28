@@ -55,12 +55,51 @@ describe "Agents can download csv from index page", :js do
       visit organisation_users_path(organisation, motif_category_id: motif_category.id)
     end
 
+    context "when agent is not admin" do
+      let!(:agent) { create(:agent) }
+
+      context "when agent has no export authorization" do
+        let!(:agent_role) { create(:agent_role, agent:, organisation:) }
+
+        it "does not display the csv export button" do
+          expect(page).to have_no_css("#csvExportButton")
+        end
+      end
+
+      context "when agent has export authorization" do
+        let!(:agent_role) { create(:agent_role, agent:, organisation:, authorized_to_export_csv: true) }
+
+        it "displays the csv export button" do
+          visit organisation_users_path(organisation, motif_category_id: motif_category.id)
+          expect(page).to have_css("#csvExportButton")
+        end
+      end
+    end
+
     it_behaves_like "triggering csv creation"
   end
 
   context "when viewing the whole department" do
     before do
       visit department_users_path(organisation.department)
+    end
+
+    context "when agent is not admin" do
+      let!(:agent) { create(:agent) }
+      let!(:agent_role) { create(:agent_role, agent:, organisation:) }
+
+      it "does not display the csv export button" do
+        expect(page).to have_no_css("#csvExportButton")
+      end
+
+      context "when agent has export authorization" do
+        let!(:agent_role) { create(:agent_role, agent:, organisation:, authorized_to_export_csv: true) }
+
+        it "displays the csv export button" do
+          visit department_users_path(organisation.department)
+          expect(page).to have_css("#csvExportButton")
+        end
+      end
     end
 
     it_behaves_like "triggering csv creation"

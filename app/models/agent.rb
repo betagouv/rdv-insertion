@@ -36,6 +36,10 @@ class Agent < ApplicationRecord
     agent_roles.select(&:admin?).map(&:organisation_id)
   end
 
+  def export_organisations_ids
+    agent_roles.select(&:authorized_to_export_csv?).map(&:organisation_id)
+  end
+
   def to_s
     "#{first_name} #{last_name&.upcase}".strip
   end

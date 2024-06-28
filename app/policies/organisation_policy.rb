@@ -33,7 +33,7 @@ class OrganisationPolicy < ApplicationPolicy
   end
 
   def export_csv?
-    configure?
+    pundit_user.export_organisations_ids.include?(record.id)
   end
 
   class Scope < Scope

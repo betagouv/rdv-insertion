@@ -76,4 +76,11 @@ describe Agent do
       end
     end
   end
+
+  describe "admins are always authorized to export" do
+    let!(:organisation) { create(:organisation) }
+    let!(:agent) { create(:agent, admin_role_in_organisations: [organisation]) }
+
+    it { expect(agent.export_organisations_ids).to include(organisation.id) }
+  end
 end

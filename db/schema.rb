@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_11_225639) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_22_164616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_225639) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_webhook_update_received_at"
+    t.boolean "authorized_to_export_csv", default: false
     t.index ["access_level"], name: "index_agent_roles_on_access_level"
     t.index ["agent_id", "organisation_id"], name: "index_agent_roles_on_agent_id_and_organisation_id", unique: true
     t.index ["agent_id"], name: "index_agent_roles_on_agent_id"

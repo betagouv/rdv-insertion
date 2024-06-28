@@ -1,0 +1,37 @@
+<div>
+  <%= form_for(:authorized_to_export_csv, url: authorized_to_export_csv_batch_update_organisation_agent_roles_path(organisation_id), method: :patch) do |f| %>
+    <div class="w-100 px-2">
+      <p>Sélectionnez les agents non-administrateurs de votre organisation qui peuvent avoir accès à la fonctionnalité d'export&nbsp;:</p>
+    </div>
+    <div class="w-100 px-2 scrollable">
+      <% agent_roles.each do |agent_role| %>
+        <div class="d-flex my-2">
+          <%= f.check_box :agent_role_ids, { multiple: true, checked: authorized_agent_role_ids.include?(agent_role.id) ,class: "form-check-input" }, agent_role.id, nil %>
+          <%= f.label "agent_role_ids_#{agent_role.id}", class: "ms-3" do %>
+            <%= agent_role.agent.to_s %>
+            <span class="text-dark-grey-alt ms-2 float-end"><%= agent_role.agent.email %></span>
+          <% end %>
+        </div>
+      <% end %>
+      <%= f.hidden_field :organisation_id, value: organisation_id %>
+      <% if agent_roles.empty? %>
+        <span class="text-dark-blue">Aucun agent disponible.</span>
+      <% end %>
+    </div>
+    <div class="d-flex justify-content-end align-items-center px-3">
+      <% if agent_roles.any? %>
+          <button type="button" class="btn btn-blue-out border-0 me-2" data-bs-dismiss="modal">
+            Annuler
+          </button>
+
+          <%= button_tag type: 'submit', class: "btn btn-primary" do %>
+            Confirmer
+          <% end %>
+      <% else %>
+          <button type="button" class="btn btn-blue border-0 me-2" data-bs-dismiss="modal">
+            Ok
+          </button>
+      <% end %>
+    </div>
+  <% end %>
+</div>

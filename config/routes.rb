@@ -72,6 +72,12 @@ Rails.application.routes.draw do
     resource :referent_assignations, only: [:destroy]
     resources :tag_assignations, only: [:index, :create]
     resource :tag_assignations, only: [:destroy]
+    resources :agent_roles, module: :agent_roles, only: [] do
+      collection do
+        resources :authorized_to_export_csv, only: [:index]
+        patch "authorized_to_export_csv/batch_update", to: "authorized_to_export_csv#batch_update"
+      end
+    end
     resources :invitation_dates_filterings, :creation_dates_filterings, only: [:new]
     resources :file_configurations, only: [:show, :new, :create, :edit, :update] do
       get :confirm_update
