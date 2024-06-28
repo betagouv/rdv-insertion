@@ -20,9 +20,9 @@
       </tr>
     </thead>
     <tbody>
-      <% invitation_dates_by_format = invitation_dates_by_format(invitations, invitation_formats) %>
-      <% max_number_of_invitations_for_a_format = max_number_of_invitations_for_a_format(invitation_dates_by_format) %>
-      <%= render "follow_ups/invitation_dates_rows", invitation_dates_by_format:, max_number_of_invitations_for_a_format:, invitation_formats:, motif_category: %>
+      <% invitations_by_format = invitations_by_format(invitations, invitation_formats) %>
+      <% max_number_of_invitations_for_a_format = max_number_of_invitations_for_a_format(invitations_by_format) %>
+      <%= render "follow_ups/invitation_dates_rows", invitations_by_format:, max_number_of_invitations_for_a_format:, invitation_formats:, motif_category: %>
       <tr>
         <%= render "follow_ups/invitation_button", invitation_format: "sms", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: sms_invitation_disabled_for?(user, follow_up, department) %>
         <%= render "follow_ups/invitation_button", invitation_format: "email", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: email_invitation_disabled_for?(user, follow_up, department) %>

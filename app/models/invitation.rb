@@ -5,6 +5,7 @@ class Invitation < ApplicationRecord
   include Templatable
   include Sendable
   include WebhookDeliverable
+  include Deliverable
 
   belongs_to :user
   belongs_to :department

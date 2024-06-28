@@ -2,6 +2,7 @@ class Notification < ApplicationRecord
   include HasCurrentCategoryConfiguration
   include Templatable
   include Sendable
+  include Deliverable
 
   attr_accessor :content
 

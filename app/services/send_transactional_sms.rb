@@ -1,8 +1,9 @@
 class SendTransactionalSms < BaseService
-  def initialize(phone_number:, sender_name:, content:)
+  def initialize(phone_number:, sender_name:, content:, record_identifier:)
     @sender_name = sender_name
     @phone_number = phone_number
     @content = content
+    @record_identifier = record_identifier
   end
 
   def call
@@ -27,12 +28,15 @@ class SendTransactionalSms < BaseService
   end
 
   def transactional_sms
-    SibApiV3Sdk::SendTransacSms.new(
+    opts = {
       sender: @sender_name,
       recipient: @phone_number,
       content: formatted_content,
-      type: "transactional"
-    )
+      type: "transactional",
+      webUrl: Rails.application.routes.url_helpers.brevo_sms_webhooks_url(@record_identifier, host: ENV["HOST"])
+    }
+
+    SibApiV3Sdk::SendTransacSms.new(**opts)
   end
 
   def formatted_content

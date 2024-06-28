@@ -30,7 +30,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_rsa_orientation) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -127,7 +127,7 @@ RSpec.describe InvitationMailer do
         before { follow_up.motif_category = send(motif_category) }
 
         it "renders the headers" do
-          expect(subject.to).to eq([user.email])
+          expecting_mail_to_have_correct_headers
         end
 
         it "renders the subject" do
@@ -177,7 +177,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -227,7 +227,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_rsa_follow_up) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -277,7 +277,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_rsa_main_tendue) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -329,7 +329,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -381,7 +381,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -432,7 +432,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -479,7 +479,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_siae_interview) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -529,7 +529,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_siae_collective_information) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -562,7 +562,7 @@ RSpec.describe InvitationMailer do
       let!(:follow_up) { build(:follow_up, motif_category: category_siae_follow_up) }
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -597,7 +597,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -648,7 +648,7 @@ RSpec.describe InvitationMailer do
     end
 
     it "renders the headers" do
-      expect(subject.to).to eq([user.email])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the subject" do
@@ -708,7 +708,7 @@ RSpec.describe InvitationMailer do
     end
 
     it "renders the headers" do
-      expect(subject.to).to eq([user.email])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the subject" do
@@ -774,7 +774,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -823,7 +823,7 @@ RSpec.describe InvitationMailer do
       end
 
       it "renders the headers" do
-        expect(subject.to).to eq([user.email])
+        expecting_mail_to_have_correct_headers
       end
 
       it "renders the subject" do
@@ -1274,5 +1274,10 @@ RSpec.describe InvitationMailer do
         expect(subject.body.encoded).to match(/Fabienne Bouchet/)
       end
     end
+  end
+
+  def expecting_mail_to_have_correct_headers
+    expect(subject.to).to eq([user.email])
+    expect(subject.header["X-Mailin-custom"].value).to eq({ record_identifier: invitation.record_identifier }.to_json)
   end
 end

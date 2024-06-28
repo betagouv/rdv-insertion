@@ -1,6 +1,8 @@
 describe SendTransactionalSms, type: :service do
   subject do
-    described_class.call(phone_number: phone_number, sender_name: sender_name, content: content)
+    described_class.call(
+      phone_number: phone_number, sender_name: sender_name, content: content, record_identifier: "invitation_123"
+    )
   end
 
   let(:sender_name) { "Dept26" }
@@ -17,7 +19,8 @@ describe SendTransactionalSms, type: :service do
           sender: sender_name,
           recipient: phone_number,
           content: content,
-          type: "transactional"
+          type: "transactional",
+          webUrl: Rails.application.routes.url_helpers.brevo_sms_webhooks_url("invitation_123", host: ENV["HOST"])
         )
         .and_return(send_transac_mock)
     end

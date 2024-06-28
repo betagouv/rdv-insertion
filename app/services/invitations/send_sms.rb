@@ -12,7 +12,7 @@ module Invitations
     def call
       verify_format!(invitation)
       verify_phone_number!(invitation)
-      send_sms(invitation.sms_sender_name, invitation.phone_number, content)
+      send_sms(invitation.sms_sender_name, invitation.phone_number, content, invitation.record_identifier)
     end
 
     private

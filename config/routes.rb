@@ -193,6 +193,10 @@ Rails.application.routes.draw do
   get "inclusion_connect/sign_out", to: "inclusion_connect#sign_out"
 
   post "/inbound_emails/brevo", to: "inbound_emails#brevo"
+  namespace :brevo do
+    post "mail_webhooks", to: "mail_webhooks#create"
+    post "sms_webhooks/:record_identifier", to: "sms_webhooks#create", as: :sms_webhooks
+  end
 
   if ENV["SIDEKIQ_USERNAME"] && ENV["SIDEKIQ_PASSWORD"]
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|

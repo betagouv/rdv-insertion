@@ -32,8 +32,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -247,8 +246,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -411,8 +409,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -603,8 +600,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -791,8 +787,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -925,8 +920,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -964,8 +958,7 @@ RSpec.describe NotificationMailer do
     end
 
     it "renders the headers" do
-      expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
-      expect(mail.to).to eq(["someone@gmail.com"])
+      expecting_mail_to_have_correct_headers
     end
 
     it "renders the signature" do
@@ -997,5 +990,15 @@ RSpec.describe NotificationMailer do
         )
       end
     end
+  end
+
+  def expecting_mail_to_have_correct_headers
+    expect(mail[:from].to_s).to eq("rdv-solidarites <support-insertion@rdv-solidarites.fr>")
+    expect(mail.to).to eq([user.email])
+    expecting_x_mailin_custom
+  end
+
+  def expecting_x_mailin_custom
+    expect(mail.header["X-Mailin-custom"].value).to eq({ record_identifier: notification.record_identifier }.to_json)
   end
 end

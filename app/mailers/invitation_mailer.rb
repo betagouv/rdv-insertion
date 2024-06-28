@@ -1,11 +1,10 @@
 class InvitationMailer < ApplicationMailer
   include ActsAsRdvSolidaritesConcern
 
-  before_action :set_invitation, :set_user, :set_department, :set_signature_lines,
-                :set_organisation_logo_path, :set_department_logo_path
-
-  before_action :set_rdv_title, :set_user_designation, :set_mandatory_warning, :set_punishable_warning,
-                :set_rdv_purpose, :set_rdv_subject, :set_custom_sentence
+  before_action :set_invitation, :set_user, :set_department, :set_signature_lines, :set_organisation_logo_path,
+                :set_department_logo_path, :set_rdv_title, :set_user_designation, :set_mandatory_warning,
+                :set_punishable_warning, :set_rdv_purpose, :set_rdv_subject, :set_custom_sentence,
+                :set_x_mailin_custom_header
 
   default to: -> { @user.email }, reply_to: -> { "invitation+#{@invitation.uuid}@reply.rdv-insertion.fr" }
 
@@ -66,6 +65,10 @@ class InvitationMailer < ApplicationMailer
   end
 
   private
+
+  def set_x_mailin_custom_header
+    headers["X-Mailin-custom"] = { record_identifier: @invitation.record_identifier }.to_json
+  end
 
   def set_invitation
     @invitation = params[:invitation]

@@ -9,8 +9,26 @@
     <tr class="<%= idx == 0 ? "motif-category-#{motif_category.id}-last-invitations" : "d-none motif-category-#{motif_category.id}-other-invitations" %>">
       <% invitation_formats.each do |format| %>
         <td class="px-4 py-3">
-          <% if invitation_dates_by_format[format]&.fetch(idx, nil).present? %>
-            <%= format_date(invitation_dates_by_format[format].fetch(idx, nil)) %>
+          <% if invitations_by_format[format]&.fetch(idx, nil).present? %>
+            <% invitation = invitations_by_format[format].fetch(idx, nil) %>
+            <%= format_date(invitation.created_at) %>
+            <div>
+              <span class="small">
+                <% if invitation.human_delivery_status_and_date == "Non délivrée" %>
+                  <span class="text-danger">
+                    Non délivrée
+                    <i
+                      class="fas fa-exclamation-circle"
+                      data-controller="tooltip"
+                      data-action="mouseover->tooltip#invitationNotDelivered"
+                      data-invitation-format="<%= format %>">
+                    </i>
+                  </span>
+                <% else %>
+                  <%= invitation.human_delivery_status_and_date %>
+                <% end %>
+              </span>
+            </div>
           <% elsif idx == 0 %>
             -
           <% end %>
