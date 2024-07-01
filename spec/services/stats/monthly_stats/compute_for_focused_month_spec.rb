@@ -4,7 +4,7 @@ describe Stats::MonthlyStats::ComputeForFocusedMonth, type: :service do
   let!(:stat) { create(:stat, statable_type: "Department", statable_id: department.id) }
 
   let(:date) { Time.zone.parse("17/03/2022 12:00") }
-  let(:date_from_previous_month) { Time.zone.parse("17/02/2022 12:00") }
+  let(:date_from_previous_month) { Time.zone.parse("15/02/2022 12:00") }
 
   let!(:department) { create(:department) }
   let!(:organisation) { create(:organisation, department: department) }
@@ -15,8 +15,8 @@ describe Stats::MonthlyStats::ComputeForFocusedMonth, type: :service do
   let!(:participation1) { create(:participation, created_at: date, rdv: rdv1) }
   let!(:participation2) { create(:participation, created_at: date_from_previous_month, rdv: rdv2) }
   let!(:notification) { create(:notification, participation: participation2) }
-  let!(:follow_up1) { create(:follow_up, created_at: date, user: user1) }
   let!(:follow_up2) { create(:follow_up, created_at: date_from_previous_month, user: user2) }
+  let!(:follow_up1) { create(:follow_up, created_at: date, user: user1) }
   let!(:invitation1) do
     create(:invitation, created_at: date, department: department)
   end
@@ -43,11 +43,9 @@ describe Stats::MonthlyStats::ComputeForFocusedMonth, type: :service do
       allow(Stats::ComputeAverageTimeBetweenInvitationAndRdvInDays).to receive(:call)
         .and_return(OpenStruct.new(success?: true, value: 4.0))
       allow(Stats::ComputeRateOfRdvSeenInLessThanNDays).to receive(:call)
-        .with(follow_ups: [follow_up2], number_of_days: 30)
-        .and_return(OpenStruct.new(success?: true, value: 50.0))
+        .and_return(OpenStruct.new(success?: true, value: 0))
       allow(Stats::ComputeRateOfRdvSeenInLessThanNDays).to receive(:call)
-        .with(follow_ups: [follow_up2], number_of_days: 15)
-        .and_return(OpenStruct.new(success?: true, value: 25.0))
+        .and_return(OpenStruct.new(success?: true, value: 0))
       allow(Stats::ComputeRateOfUsersWithRdvSeen).to receive(:call)
         .and_return(OpenStruct.new(success?: true, value: 50.0))
       allow(Stats::ComputeRateOfAutonomousUsers).to receive(:call)
@@ -132,15 +130,15 @@ describe Stats::MonthlyStats::ComputeForFocusedMonth, type: :service do
     it "computes the percentage of users with rdv seen in less than 30 days" do
       expect(stat).to receive(:users_first_orientation_follow_up)
       expect(Stats::ComputeRateOfRdvSeenInLessThanNDays).to receive(:call)
-        .with(follow_ups: [follow_up2], number_of_days: 30)
-      expect(subject.stats_values[:rate_of_users_oriented_in_less_than_30_days_by_month]).to eq(50.0)
+        .with(follow_ups: [], number_of_days: 30)
+      expect(subject.stats_values[:rate_of_users_oriented_in_less_than_30_days_by_month]).to eq(0)
     end
 
     it "computes the percentage of users with rdv seen in less than 15 days" do
       expect(stat).to receive(:users_first_orientation_follow_up)
       expect(Stats::ComputeRateOfRdvSeenInLessThanNDays).to receive(:call)
-        .with(follow_ups: [follow_up2], number_of_days: 15)
-      expect(subject.stats_values[:rate_of_users_oriented_in_less_than_15_days_by_month]).to eq(25.0)
+        .with(follow_ups: [], number_of_days: 15)
+      expect(subject.stats_values[:rate_of_users_oriented_in_less_than_15_days_by_month]).to eq(0)
     end
 
     it "computes the percentage of users with rdv seen posterior to an invitation" do

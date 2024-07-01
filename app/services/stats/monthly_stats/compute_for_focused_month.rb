@@ -69,16 +69,14 @@ module Stats
 
       def rate_of_users_oriented_in_less_than_30_days_for_focused_month
         ComputeRateOfRdvSeenInLessThanNDays.call(
-          # we take the records of the previous month because we want at least 30 days old users
-          follow_ups: @stat.users_first_orientation_follow_up.where(created_at: (@date - 1.month).all_month),
+          follow_ups: created_during_focused_month(@stat.users_first_orientation_follow_up),
           number_of_days: 30
         ).value.round
       end
 
       def rate_of_users_oriented_in_less_than_15_days_for_focused_month
         ComputeRateOfRdvSeenInLessThanNDays.call(
-          # we take the records of the previous month to be sure to have at least a 15 days window
-          follow_ups: @stat.users_first_orientation_follow_up.where(created_at: (@date - 1.month).all_month),
+          follow_ups: created_during_focused_month(@stat.users_first_orientation_follow_up),
           number_of_days: 15
         ).value.round
       end

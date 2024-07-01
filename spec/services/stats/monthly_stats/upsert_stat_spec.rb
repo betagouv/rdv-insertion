@@ -82,7 +82,7 @@ describe Stats::MonthlyStats::UpsertStat, type: :service do
         { "01/2022" => 5, "02/2022" => 5, "03/2022" => 5, "04/2022" => 5 }
       )
       expect(stat.reload[:rate_of_users_oriented_in_less_than_30_days_by_month]).to eq(
-        { "12/2021" => 7, "01/2022" => 7, "02/2022" => 7, "03/2022" => 7 }
+        { "01/2022" => 7, "02/2022" => 7, "03/2022" => 7, "04/2022" => 7 }
       )
       expect(stat.reload[:rate_of_autonomous_users_grouped_by_month]).to eq(
         { "01/2022" => 8, "02/2022" => 8, "03/2022" => 8, "04/2022" => 8 }
