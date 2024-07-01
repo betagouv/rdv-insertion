@@ -12,7 +12,7 @@
   <p><%= user.title.capitalize %>,</p>
   <p>Vous êtes <%= user_designation %> et devez bénéficier d’un accompagnement obligatoire dans le cadre de vos démarches d’insertion.</p>
   <p>La première étape est <span class="bold-blue">un appel téléphonique avec un professionnel de l’insertion</span> afin de définir, selon votre situation et vos besoins, quelle sera la structure la mieux adaptée pour vous accompagner.</p>
-  <p>Pour cela, <span class="bold-blue">merci d’appeler le <%= invitation.help_phone_number %> dans un délai de <%= Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER %> jours à réception de ce courrier.</span></p>
+  <p>Pour cela, <span class="bold-blue">merci d’appeler le <%= invitation.help_phone_number %><%= " dans un délai de #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours à réception de ce courrier" unless optional_rdv_subscription %>.</span></p>
   <%= tag.p tag.span(mandatory_warning, class: "bold-blue") if mandatory_warning %>
   <%= tag.p tag.span("En l'absence d'action de votre part, #{punishable_warning}.", class: "bold-blue") if punishable_warning.present? %>
   <%= render "letters/invitations/help_message", invitation: invitation, help_address: help_address %>

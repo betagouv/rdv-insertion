@@ -1,6 +1,6 @@
 <h1>Bonjour <%= "#{@user.first_name} #{@user.last_name.upcase}" %>,</h1>
 <p>En tant que <%= @user_designation %> vous devez contacter la plateforme départementale afin de <%= @rdv_purpose %>.</p>
-<p><span class="font-weight-bold">Pour cela, merci d’appeler le <%= @invitation.help_phone_number_formatted %> dans un délai de <%= Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER %> jours.</span></p>
+<p><span class="font-weight-bold">Pour cela, merci d’appeler le <%= @invitation.help_phone_number_formatted %><%= tag.span(" dans un délai de #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours", class: ["font-weight-bold"]) unless @optional_rdv_subscription %>.</span></p>
 <%= tag.p tag.strong(@mandatory_warning) if @mandatory_warning %>
 <%= tag.p tag.strong("En l'absence d'action de votre part, #{@punishable_warning}.") if @punishable_warning.present? %>
 <%= render 'common/organisation_signature', signature_lines: @signature_lines, department: @department %>

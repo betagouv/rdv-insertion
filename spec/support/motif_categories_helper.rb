@@ -6,6 +6,7 @@ module MotifCategoriesHelper
         :motif_category,
         name: "RSA orientation", short_name: "rsa_orientation",
         leads_to_orientation: true,
+        optional_rdv_subscription: false,
         template: create(
           :template,
           model: "standard",
@@ -57,6 +58,7 @@ module MotifCategoriesHelper
         :motif_category,
         name: "RSA accompagnement",
         short_name: "rsa_accompagnement",
+        optional_rdv_subscription: false,
         template: create(
           :template,
           model: "standard",
@@ -111,6 +113,7 @@ module MotifCategoriesHelper
         :motif_category,
         name: "RSA signature CER",
         short_name: "rsa_cer_signature",
+        optional_rdv_subscription: false,
         template: create(
           :template,
           model: "standard",
@@ -128,6 +131,7 @@ module MotifCategoriesHelper
         :motif_category,
         name: "RSA suivi",
         short_name: "rsa_follow_up",
+        optional_rdv_subscription: false,
         template: create(
           :template,
           model: "standard",

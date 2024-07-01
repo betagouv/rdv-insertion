@@ -2,7 +2,7 @@ module Invitations
   module SmsContent
     extend ActiveSupport::Concern
 
-    delegate :user, :help_phone_number, :number_of_days_before_expiration,
+    delegate :user, :help_phone_number, :number_of_days_before_expiration, :motif_category,
              :rdv_purpose, :rdv_title, :user_designation, :mandatory_warning, :punishable_warning,
              to: :invitation
 
@@ -21,7 +21,7 @@ module Invitations
     def standard_content
       "#{user.full_name},\nVous êtes #{user_designation} et êtes #{user.conjugate('invité')} à" \
         " participer à un #{rdv_title}. Pour choisir la date du RDV, " \
-        "cliquez sur ce lien dans les #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours: " \
+        "cliquez sur ce lien#{display_time_to_accept_invitation}: " \
         "#{@invitation.rdv_solidarites_public_url(with_protocol: false)}\n" \
         "#{mandatory_warning_message}" \
         "#{punishable_warning_message}" \
@@ -31,7 +31,7 @@ module Invitations
     def phone_platform_content
       "#{user.full_name},\nVous êtes #{user_designation} et devez contacter la plateforme " \
         "départementale afin de #{rdv_purpose}. Pour cela, merci d'appeler le " \
-        "#{formatted_phone_number} dans un délai de #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours. " \
+        "#{formatted_phone_number}#{display_time_to_accept_invitation}. " \
         "#{mandatory_warning_message}" \
         "#{punishable_warning_message}"
     end
@@ -57,7 +57,7 @@ module Invitations
     ### Reminders
 
     def short_reminder_content
-      "#{user.full_name},\nVous avez reçu un message il y a 3 jours " \
+      "#{user.full_name},\nVous avez reçu un message il y a #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours " \
         "vous invitant à prendre un #{rdv_title}." \
         " Ce lien de prise de RDV expire dans #{number_of_days_before_expiration} " \
         "jours: " \
@@ -68,9 +68,9 @@ module Invitations
     end
 
     def standard_reminder_content
-      "#{user.full_name},\nEn tant que #{user_designation}, vous avez reçu un message il y a 3 jours " \
-        "vous invitant à prendre RDV au créneau de votre choix afin de #{rdv_purpose}." \
-        " Ce lien de prise de RDV expire dans #{number_of_days_before_expiration} " \
+      "#{user.full_name},\nEn tant que #{user_designation}, vous avez reçu un message il y a " \
+        "#{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours vous invitant à prendre RDV au créneau de votre choix " \
+        "afin de #{rdv_purpose}. Ce lien de prise de RDV expire dans #{number_of_days_before_expiration} " \
         "jours: " \
         "#{@invitation.rdv_solidarites_public_url(with_protocol: false)}\n" \
         "#{mandatory_warning_message}" \
@@ -79,19 +79,18 @@ module Invitations
     end
 
     def phone_platform_reminder_content
-      "#{user.full_name},\nEn tant que #{user_designation}, vous avez reçu un message il y a 3 jours vous " \
-        "invitant à contacter la plateforme départementale afin de #{rdv_purpose}. " \
-        "Il vous reste #{number_of_days_before_expiration} jours pour appeler le " \
+      "#{user.full_name},\nEn tant que #{user_designation}, vous avez reçu un message il y a " \
+        "#{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours vous invitant à contacter la plateforme départementale " \
+        "afin de #{rdv_purpose}. Il vous reste #{number_of_days_before_expiration} jours pour appeler le " \
         "#{formatted_phone_number}. " \
         "#{mandatory_warning_message}" \
         "#{punishable_warning_message}"
     end
 
     def atelier_enfants_ados_reminder_content
-      "#{user.full_name},\nTu as reçu un message il y a 3 jours " \
+      "#{user.full_name},\nTu as reçu un message il y a #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours " \
         "t'invitant à participer à un #{rdv_title}." \
-        " Le lien de prise de RDV suivant expire dans #{number_of_days_before_expiration} " \
-        "jours: " \
+        " Le lien de prise de RDV suivant expire dans #{number_of_days_before_expiration} jours: " \
         "#{@invitation.rdv_solidarites_public_url(with_protocol: false)}\n" \
         "#{mandatory_warning_message}" \
         "#{punishable_warning_message}" \
@@ -99,6 +98,10 @@ module Invitations
     end
 
     ###
+
+    def display_time_to_accept_invitation
+      " dans les #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours" unless motif_category.optional_rdv_subscription?
+    end
 
     def mandatory_warning_message
       mandatory_warning ? "#{mandatory_warning} " : ""

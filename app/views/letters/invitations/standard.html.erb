@@ -13,7 +13,7 @@
   <p>Vous êtes <%= user_designation %> et à ce titre vous êtes <%= user.conjugate('invité') %> à participer à un <%= rdv_title %> afin de <%= rdv_purpose %>.</p>
   <%= tag.p(custom_sentence) if custom_sentence %>
   <p>Pour faciliter votre prise de rendez-vous, <%= sender_name %> a mis en place <span class="bold-blue">une plateforme vous permettant de prendre rendez-vous vous-même.</span></p>
-  <p>Choisissez un créneau à votre convenance dans un délai de <%= Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER %> jours à réception de ce courrier&nbsp;:</p>
+  <p>Choisissez un créneau à votre convenance<%= " dans un délai de #{Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER} jours à réception de ce courrier" unless optional_rdv_subscription %>&nbsp;:</p>
   <div>
     <div class="invitation-left-col pdf-align-center">
       <div>soit en scannant ce QR code</div>

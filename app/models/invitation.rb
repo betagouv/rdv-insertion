@@ -81,7 +81,7 @@ class Invitation < ApplicationRecord
   def rdv_solidarites_public_url(with_protocol: true)
     url = "#{ENV['RDV_SOLIDARITES_URL']}/i/r/#{uuid}"
 
-    with_protocol ? url : url.gsub("https://", "").gsub("www.", "")
+    with_protocol ? url : url.gsub("https://", "").gsub("http://", "").gsub("www.", "")
   end
 
   def qr_code

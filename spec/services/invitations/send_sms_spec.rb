@@ -52,7 +52,7 @@ describe Invitations::SendSms, type: :service do
     before do
       allow(SendTransactionalSms).to receive(:call).and_return(OpenStruct.new(success?: true))
       allow(invitation).to receive(:sms_sender_name).and_return(sms_sender_name)
-      ENV["HOST"] = "www.rdv-insertion.fr"
+      ENV["RDV_SOLIDARITES_URL"] = "www.rdv-solidarites.fr"
     end
 
     it("is a success") { is_a_success }
@@ -212,7 +212,7 @@ describe Invitations::SendSms, type: :service do
       let!(:content) do
         "M. John DOE,\nVous êtes bénéficiaire du RSA et devez contacter la plateforme départementale " \
           "afin de démarrer un parcours d'accompagnement. Pour cela, merci d'appeler le " \
-          "0147200001 dans un délai de 3 jours. " \
+          "0147200001 dans les 3 jours. " \
           "Cet appel est obligatoire pour le traitement de votre dossier. "
       end
 

@@ -2,9 +2,8 @@ class InvitationMailer < ApplicationMailer
   include ActsAsRdvSolidaritesConcern
 
   before_action :set_invitation, :set_user, :set_department, :set_signature_lines,
-                :set_organisation_logo_path, :set_department_logo_path
-
-  before_action :set_rdv_title, :set_user_designation, :set_mandatory_warning, :set_punishable_warning,
+                :set_organisation_logo_path, :set_department_logo_path, :set_optional_rdv_subscription,
+                :set_rdv_title, :set_user_designation, :set_mandatory_warning, :set_punishable_warning,
                 :set_rdv_purpose, :set_rdv_subject, :set_custom_sentence
 
   default to: -> { @user.email }, reply_to: -> { "invitation+#{@invitation.uuid}@reply.rdv-insertion.fr" }
@@ -105,6 +104,10 @@ class InvitationMailer < ApplicationMailer
 
   def set_user_designation
     @user_designation = @invitation.user_designation
+  end
+
+  def set_optional_rdv_subscription
+    @optional_rdv_subscription = @invitation.motif_category.optional_rdv_subscription?
   end
 
   def set_mandatory_warning
