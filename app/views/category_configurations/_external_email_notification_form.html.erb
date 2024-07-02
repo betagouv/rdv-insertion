@@ -1,0 +1,36 @@
+<div class="mb-2">
+  <div class="d-flex align-items-center">
+    <h3>Notifications tierces</h3>
+  </div>
+
+  <div>
+    <div class="mt-2">
+      <div class="d-flex mb-2">
+        <div class="w-75 d-flex">
+          <div class="form-check form-switch mx-2 d-flex align-items-center">
+            <%= f.check_box :notify_rdv_changes, class: "form-check-input" %>
+          </div>
+          <div class="align-items-center">
+            Notifier l'adresse email suivante de toutes les prises de rendez-vous ayant lieu pour cette catégorie de motifs : 
+          </div>
+        </div>
+        <div class="w-25 ps-2">
+          <%= f.text_field :notify_rdv_changes_email, placeholder: "email@email.fr" %>
+        </div>
+      </div>
+      <div class="d-flex mb-2">
+        <div class="w-75 d-flex">
+          <div class="form-check form-switch mx-2 d-flex align-items-center">
+            <%= f.check_box :notify_out_of_slots, class: "form-check-input" %>
+          </div>
+          <div class="align-items-center">
+            Notifier l'adresse email suivante dès lors qu'il n'y a plus de créneaux disponibles sur les motifs de cette catégorie :
+          </div>
+        </div>
+        <div class="w-25 ps-2">
+          <%= f.text_field :notify_out_of_slots_email, placeholder: "email@email.fr" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

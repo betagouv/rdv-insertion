@@ -10,17 +10,30 @@ class NotifyUnavailableCreneauJob < ApplicationJob
     #   referent_ids: ["1", "2", "3"]
     # },...]
     organisation = Organisation.find(organisation_id)
-    deliver_email(organisation, result.grouped_invitation_params_by_category)
+    deliver_general_email(organisation, result.grouped_invitation_params_by_category)
+    deliver_per_category_notify_out_of_slots_email(organisation, result.grouped_invitation_params_by_category)
     notify_on_mattermost(organisation, result.grouped_invitation_params_by_category)
   end
 
   private
 
-  def deliver_email(organisation, grouped_invitation_params_by_category)
+  def deliver_general_email(organisation, grouped_invitation_params_by_category)
     OrganisationMailer.creneau_unavailable(
       organisation: organisation,
       grouped_invitation_params_by_category: grouped_invitation_params_by_category
     ).deliver_now
+  end
+
+  def deliver_per_category_notify_out_of_slots_email(organisation, grouped_invitation_params_by_category)
+    grouped_invitation_params_by_category.each do |grouped_invitation_params|
+      next unless grouped_invitation_params[:matching_category_configuration]&.notify_out_of_slots?
+
+      OrganisationMailer.notify_out_of_slots(
+        organisation: organisation,
+        recipient: grouped_invitation_params[:matching_category_configuration].notify_out_of_slots_email,
+        grouped_invitation_params_by_category: grouped_invitation_params_by_category
+      ).deliver_now
+    end
   end
 
   def notify_on_mattermost(organisation, grouped_invitation_params_by_category)

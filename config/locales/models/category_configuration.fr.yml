@@ -18,3 +18,5 @@ fr:
         template_rdv_title_by_phone_override: Titre du rendez-vous téléphonique
         template_rdv_purpose_override: But du rendez-vous
         template_user_designation_override: Désignation de la personne
+        notify_rdv_changes_email: Email de destination des notifications de prise de RDV
+        notify_out_of_slots_email: Email de destination des notifications de créneaux épuisés

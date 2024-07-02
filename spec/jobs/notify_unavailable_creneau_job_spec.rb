@@ -6,11 +6,13 @@ describe NotifyUnavailableCreneauJob do
   let!(:organisation) { create(:organisation) }
   let!(:organisation_id) { organisation.id }
   let!(:organisation_mail) { instance_double("organisation_mail") }
+  let(:category_configuration) { create(:category_configuration) }
 
   let!(:grouped_invitation_params_by_category) do
     [
       {
         motif_category_name: "RSA Orientation",
+        matching_category_configuration: category_configuration,
         city_code: %w[75001 75002 75003],
         referent_ids: ["1"],
         invitations_counter: 3
@@ -18,6 +20,7 @@ describe NotifyUnavailableCreneauJob do
       {
         motif_category_name: "RSA Accompagnement",
         city_code: ["75004"],
+        matching_category_configuration: category_configuration,
         referent_ids: [],
         invitations_counter: 1
       }

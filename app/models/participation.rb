@@ -24,6 +24,7 @@ class Participation < ApplicationRecord
 
   after_commit :refresh_follow_up_status
   after_commit :notify_user, if: :should_notify?, on: [:create, :update]
+  after_commit :notify_external, on: [:create, :update, :destroy]
 
   enum created_by: { agent: "agent", user: "user", prescripteur: "prescripteur" }, _prefix: :created_by
 
@@ -63,6 +64,13 @@ class Participation < ApplicationRecord
                                                  "participation_#{event_to_notify}")
     end
     NotifyParticipationToUserJob.perform_async(id, "email", "participation_#{event_to_notify}") if email?
+  end
+
+  def notify_external
+    NotifyParticipationToExternalOrganisationEmailJob.perform_async(
+      id,
+      event_to_notify || :updated
+    )
   end
 
   def event_to_notify

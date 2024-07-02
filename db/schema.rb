@@ -111,6 +111,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_27_145505) do
     t.integer "position", default: 0
     t.integer "department_position", default: 0
     t.string "phone_number"
+    t.boolean "notify_rdv_changes", default: false
+    t.string "notify_rdv_changes_email"
+    t.boolean "notify_out_of_slots", default: false
+    t.string "notify_out_of_slots_email"
     t.index ["file_configuration_id"], name: "index_category_configurations_on_file_configuration_id"
     t.index ["motif_category_id"], name: "index_category_configurations_on_motif_category_id"
     t.index ["organisation_id"], name: "index_category_configurations_on_organisation_id"

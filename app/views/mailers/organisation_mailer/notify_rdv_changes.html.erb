@@ -1,0 +1,32 @@
+<p>Bonjour,</p>
+
+<p>Vous avez demandé à être notifié sur cette adresse email de tous les évènements liés aux rendez-vous (nouveaux rendez-vous, modifications et annulations de rendez-vous) de la catégorie <b>“<%= @motif_category.name %>”</b> de l’organisation <b>“<%= @organisation %>”.</b></p>
+
+<p>Voici un nouvel évènement :</p>
+
+<%
+  translated_event = if @event == "updated"
+    "Modification de rendez-vous" 
+  elsif @event == "created"
+    "Prise de rendez-vous"
+  elsif @event == "cancelled"
+    "Annulation de rendez-vous"
+  end
+%>
+<p>
+Évènement : <%= translated_event %><br />
+Date : <%= I18n.l(@participation.rdv.starts_at, format: :human) %><br />
+Usager : <%= @participation.user %><br />
+<% if @participation.agent_prescripteur&.name %><%= "Professionel :" %><br /><% end %>
+Motif : <%= @participation.rdv.motif_name %><br />
+<% if @participation.rdv.lieu.present? %> <%= "Lieu : #{@participation.rdv.lieu.name}"%><br /> <% end %>
+<% if @participation.rdv.lieu.present? %> <%= "Adresse : #{@participation.rdv.lieu.address}" %><br /><% end %>
+Durée : <%= @participation.rdv.duration_in_min %> minutes<br />
+</p>
+<p class="btn-wrapper">
+<%= link_to "Voir sur RDV-Insertion", organisation_user_follow_ups_url(@organisation.id, @participation.user.id), class: "btn btn-primary" %>
+</p>
+<p>À bientôt,</p>
+
+<p>L’équipe rdv-insertion</p>
+<p>PS : Si vous n'avez pas demandé à être notifié(e), veuillez répondre à ce mail ou contacter l'organisation <%= @organisation %> à l'adresse suivante <%= mail_to @organisation.email %> pour ne plus recevoir ces emails.</p>
