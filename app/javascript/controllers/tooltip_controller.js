@@ -17,6 +17,16 @@ export default class extends Controller {
     });
   }
 
+  tagCreationDate() {
+    tippy(this.element, {
+      content(reference) {
+        const { tagCreationDate } = reference.dataset;
+        return (`Tag ajouté le ${tagCreationDate}`);
+      },
+      allowHTML: true,
+    });
+  }
+
   csvExportUsers() {
     tippy(this.element, {
       content: "Les usagers correspondant aux filtres actuels seront exportés",

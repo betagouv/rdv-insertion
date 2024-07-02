@@ -1,0 +1,26 @@
+<span
+  class="badge badge-tag justify-content-between background-blue-light text-dark-blue me-2 d-flex text-truncate"
+  data-controller="tooltip"
+  data-action="mouseover->tooltip#tagCreationDate"
+  data-tag-creation-date="<%= user_tag_creation_date(tag, user) %>"
+>
+  <span class="text-truncate">
+    <%= tag.value %>
+  </span>
+  <% if with_delete %>
+    <%=
+      link_to(
+        structure_tag_assignations_path(user.id, tag_id: tag.id),
+        data: {
+          turbo_confirm: "Retirer le tag de cet usager ?",
+          turbo_confirm_text_content: "Êtes-vous sûr de vouloir retirer le tag <b class='text-large text-truncate d-block'><i>#{tag.value}</i></b> de l'usager <b>#{user}</b> ?",
+          turbo_confirm_text_action: "- Retirer",
+          turbo_method: :delete,
+        },
+        class: 'text-dark-grey-alt ms-2'
+      ) do
+    %>
+      <i class="fas fa-times"></i>
+    <% end %>
+  <% end %>
+</span>

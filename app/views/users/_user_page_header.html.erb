@@ -17,12 +17,10 @@
       <%= render "users/user_icon", user: @user %> <%= "#{@user.first_name} #{@user.last_name.upcase}" %>
     </h4>
     <% if @user_tags.any? %>
-      <div class="mb-3 mt-3 flex-wrap d-flex justify-content-center" id="header_tags_list">
+      <div class="mb-3 mt-3 flex-wrap d-flex justify-content-center w-100" id="header_tags_list">
         <% @user_tags.each do |tag| %>
           <%= link_to(structure_user_path(@user.id, anchor: "tags_list"), class: "d-flex text-truncate", target: "_top") do %>
-            <span class="badge badge-tag background-blue-light text-dark-blue me-2 text-truncate">
-              <%= tag.value %>
-            </span>
+            <%= render "users_tags/user_tag_badge", user: @user, tag:, with_delete: false %>
           <% end %>
         <% end %>
       </div>
