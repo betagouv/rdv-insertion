@@ -1,0 +1,7 @@
+---
+:queues:
+  - default
+  - stats
+
+:limits:
+  stats: 2

@@ -1,7 +1,7 @@
 module Stats
   module MonthlyStats
     class ComputeAndSaveSingleStatJob < ApplicationJob
-      sidekiq_options retry: 3
+      sidekiq_options queue: :stats, retry: 3
 
       def perform(stat_id, attribute_name, date)
         Timeout.timeout(20.minutes) do

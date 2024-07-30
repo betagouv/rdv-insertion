@@ -1,7 +1,7 @@
 module Stats
   module GlobalStats
     class UpsertStatJob < ApplicationJob
-      sidekiq_options retry: 3
+      sidekiq_options queue: :stats, retry: 3
 
       def perform(structure_type, structure_id, stat_name)
         Timeout.timeout(30.minutes) do
