@@ -8,7 +8,7 @@ class Organisation < ApplicationRecord
   before_create { build_messages_configuration }
 
   validates :rdv_solidarites_organisation_id, uniqueness: true, allow_nil: true
-  validates :name, presence: true
+  validates :name, :organisation_type, presence: true
   validates :email, allow_blank: true, format: { with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/ }
   validate :validate_organisation_phone_number
 
