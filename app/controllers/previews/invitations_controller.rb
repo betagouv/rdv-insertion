@@ -83,7 +83,8 @@ module Previews
         mandatory_warning: @invitation.mandatory_warning,
         punishable_warning: @invitation.punishable_warning,
         custom_sentence: @invitation.custom_sentence,
-        signature_lines: @organisation.messages_configuration&.signature_lines
+        signature_lines: @organisation.messages_configuration&.signature_lines,
+        optional_rdv_subscription: @invitation.motif_category.optional_rdv_subscription?
       }
     end
 
