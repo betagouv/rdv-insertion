@@ -29,9 +29,11 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
   let!(:users) do
     [
       { id: user_id1, first_name: "James", last_name: "Cameron", created_at: "2021-05-29 14:50:22 +0200",
-        phone_number: "0755929249", email: nil, birth_date: nil, address: "50 rue Victor Hugo 93500 Pantin" },
+        phone_number: "0755929249", email: nil, birth_date: nil, address: "50 rue Victor Hugo 93500 Pantin",
+        organisation_ids: [rdv_solidarites_organisation_id] },
       { id: user_id2, first_name: "Jane", last_name: "Campion", created_at: "2021-05-29 14:20:20 +0200",
-        email: "jane@campion.com", phone_number: nil, birth_date: nil, address: nil }
+        email: "jane@campion.com", phone_number: nil, birth_date: nil, address: nil,
+        organisation_ids: [rdv_solidarites_organisation_id] }
     ]
   end
   let!(:starts_at) { "2021-09-08 12:00:00 UTC" }
@@ -281,6 +283,37 @@ describe InboundWebhooks::RdvSolidarites::ProcessRdvJob do
                 }
               )
             subject
+          end
+
+          context "when the users belongs to multiple organisations" do
+            let!(:other_org) do
+              create(:organisation, rdv_solidarites_organisation_id: other_rdv_solidarites_organisation_id)
+            end
+            let!(:other_rdv_solidarites_organisation_id) { 12_415_332 }
+
+            let!(:users) do
+              [
+                {
+                  id: user_id1, first_name: "James", last_name: "Cameron", created_at: "2021-05-29 14:50:22 +0200",
+                  phone_number: "0755929249", email: nil, birth_date: nil, address: "50 rue Victor Hugo 93500 Pantin",
+                  organisation_ids: [rdv_solidarites_organisation_id, other_rdv_solidarites_organisation_id]
+                }
+              ]
+            end
+
+            it "creates the users in all the orgs" do
+              expect(User).to receive(:create!).with(
+                rdv_solidarites_user_id: user_id1,
+                organisations: [organisation, other_org],
+                first_name: "James",
+                last_name: "Cameron",
+                address: "50 rue Victor Hugo 93500 Pantin",
+                phone_number: "0755929249",
+                created_through: "rdv_solidarites_webhook",
+                created_from_structure: organisation
+              )
+              subject
+            end
           end
         end
 

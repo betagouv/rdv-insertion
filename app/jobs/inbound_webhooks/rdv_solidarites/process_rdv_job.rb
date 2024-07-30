@@ -114,17 +114,21 @@ module InboundWebhooks
           user.id.in?(existing_users.map(&:rdv_solidarites_user_id))
         end
 
-        new_users = new_rdv_solidarites_users.map do |user|
-          User.create!(
-            rdv_solidarites_user_id: user.id,
-            organisations: [organisation],
-            created_through: "rdv_solidarites_webhook",
-            created_from_structure: organisation,
-            **user.attributes.slice(*User::SHARED_ATTRIBUTES_WITH_RDV_SOLIDARITES).compact_blank
-          )
+        new_users = new_rdv_solidarites_users.map do |rdv_solidarites_user|
+          create_user_from_rdv_solidarites_user(rdv_solidarites_user)
         end
 
         @users = existing_users + new_users
+      end
+
+      def create_user_from_rdv_solidarites_user(rdv_solidarites_user)
+        User.create!(
+          rdv_solidarites_user_id: rdv_solidarites_user.id,
+          created_through: "rdv_solidarites_webhook",
+          created_from_structure: organisation,
+          organisations: Organisation.where(rdv_solidarites_organisation_id: rdv_solidarites_user.organisation_ids),
+          **rdv_solidarites_user.attributes.slice(*User::SHARED_ATTRIBUTES_WITH_RDV_SOLIDARITES).compact_blank
+        )
       end
 
       def participations_attributes_destroyed
