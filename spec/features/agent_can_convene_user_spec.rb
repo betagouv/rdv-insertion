@@ -238,7 +238,7 @@ describe "Agents can convene user to rdv", :js do
 
       context "from department level" do
         it "can also convene an user" do
-          visit organisation_users_path(organisation, motif_category_id: motif_category.id)
+          visit department_users_path(department, motif_category_id: motif_category.id)
           expect(page).to have_link("📅 Convoquer")
           new_window = window_opened_by { click_link("📅 Convoquer") }
           within_window new_window do

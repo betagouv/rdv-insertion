@@ -10,7 +10,7 @@
   >
     <button
       data-action="click->invitation-button#generatePostalInvitation"
-      class="btn btn-blue<%= postal_invitation_disabled_for?(user, follow_up, department) ? ' disabled' : '' %>"
+      class="btn btn-blue<%= postal_invitation_disabled_for?(user, follow_up, user_is_archived) ? ' disabled' : '' %>"
       type="button"
     >
       <% if invitations.any?(&:format_postal?) %>

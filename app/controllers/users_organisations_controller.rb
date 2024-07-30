@@ -1,5 +1,5 @@
 class UsersOrganisationsController < ApplicationController
-  before_action :set_user, :set_department, :set_organisations,
+  before_action :set_user, :set_department, :set_organisations, :set_user_archives,
                 only: [:index, :create, :destroy]
   before_action :set_user_organisations, only: [:index]
   before_action :set_organisation_to_add, :assign_motif_category, only: [:create]
@@ -42,7 +42,7 @@ class UsersOrganisationsController < ApplicationController
   end
 
   def set_user
-    @user = policy_scope(User).find(user_id)
+    @user = policy_scope(User).preload(:archives).find(user_id)
   end
 
   def set_department
@@ -98,5 +98,9 @@ class UsersOrganisationsController < ApplicationController
       user: @user,
       organisation: @organisation_to_remove
     )
+  end
+
+  def set_user_archives
+    @user_archives = @user.archives
   end
 end

@@ -3,16 +3,17 @@ module InvitationsHelper
     invitation_formats.include?(format)
   end
 
-  def sms_invitation_disabled_for?(user, follow_up, department)
-    !user.phone_number_is_mobile? || user.archived_in?(department) || follow_up.rdv_pending? || follow_up.closed?
+  def sms_invitation_disabled_for?(user, follow_up, user_is_archived)
+    !user.phone_number_is_mobile? || user_is_archived || follow_up.rdv_pending? ||
+      follow_up.closed?
   end
 
-  def email_invitation_disabled_for?(user, follow_up, department)
-    !user.email? || user.archived_in?(department) || follow_up.rdv_pending? || follow_up.closed?
+  def email_invitation_disabled_for?(user, follow_up, user_is_archived)
+    !user.email? || user_is_archived || follow_up.rdv_pending? || follow_up.closed?
   end
 
-  def postal_invitation_disabled_for?(user, follow_up, department)
-    !user.address? || user.archived_in?(department) || follow_up.rdv_pending? || follow_up.closed?
+  def postal_invitation_disabled_for?(user, follow_up, user_is_archived)
+    !user.address? || user_is_archived || follow_up.rdv_pending? || follow_up.closed?
   end
 
   def invitations_by_format(invitations, invitation_formats)

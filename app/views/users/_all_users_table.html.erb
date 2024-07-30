@@ -19,7 +19,7 @@
   <tbody class="align-middle">
     <% @users.each do |user| %>
       <tr
-        class="clickable <%= "table-archived" if user.archived_in?(@department) %>"
+        class="clickable <%= "table-archived" if user_archived_in?(user, current_structure) %>"
         data-controller="user-link"
         data-user-link-path="<%= structure_user_path(user.id) %>"
         data-action="click->user-link#navigate"
@@ -27,7 +27,7 @@
         <td><%= display_attribute user.last_name %></td>
         <td><%= display_attribute user.first_name %></td>
         <td><%= display_attribute format_date(user.created_at) %></td>
-        <% if user.archived_in?(@department) %>
+        <% if user_archived_in?(user, current_structure) %>
           <td colspan=<%= @all_configurations.count %>>Archivé</td>
         <% else %>
           <% @all_configurations.each do |category_configuration| %>

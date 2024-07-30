@@ -11,7 +11,6 @@ class OrganisationDashboard < Administrate::BaseDashboard
     id: Field::Number,
     agent_roles: Field::HasMany,
     agents: Field::HasMany,
-    archived_users: Field::HasMany,
     category_configurations: Field::HasMany,
     department: Field::BelongsTo,
     email: Field::String,

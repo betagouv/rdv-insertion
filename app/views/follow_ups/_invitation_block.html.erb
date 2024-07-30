@@ -24,9 +24,9 @@
       <% max_number_of_invitations_for_a_format = max_number_of_invitations_for_a_format(invitations_by_format) %>
       <%= render "follow_ups/invitation_dates_rows", invitations_by_format:, max_number_of_invitations_for_a_format:, invitation_formats:, motif_category: %>
       <tr>
-        <%= render "follow_ups/invitation_button", invitation_format: "sms", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: sms_invitation_disabled_for?(user, follow_up, department) %>
-        <%= render "follow_ups/invitation_button", invitation_format: "email", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: email_invitation_disabled_for?(user, follow_up, department) %>
-        <%= render "follow_ups/postal_invitation_button", invitation_formats:, user:, motif_category:, invitations:, follow_up:, department:, organisation: %>
+        <%= render "follow_ups/invitation_button", invitation_format: "sms", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: sms_invitation_disabled_for?(user, follow_up, user_is_archived) %>
+        <%= render "follow_ups/invitation_button", invitation_format: "email", invitation_formats:, user:, motif_category:, invitations:, invitation_disabled: email_invitation_disabled_for?(user, follow_up, user_is_archived) %>
+        <%= render "follow_ups/postal_invitation_button", invitation_formats:, user:, motif_category:, invitations:, follow_up:, department:, organisation:, user_is_archived: %>
       </tr>
       <% if max_number_of_invitations_for_a_format > 1 %>
         <tr>

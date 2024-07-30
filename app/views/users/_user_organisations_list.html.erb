@@ -5,37 +5,7 @@
 
   <p class="mb-2 mt-3 flex-wrap d-flex">
     <% user.organisations.each do |organisation| %>
-      <span class="badge badge-tag justify-content-between background-blue-light text-dark-blue me-2 mb-2 d-flex text-truncate">
-        <span class="text-truncate">
-          <%= organisation.name %>
-          <% if @department.id != organisation.department_id %>
-            <span class="text-dark-grey-alt">
-              &nbsp;(<%= organisation.department.number %> - <%= organisation.department.name %>)
-            </span>
-          <% end %>
-        </span>
-        <% if policy(organisation).unassign? %>
-          <%
-            if user.organisations.count > 1
-              data = {
-                turbo_confirm: "Retirer l'usager de cette organisation ?",
-                turbo_confirm_text_content: "Êtes-vous sûr de vouloir retirer l'usager <b>#{user}</b> de l'organisation <b>#{organisation.name}</b> ?",
-                turbo_confirm_text_action: "- Retirer",
-                turbo_method: :delete,
-              }
-            else
-              data = {
-                turbo_confirm: true,
-                turbo_confirm_template: raw(render("users/user_remove_from_last_organisation_confirm", user: user, organisation: organisation)),
-                turbo_method: :delete,
-              }
-            end
-          %>
-          <%= link_to(structure_users_organisations_path(user.id, users_organisation: { user_id: user.id, organisation_id: organisation.id }), data:, class: 'text-dark-grey-alt ms-2' ) do %>
-            <i class="fas fa-times"></i>
-          <% end %>
-        <% end %>
-      </span>
+      <%= render "users_organisations/user_organisation_badge", organisation:, department:, user:, archive: organisation_archive(organisation, archives), with_delete: true %>
     <% end %>
   </p>
 

@@ -7,7 +7,6 @@ class SendInvitationRemindersJob < ApplicationJob
       # we check here that the **first** invitation has been sent Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER
       # number of days ago with that value being set to 3
       next unless invitation_sent_3_days_ago?(invitation)
-      next if invitation_related_to_archive?(invitation)
 
       user = follow_up.user
 
@@ -45,10 +44,6 @@ class SendInvitationRemindersJob < ApplicationJob
 
   def invitation_sent_3_days_ago?(invitation)
     invitation.created_at.to_date == Invitation::NUMBER_OF_DAYS_BEFORE_REMINDER.days.ago.to_date
-  end
-
-  def invitation_related_to_archive?(invitation)
-    Archive.exists?(user: invitation.user, department: invitation.department)
   end
 
   def notify_on_mattermost

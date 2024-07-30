@@ -1,5 +1,5 @@
 class ConvocationsController < ApplicationController
-  before_action :set_organisations, :set_motif_category, :set_user
+  before_action :set_user, :set_organisations, :set_motif_category
 
   def new
     @convocation_links_by_type = {
@@ -12,7 +12,11 @@ class ConvocationsController < ApplicationController
   private
 
   def set_organisations
-    @organisations = policy_scope(Organisation).where(id: params[:organisation_ids])
+    @organisations =  policy_scope(Organisation)
+                      .where(id: @user.unarchived_organisations)
+                      .where(
+                        department_level? ? { department_id: current_department_id } : { id: current_organisation_id }
+                      )
   end
 
   def set_motif_category

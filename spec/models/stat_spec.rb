@@ -115,10 +115,6 @@ describe Stat do
           create(:user, organisations: [organisation], deleted_at: date)
         end
         let!(:user4) do
-          create(:user, organisations: [organisation])
-        end
-        let!(:archive) { create(:archive, user: user4, department: department) }
-        let!(:user5) do
           create(:user, organisations: [organisation_with_no_configuration])
         end
 
@@ -129,10 +125,6 @@ describe Stat do
 
         it "does not include the deleted users" do
           expect(stat.users_set).not_to include(user3)
-        end
-
-        it "does not include the archived users" do
-          expect(stat.users_set).not_to include(user4)
         end
       end
 
@@ -307,10 +299,6 @@ describe Stat do
           create(:user, organisations: [organisation], deleted_at: date)
         end
         let!(:user4) do
-          create(:user, organisations: [organisation])
-        end
-        let!(:archive) { create(:archive, user: user4, department: department) }
-        let!(:user5) do
           create(:user, organisations: [organisation_with_no_configuration])
         end
 
@@ -323,12 +311,8 @@ describe Stat do
           expect(stat.users_set).not_to include(user3)
         end
 
-        it "does not include the archived users" do
-          expect(stat.users_set).not_to include(user4)
-        end
-
         it "does not include the user from irrelevant organisations" do
-          expect(stat.users_set).not_to include(user5)
+          expect(stat.users_set).not_to include(user4)
         end
       end
 

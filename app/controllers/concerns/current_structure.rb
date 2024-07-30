@@ -62,7 +62,7 @@ module CurrentStructure
   def current_agent_department_organisations
     return unless current_agent && current_department
 
-    @current_agent_department_organisations ||= current_department.organisations & current_agent.organisations
+    @current_agent_department_organisations ||= current_agent.department_organisations(current_department_id)
   end
 
   def current_organisation_ids

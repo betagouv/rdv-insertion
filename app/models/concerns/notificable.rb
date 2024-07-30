@@ -27,6 +27,10 @@ module Notificable
     convocations.select(&:format_email?)
   end
 
+  def postal_convocations
+    convocations.select(&:format_postal?)
+  end
+
   def last_convocation
     convocations.max_by(&:created_at)
   end

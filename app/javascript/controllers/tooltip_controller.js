@@ -17,6 +17,20 @@ export default class extends Controller {
     });
   }
 
+  organisationArchiveInformations() {
+    tippy(this.element, {
+      content(reference) {
+        const { archiveCreationDate, archiveReason, showArchivingReason } = reference.dataset;
+        const displayedArchivingReason = showArchivingReason === "true" ? `Motif: ${archiveReason || "Aucun motif renseigné"}` : ""
+
+        return (
+          `Archivé le ${archiveCreationDate}<br/>${displayedArchivingReason}`
+        );
+      },
+      allowHTML: true,
+    });
+  }
+
   tagCreationDate() {
     tippy(this.element, {
       content(reference) {
@@ -144,10 +158,10 @@ export default class extends Controller {
   archivingDisabled() {
     // the button is in a wrapper because we cannot set a tooltip on a disabled element
     const archiveButton = document.getElementById("archive-button");
-    if (archiveButton.disabled) {
+    if (archiveButton.classList.contains("disabled")) {
       tippy(this.element, {
         content:
-          "Vous devez appartenir à toutes les organisations auxquelles appartient le bénéficiaire au sein de votre département pour pouvoir l'archiver",
+          "L'usager est archivé dans toutes vos organisations. Pour rouvrir son dossier, naviguez au sein d'une organisation où il est archivé.",
       });
     }
   }

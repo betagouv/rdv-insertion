@@ -202,6 +202,23 @@ describe UsersController do
       end
     end
 
+    context "when user is archived" do
+      let!(:user) { create(:user, organisations: [organisation]) }
+      let!(:archive) { create(:archive, user: user, organisation: organisation) }
+      let!(:show_params) { { id: user.id, organisation_id: organisation.id } }
+
+      it "the user is displayed as archived" do
+        get :show, params: show_params
+
+        expect(response).to be_successful
+        expect(response.body).to match(/Dossier archivé/)
+        expect(response.body).to match(
+          "span class=\"badge badge-tag justify-content-between text-dark-blue me-2 mb-2 " \
+          "d-flex text-truncate background-warning"
+        )
+      end
+    end
+
     context "when department_level" do
       let!(:show_params) { { id: user.id, department_id: department.id } }
 
@@ -212,19 +229,44 @@ describe UsersController do
         expect(response.body).to match(/Andreas/)
         expect(response.body).to match(/Kopke/)
       end
-    end
 
-    context "when user is archived" do
-      let!(:user) { create(:user, organisations: [organisation]) }
-      let!(:archive) { create(:archive, user: user, department: department) }
-      let!(:show_params) { { id: user.id, organisation_id: organisation.id } }
+      context "when user is archived" do
+        let!(:other_organisation) { create(:organisation, department:) }
+        let!(:agent) { create(:agent, basic_role_in_organisations: [organisation, other_organisation]) }
+        let!(:user) { create(:user, organisations: [organisation, other_organisation]) }
+        let!(:archive) { create(:archive, user: user, organisation: organisation) }
+        let!(:archive2) { create(:archive, user: user, organisation: other_organisation) }
 
-      it "the user is displayed as archived" do
-        get :show, params: show_params
+        it "the user is displayed as archived" do
+          get :show, params: show_params
 
-        expect(response).to be_successful
-        expect(response.body).to match(/Dossier archivé/)
-        expect(response.body).to match(/Motif d&#39;archivage/)
+          expect(response).to be_successful
+          expect(response.body).to match(/Dossier archivé/)
+          matches = response.body.scan(
+            "span class=\"badge badge-tag justify-content-between text-dark-blue me-2 mb-2 " \
+            "d-flex text-truncate background-warning"
+          )
+          expect(matches.size).to eq(2)
+        end
+      end
+
+      context "when user is partially archived" do
+        let!(:other_organisation) { create(:organisation, department:) }
+        let!(:agent) { create(:agent, basic_role_in_organisations: [organisation, other_organisation]) }
+        let!(:user) { create(:user, organisations: [organisation, other_organisation]) }
+        let!(:archive) { create(:archive, user: user, organisation: organisation) }
+
+        it "the user is not displayed as archived" do
+          get :show, params: show_params
+
+          expect(response).to be_successful
+          expect(response.body).not_to match(/Dossier archivé/)
+          matches = response.body.scan(
+            "span class=\"badge badge-tag justify-content-between text-dark-blue me-2 mb-2 " \
+            "d-flex text-truncate background-warning"
+          )
+          expect(matches.size).to eq(1)
+        end
       end
     end
   end
@@ -372,8 +414,17 @@ describe UsersController do
         organisations: [organisation], last_name: "Barthelemy", follow_ups: [follow_up4]
       )
     end
-    let!(:archive) { create(:archive, user: archived_user, department: department) }
+    let!(:archive) { create(:archive, user: archived_user, organisation: organisation) }
     let!(:follow_up4) { build(:follow_up, motif_category: category_orientation, status: "invitation_pending") }
+
+    let!(:other_organisation) { create(:organisation, department:) }
+    let!(:agent) { create(:agent, basic_role_in_organisations: [organisation, other_organisation]) }
+    let!(:partially_archived_user) do
+      create(:user, organisations: [organisation, other_organisation], follow_ups: [follow_up5], last_name: "Rouve")
+    end
+    # user is archived in only one of his organisations
+    let!(:archive2) { create(:archive, user: partially_archived_user, organisation: other_organisation) }
+    let!(:follow_up5) { build(:follow_up, motif_category: category_orientation, status: "invitation_pending") }
 
     let!(:index_params) { { organisation_id: organisation.id, motif_category_id: category_orientation.id } }
 
@@ -385,6 +436,7 @@ describe UsersController do
       expect(response.body).to match(/Baer/)
       expect(response.body).not_to match(/Darmon/)
       expect(response.body).not_to match(/Barthelemy/)
+      expect(response.body).to match(/Rouve/)
     end
 
     it "does not display the configure organisation option" do
@@ -439,6 +491,7 @@ describe UsersController do
         expect(response.body).to match(/Baer/)
         expect(response.body).to match(/Darmon/)
         expect(response.body).to match(/Barthelemy/)
+        expect(response.body).to match(/Rouve/)
       end
 
       it "displays the users creation date and the corresponding filter" do
@@ -446,6 +499,13 @@ describe UsersController do
 
         expect(response.body).to match(/Date de création/)
         expect(response.body).to match(/Filtrer par date de création/)
+      end
+
+      it "displays the archived users as archived" do
+        get :index, params: index_params
+
+        matches = response.body.scan("table-archived")
+        expect(matches.size).to eq(1)
       end
     end
 
@@ -466,6 +526,20 @@ describe UsersController do
 
         expect(response.body).to match(/Date de création/)
         expect(response.body).to match(/Filtrer par date de création/)
+      end
+
+      context "when department level" do
+        let!(:index_params) { { department_id: department.id, users_scope: "archived" } }
+
+        it "returns the list of archived users" do
+          get :index, params: index_params
+
+          expect(response).to be_successful
+          expect(response.body).not_to match(/Chabat/)
+          expect(response.body).not_to match(/Baer/)
+          expect(response.body).to match(/Barthelemy/)
+          expect(response.body).not_to match(/Rouve/)
+        end
       end
     end
 

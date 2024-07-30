@@ -19,7 +19,6 @@ class User < ApplicationRecord
   include User::Address
   include User::Nir
   include User::AffiliationNumber
-  include User::Archivable
   include User::Referents
   include User::CreationOrigin
   include User::Geocodable
@@ -79,6 +78,10 @@ class User < ApplicationRecord
 
   def organisations_with_rdvs
     organisations.where(id: rdvs.pluck(:organisation_id))
+  end
+
+  def unarchived_organisations
+    organisations.where.not(id: archives.pluck(:organisation_id))
   end
 
   def delete_organisation(organisation)
@@ -167,6 +170,14 @@ class User < ApplicationRecord
     User.joins(:organisations).find_by(
       role: opposite_role, affiliation_number:, organisations:
     )
+  end
+
+  def department_organisations(department)
+    organisations.where(department: department)
+  end
+
+  def organisation_archive(organisation)
+    archives.find { |a| a.organisation_id == organisation.id }
   end
 
   private

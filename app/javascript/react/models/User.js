@@ -72,6 +72,7 @@ export default class User {
     this.referentEmail = formattedAttributes.referentEmail || currentAgent?.email;
     this.tags = attributes.tags || [];
 
+    this.currentAgent = currentAgent;
     this.department = department;
     this.departmentNumber = department.number;
     // when creating/inviting we always consider an user in the scope of only one organisation
@@ -198,6 +199,8 @@ export default class User {
     }
 
     this.triggers.unarchive = false;
+
+    return success;
   }
 
   async assignReferent(options = { raiseError: true }) {
@@ -452,12 +455,39 @@ export default class User {
     return "";
   }
 
-  archiveInCurrentDepartment() {
-    return this.archives.find((archive) => archive.department_id === this.department.id);
+  isArchived() {
+    if (this.list.isDepartmentLevel) {
+      return this.isArchivedInCurrentDepartment();
+    }
+    return this.isArchivedInCurrentOrganisation();
+  }
+
+  archiveInCurrentOrganisation() {
+    return this.currentOrganisation && this.archives.find((archive) => archive.organisation_id === this.currentOrganisation.id);
+  }
+
+  isArchivedInCurrentOrganisation() {
+    return !this.list.isDepartmentLevel && this.archives.length > 0 && this.archiveInCurrentOrganisation();
   }
 
   isArchivedInCurrentDepartment() {
-    return this.archives && this.archiveInCurrentDepartment();
+    return this.list.isDepartmentLevel && this.archives.length > 0 && this.isArchivedInAllAgentUserOrganisations();
+  }
+
+  isArchivedInAllAgentUserOrganisations() {
+    return this.archivesInAgentUserOrganisations().length === this.agentUserOrganisations().length;
+  }
+
+  archivesInAgentUserOrganisations() {
+    return this.archives.filter((archive) => this.agentUserOrganisations().map((o) => o.id).includes(archive.organisation_id));
+  }
+
+  agentUserOrganisations() {
+    return this.organisations.filter((organisation) => this.currentAgentDepartmentOrganisationIds().includes(organisation.id));
+  }
+
+  currentAgentDepartmentOrganisationIds() {
+    return this.currentAgent.organisations.filter((organisation) => this.department.id === organisation.department_id).map((o) => o.id)
   }
 
   generateUid() {

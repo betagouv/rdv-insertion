@@ -103,8 +103,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_232305) do
     t.string "archiving_reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "department_id", null: false
-    t.index ["department_id"], name: "index_archives_on_department_id"
+    t.bigint "organisation_id", null: false
+    t.index ["organisation_id"], name: "index_archives_on_organisation_id"
     t.index ["user_id"], name: "index_archives_on_user_id"
   end
 
@@ -548,7 +548,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_232305) do
   add_foreign_key "address_geocodings", "users"
   add_foreign_key "agent_roles", "agents"
   add_foreign_key "agent_roles", "organisations"
-  add_foreign_key "archives", "departments"
+  add_foreign_key "archives", "organisations"
   add_foreign_key "archives", "users"
   add_foreign_key "category_configurations", "file_configurations"
   add_foreign_key "category_configurations", "motif_categories"

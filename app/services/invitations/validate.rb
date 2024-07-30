@@ -20,10 +20,10 @@ module Invitations
       validate_invitation_not_already_sent_today
       validate_user_title_presence
       validate_help_phone_number_presence
+      validate_user_belongs_to_an_org_linked_to_motif_category
       validate_organisations_are_not_from_different_departments
       validate_no_rdv_pending_taken_today
       validate_it_expires_in_more_than_5_days if invitation.format_postal?
-      validate_user_belongs_to_an_org_linked_to_motif_category
       validate_motif_of_this_category_is_defined_in_organisations
       validate_referents_are_assigned if invitation.rdv_with_referents?
       validate_follow_up_motifs_are_defined if invitation.rdv_with_referents?
@@ -67,9 +67,10 @@ module Invitations
     end
 
     def validate_user_belongs_to_an_org_linked_to_motif_category
-      return if user.organisations.flat_map(&:motif_categories).include?(motif_category)
+      return if user.unarchived_organisations.flat_map(&:motif_categories).include?(motif_category)
 
-      result.errors << "L'usager n'appartient pas à une organisation qui gère la catégorie #{motif_category_name}"
+      result.errors << "L'usager n'appartient pas ou n'est pas actif dans une organisation qui gère la catégorie " \
+                       "#{motif_category_name}"
     end
 
     def validate_motif_of_this_category_is_defined_in_organisations

@@ -79,16 +79,6 @@ describe SendInvitationRemindersJob do
       )
     end
 
-    # user is archived
-    let!(:invitation5) do
-      create(
-        :invitation,
-        user: user5, follow_up: follow_up5,
-        created_at: 3.days.ago, valid_until: 4.days.from_now
-      )
-    end
-    let!(:archive) { create(:archive, user: user5, department: invitation5.department) }
-
     # Motif Category not eligible for reminder
     let!(:invitation6) do
       create(

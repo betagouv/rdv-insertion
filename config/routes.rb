@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :organisations, only: [:index, :new, :show, :edit, :create, :update] do
     get :geolocated, on: :collection
     get :search, on: :collection
+    resources :convocations, only: [:new]
     resources :users, only: [:index, :create, :show, :update, :edit, :new] do
       collection do
         get :default_list
@@ -61,6 +62,7 @@ Rails.application.routes.draw do
       resources :archives, only: [:new, :create]
       resources :invitations, only: [:create]
     end
+    resources :archives, only: [:destroy]
     resources :follow_ups, module: :follow_ups, only: [] do
       resource :closings, only: [:create, :destroy]
     end
@@ -104,16 +106,12 @@ Rails.application.routes.draw do
 
   resources :csv_exports, only: :show
 
-  resources :convocations, only: [:new]
-
   resources :participations, only: [:update]
   resources :follow_ups, only: [:create]
 
   namespace :users do
     resources :searches, only: :create
   end
-
-  resources :archives, only: [:destroy]
 
   namespace :organisations do
     resources :user_added_notifications, only: [:create]
@@ -135,6 +133,7 @@ Rails.application.routes.draw do
   resources :departments, only: [] do
     patch "category_configurations_positions/update", to: "category_configurations_positions#update"
     resources :department_organisations, only: [:index], as: :organisations, path: "/organisations"
+    resources :convocations, only: [:new]
     resources :users, only: [:index, :new, :create, :show, :edit, :update] do
       collection do
         scope module: :users do
@@ -151,7 +150,10 @@ Rails.application.routes.draw do
         resources :parcours_documents, only: [:show, :update, :create, :destroy]
       end
       resources :invitations, only: [:create]
-      resources :archives, only: [:new, :create]
+      resources :archives, only: [] do
+        get :new_batch, on: :collection
+        post :create_many, on: :collection
+      end
     end
     resources :follow_ups, module: :follow_ups, only: [] do
       resource :closings, only: [:create, :destroy]

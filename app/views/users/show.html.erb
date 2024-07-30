@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "user_page", data: { turbo_action: "advance" } do %>
   <%= render "users/page_title", user: @user %>
 
-  <%= render 'archive_banner' if @archive.present? %>
+  <%= render 'archive_banner' if @user_is_archived %>
 
   <div class="container text-dark-blue h4-as-labels mt-4">
     <%= render "user_page_header" %>
@@ -44,14 +44,10 @@
         <%= render "common/attribute_display", record: @user, attribute: :phone_number %>
         <%= render "common/attribute_display", record: @user, attribute: :rights_opening_date, as: :date %>
         <%= render "common/attribute_display", record: @user, attribute: :created_at, as: :date %>
-        <% if @archive.present? %>
-          <%= render "common/attribute_display", record: @archive, attribute: :archiving_reason %>
-          <%= render "common/attribute_display", record: @archive, attribute: :created_at, as: :date %>
-        <% end %>
       </div>
       <div class="row d-flex justify-content-start flex-wrap mt-5">
         <%= render "user_tags", tags: @user_tags, user: @user %>
-        <%= render "user_organisations_list", user: @user %>
+        <%= render "user_organisations_list", user: @user, archives: @user_archives, department: @department %>
         <%= render "user_referents_list", referents: @user_referents, user: @user %>
       </div>
     </div>

@@ -124,6 +124,20 @@ describe InviteUser, type: :service do
             expect(Invitations::SaveAndSend).to receive(:call)
             subject
           end
+
+          context "when the user is archived in the org" do
+            let!(:archive) { create(:archive, organisation:, user:) }
+
+            it "does not take the org in account" do
+              expect(Invitation).to receive(:new)
+                .with(
+                  organisations: [], user:, department:, follow_up:, valid_until: 5.days.from_now,
+                  rdv_with_referents: true, format: "sms", rdv_solidarites_lieu_id: 2,
+                  help_phone_number: organisation.phone_number
+                )
+              subject
+            end
+          end
         end
 
         context "when the category_configuration has a custom phone number" do

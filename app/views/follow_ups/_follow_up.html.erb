@@ -15,7 +15,7 @@
             <div class="mx-2">
               <%= render "follow_ups/convocation_button",
                          user_id: user.id, motif_category_id: follow_up.motif_category_id,
-                         organisation_ids: department_level? ? user_organisations.ids : [organisation.id]
+                         disabled: user_is_archived
               %>
             </div>
           <% end %>
@@ -53,7 +53,7 @@
                     <% if convocable_participations.present? %>
                       <td class="px-4 py-2">
                         <% if participation.convocable? %>
-                          <%= render("follow_ups/convocations", user: user, participation: participation, sms_convocations: participation.sms_convocations, email_convocations: participation.email_convocations) %>
+                          <%= render("follow_ups/convocations", user: user, participation: participation, sms_convocations: participation.sms_convocations, email_convocations: participation.email_convocations, postal_convocations: participation.postal_convocations, user_is_archived:) %>
                         <% else %>
                           -
                         <% end %>
@@ -82,7 +82,7 @@
           </div>
         <% end %>
         <% if category_configuration.invitation_formats.any? %>
-         <%= render "follow_ups/invitation_block", user: user, organisation: organisation, department: department, invitations: invitations, category_configuration: category_configuration, follow_up: follow_up, motif_category: follow_up.motif_category, invitation_formats: category_configuration.invitation_formats %>
+         <%= render "follow_ups/invitation_block", user:, organisation:, department:, invitations:, category_configuration:, follow_up:, motif_category: follow_up.motif_category, invitation_formats: category_configuration.invitation_formats, user_is_archived: %>
         <% end %>
       </div>
     </div>

@@ -10,8 +10,6 @@ class DepartmentDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     agents: Field::HasMany,
-    archived_users: Field::HasMany,
-    archives: Field::HasMany,
     capital: Field::String,
     carnet_de_bord_deploiement_id: Field::String,
     category_configurations: Field::HasMany,

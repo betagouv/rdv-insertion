@@ -8,12 +8,9 @@ import { getFrenchFormatDateString } from "../../../lib/datesHelper";
 export default function InvitationCells({ user }) {
   return (
     /* ----------------------------- Disabled invitations cases -------------------------- */
-    user.isArchivedInCurrentDepartment() ? (
+    user.isArchived() ? (
       <td colSpan={user.list.invitationsColSpan}>
         Dossier archivé
-        {user.archiveInCurrentDepartment().archiving_reason && (
-          <>&nbsp;: {user.archiveInCurrentDepartment().archiving_reason}</>
-        )}
       </td>
     ) : user.createdAt && user.list.isDepartmentLevel && !user.linkedToCurrentCategory() ? (
       <td colSpan={user.list.invitationsColSpan}>

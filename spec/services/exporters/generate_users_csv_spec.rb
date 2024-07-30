@@ -199,18 +199,13 @@ describe Exporters::GenerateUsersCsv, type: :service do
         end
 
         context "when the user is archived" do
-          let!(:user1) do
-            create(
-              :user,
-              organisations: [organisation],
-              archives: [archive]
-            )
-          end
           let!(:archive) do
             create(
               :archive,
+              user: user1,
               created_at: Time.zone.parse("2022-06-20"),
-              department: department, archiving_reason: "test"
+              organisation:,
+              archiving_reason: "test"
             )
           end
 

@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "user_page", data: { turbo_action: "advance" } do %>
   <%= render "users/page_title", user: @user %>
 
-  <%= render 'users/archive_banner' if @user.archived_in?(@department) %>
+  <%= render 'users/archive_banner' if @user_is_archived %>
 
   <div class="container text-dark-blue h4-as-labels mt-4">
     <%= render "users/user_page_header" %>

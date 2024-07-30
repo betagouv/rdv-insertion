@@ -1,0 +1,45 @@
+<%= render "common/remote_modal", title: "Archiver le dossier de l'usager sur..." do %>
+  <div class="modal-body pt-0">
+    <%= form_for(:archives, url: create_many_department_user_archives_path(department, user), method: :post) do |f| %>
+      <div id="custom-body" class="w-100">
+        <% if archives.any? %>
+          <p class="mb-2">Archives existantes</p>
+          <div class="flex-wrap d-flex">
+            <% archives.each do |archive| %>
+              <% organisation = archive.organisation %>
+              <%= render "users_organisations/user_organisation_badge", organisation:, department: organisation.department, user:, archive: organisation_archive(organisation, archives), with_delete: false %>
+            <% end %>
+          </div>
+
+          <p class="mb-1 mt-3">Créer des archives</p>
+        <% end %>
+        <% archivable_organisations.each do |organisation| %>
+          <div class="d-flex my-2">
+            <%= f.check_box :organisation_ids, { multiple: true, class: "form-check-input" }, organisation.id, nil %>
+            <%= f.label "organisation_ids_#{organisation.id}", class: "ms-3" do %>
+              <%= organisation.name %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= f.hidden_field :user_id, value: user.id %>
+
+        <p class="text-center">
+          Motif d'archivage <span class="link-primary">*</span> :
+        </p>
+        <%= f.text_field :archiving_reason, class: "form-control" %>
+        <p class="link-primary icon-btn-sm mt-2">
+          *Ce champ est une zone de commentaires libres : veillez à utiliser des termes objectifs, pertinents, non excessifs et/ou insultants. Conformément aux articles 9 et 10 du RGPD, les données sensibles telles que celles relatives à la santé, à la vie sexuelle des personnes, à leur situation judiciaire (infractions, condamnations et mesures de sureté) sont proscrites. L’équipe de rdv-insertion se réserve un droit de suppression des informations qui seraient considérées comme sensibles
+        </p>
+      </div>
+
+      <div class="d-flex justify-content-end align-items-center px-3">
+        <button type="button" class="btn btn-blue-out border-0 me-2" data-bs-dismiss="modal">
+          Annuler
+        </button>
+        <button type="submit" id="confirm-button" class="btn btn-primary me-2">
+          Archiver
+        </button>
+      </div>
+    <% end %>
+  </div>
+<% end %>

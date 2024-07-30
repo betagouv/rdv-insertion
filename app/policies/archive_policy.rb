@@ -1,13 +1,13 @@
 class ArchivePolicy < ApplicationPolicy
   def create?
-    # agent must belong to all orgs where the user is present inside the department
-    record.user.organisations.all? do |organisation|
-      organisation.department_id != record.department_id ||
-        organisation.id.in?(pundit_user.organisation_ids)
-    end
+    pundit_user.organisation_ids.include?(record.organisation_id)
   end
 
-  def destroy?
-    pundit_user.organisation_ids.intersect?(record.user.organisation_ids)
+  def show? = create?
+
+  def destroy? = create?
+
+  def resolve
+    Archive.where(organisation_id: pundit_user.organisations.pluck(:id))
   end
 end

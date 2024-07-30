@@ -123,8 +123,20 @@ describe Invitations::Validate, type: :service do
 
       it "stores an error message" do
         expect(subject.errors).to include(
-          "L'usager n'appartient pas à une organisation qui gère la catégorie RSA orientation"
+          "L'usager n'appartient pas ou n'est pas actif dans une organisation qui gère la catégorie RSA orientation"
         )
+      end
+
+      context "when the user is archived in the organisation that handles that category" do
+        let!(:archive) { create(:archive, organisation:, user:) }
+
+        it("is a failure") { is_a_failure }
+
+        it "stores an error message" do
+          expect(subject.errors).to include(
+            "L'usager n'appartient pas ou n'est pas actif dans une organisation qui gère la catégorie RSA orientation"
+          )
+        end
       end
     end
 

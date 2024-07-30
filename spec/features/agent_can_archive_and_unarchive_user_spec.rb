@@ -1,10 +1,8 @@
 describe "Agents can archive and unarchive user", :js do
-  let!(:agent) { create(:agent) }
+  let!(:agent) { create(:agent, organisations: [organisation]) }
   let!(:department) { create(:department) }
-  let!(:organisation) { create(:organisation, agents: [agent], department: department) }
-  let!(:user) do
-    create(:user, organisations: [organisation])
-  end
+  let!(:organisation) { create(:organisation, department:) }
+  let!(:user) { create(:user, organisations: [organisation]) }
 
   before { setup_agent_session(agent) }
 
@@ -15,59 +13,54 @@ describe "Agents can archive and unarchive user", :js do
 
       click_link("Archiver le dossier")
 
-      expect(page).to have_content("Le dossier sera archivé sur toutes les organisations")
+      expect(page).to have_content("Le dossier sera archivé dans l'organisation")
       fill_in "archive_archiving_reason", with: "déménagement"
 
       click_button "Archiver"
 
       expect(page).to have_content "Dossier archivé"
-      expect(page).to have_content "Motif d'archivage"
-      expect(page).to have_content "déménagement"
 
       expect(Archive.count).to eq(1)
       expect(Archive.first.user).to eq(user)
       expect(Archive.first.archiving_reason).to eq("déménagement")
 
-      expect(page).to have_button "Rouvrir le dossier"
+      expect(page).to have_link "Rouvrir le dossier"
+      click_link "Rouvrir le dossier"
+      expect(page).to have_content "Êtes vous sûr ?"
+      expect(page).to have_content "Le dossier de #{user} sera rouvert dans l'organisation #{organisation.name}"
       click_button "Rouvrir le dossier"
-      expect(page).to have_content "Le dossier sera rouvert"
-      click_button "Oui"
 
       expect(page).to have_no_content "Dossier archivé"
-      expect(page).to have_no_content "Motif d'archivage"
-      expect(page).to have_no_content "déménagement"
 
       expect(page).to have_content("Archiver le dossier")
 
       expect(Archive.count).to eq(0)
     end
 
-    context "when the user is archived in another department" do
-      let!(:other_department) { create(:department) }
-      let!(:other_org) { create(:organisation, department: other_department, users: [user]) }
-      let!(:archive) { create(:archive, user: user, department: create(:department)) }
+    context "when the user is archived in another organisation" do
+      let!(:other_org) { create(:organisation, department: department, users: [user]) }
+      let!(:archive) { create(:archive, user: user, organisation: other_org) }
 
-      it "can still archive in agent department" do
-        visit department_user_path(department, user)
+      it "can still archive in other org" do
+        visit organisation_user_path(organisation, user)
         expect(page).to have_link("Archiver le dossier")
 
         click_link("Archiver le dossier")
 
-        expect(page).to have_content("Le dossier sera archivé sur toutes les organisations")
+        expect(page).to have_content("Le dossier sera archivé dans l'organisation")
         fill_in "archive_archiving_reason", with: "déménagement"
 
         click_button "Archiver"
 
         expect(page).to have_content "Dossier archivé"
-        expect(page).to have_content "Motif d'archivage"
-        expect(page).to have_content "déménagement"
 
         expect(Archive.count).to eq(2)
 
-        expect(page).to have_button "Rouvrir le dossier"
+        expect(page).to have_link "Rouvrir le dossier"
+        click_link "Rouvrir le dossier"
+        expect(page).to have_content "Êtes vous sûr ?"
+        expect(page).to have_content "Le dossier de #{user} sera rouvert dans l'organisation #{organisation.name}"
         click_button "Rouvrir le dossier"
-        expect(page).to have_content "Le dossier sera rouvert"
-        click_button "Oui"
 
         expect(page).to have_no_content "Dossier archivé"
         expect(page).to have_no_content "Motif d'archivage"
@@ -78,35 +71,14 @@ describe "Agents can archive and unarchive user", :js do
         expect(Archive.count).to eq(1)
       end
     end
-
-    context "when the agent does not belong to all users orgs inside the deparment" do
-      let!(:other_org) { create(:organisation, department: department, users: [user]) }
-
-      it "is not allowed to archive the user" do
-        visit organisation_user_path(organisation, user)
-
-        expect(page).to have_css("a.disabled", text: "Archiver le dossier")
-      end
-    end
   end
 
   describe "from upload page" do
     include_context "with file configuration"
 
-    let!(:category_configuration) do
-      create(:category_configuration, file_configuration: file_configuration, organisation: organisation)
-    end
-    let!(:user) do
-      create(
-        :user,
-        email: "hernan@crespo.com",
-        first_name: "hernan",
-        organisations: [organisation]
-      )
-    end
-    let!(:archive) do
-      create(:archive, user: user, department: department, archiving_reason: "CDI")
-    end
+    let!(:category_configuration) { create(:category_configuration, file_configuration:, organisation:) }
+    let!(:user) { create(:user, email: "hernan@crespo.com", first_name: "hernan", organisations: [organisation]) }
+    let!(:archive) { create(:archive, user:, organisation:, archiving_reason: "CDI") }
 
     it "can unarchive an user" do
       visit new_organisation_upload_path(organisation, category_configuration_id: category_configuration.id)
@@ -115,7 +87,6 @@ describe "Agents can archive and unarchive user", :js do
 
       expect(page).to have_button "Rouvrir le dossier"
       expect(page).to have_content "Dossier archivé"
-      expect(page).to have_content "CDI"
 
       expect(page).to have_no_button "Inviter par SMS"
 
@@ -127,9 +98,10 @@ describe "Agents can archive and unarchive user", :js do
       expect(page).to have_button "Inviter par SMS"
     end
 
-    context "when the archive is in another department" do
+    context "when the archive is in another organisation" do
+      let!(:other_org) { create(:organisation, department: department, users: [user]) }
       let!(:archive) do
-        create(:archive, user: user, department: create(:department))
+        create(:archive, user:, organisation: other_org)
       end
 
       it "does not show the user as archived" do
@@ -141,6 +113,38 @@ describe "Agents can archive and unarchive user", :js do
 
         expect(page).to have_no_button "Rouvrir le dossier"
         expect(page).to have_no_content "Dossier archivé"
+      end
+    end
+
+    context "when department level" do
+      let!(:other_org) { create(:organisation, department:, users: [user]) }
+      let!(:agent) { create(:agent, organisations: [organisation, other_org]) }
+      let!(:archive) { create(:archive, user:, organisation:, archiving_reason: "CDI") }
+
+      before do
+        visit new_department_upload_path(department, category_configuration_id: category_configuration.id)
+
+        attach_file(
+          "users-list-upload", Rails.root.join("spec/fixtures/fichier_usager_test.xlsx"), make_visible: true
+        )
+      end
+
+      context "when the user is archived in all organisations of department" do
+        let!(:archive2) { create(:archive, user:, organisation: other_org, archiving_reason: "CDI") }
+
+        it "displays the user as archived but with no reopen button" do
+          expect(page).to have_no_button "Rouvrir le dossier"
+          expect(page).to have_css(".fa-link")
+          expect(page).to have_content "Dossier archivé"
+        end
+      end
+
+      context "when the user is partially archived in the department" do
+        it "does not display the user as archived" do
+          expect(page).to have_no_button "Rouvrir le dossier"
+          expect(page).to have_button "Inviter par SMS"
+          expect(page).to have_no_content "Dossier archivé"
+        end
       end
     end
   end

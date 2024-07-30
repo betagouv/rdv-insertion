@@ -92,12 +92,12 @@ module Exporters
        "Date de début d'accompagnement",
        "Date de fin d'accompagnement",
        "Structure d'orientation",
-       Archive.human_attribute_name(:created_at),
-       Archive.human_attribute_name(:archiving_reason),
        User.human_attribute_name(:referents),
        "Nombre d'organisations",
        "Nom des organisations",
-       User.human_attribute_name(:tags)]
+       User.human_attribute_name(:tags),
+       *(Archive.human_attribute_name(:created_at) unless department_level?),
+       *(Archive.human_attribute_name(:archiving_reason) unless department_level?)]
     end
 
     def csv_row(user) # rubocop:disable Metrics/AbcSize
@@ -134,12 +134,12 @@ module Exporters
        display_date(orientation_starts_at(user)),
        display_date(orientation_ends_at(user)),
        orientation_structure(user),
-       display_date(user.archive_for(department_id)&.created_at),
-       user.archive_for(department_id)&.archiving_reason,
        user.referents.map(&:email).join(", "),
        user.organisations.to_a.count,
        display_organisation_names(user.organisations),
-       scoped_user_tags(user.tags).pluck(:value).join(", ")]
+       scoped_user_tags(user.tags).pluck(:value).join(", "),
+       *(display_date(user.organisation_archive(@structure)&.created_at) unless department_level?),
+       *(user.organisation_archive(@structure)&.archiving_reason unless department_level?)]
     end
 
     def human_last_participation_status(user)

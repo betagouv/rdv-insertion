@@ -2,8 +2,8 @@ import Swal from "sweetalert2";
 import deleteArchive from "../actions/deleteArchive";
 
 const handleArchiveDelete = async (user, options = { raiseError: true }) => {
-  const archiveToDelete = user.archiveInCurrentDepartment();
-  const result = await deleteArchive(archiveToDelete.id);
+  const archiveToDelete = user.archiveInCurrentOrganisation();
+  const result = await deleteArchive(archiveToDelete.id, archiveToDelete.organisation_id);
   if (result.success) {
     user.archives = user.archives.filter((archive) => archive.id !== archiveToDelete.id);
     if (options.raiseError) {

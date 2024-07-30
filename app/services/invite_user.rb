@@ -42,7 +42,7 @@ class InviteUser < BaseService
   def set_invitation_organisations
     @invitation_organisations =
       if @current_configuration.invite_to_user_organisations_only?
-        @organisations & @user.organisations
+        @organisations & @user.unarchived_organisations
       else
         @organisations
       end

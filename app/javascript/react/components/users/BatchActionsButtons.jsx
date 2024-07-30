@@ -34,7 +34,7 @@ export default observer(({ users }) => {
     // We need a synchronous loop with await here to avoid sending too many requests at the same time
     // eslint-disable-next-line no-restricted-syntax
     for (const user of users.selectedUsers) {
-      if (user.isArchivedInCurrentDepartment()) {
+      if (user.isArchivedInCurrentOrganisation()) {
         // eslint-disable-next-line no-await-in-loop
         await user.unarchive({ raiseError: false });
       } else {

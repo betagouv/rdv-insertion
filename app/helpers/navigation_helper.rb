@@ -19,12 +19,12 @@ module NavigationHelper
     send(:"#{current_structure_type}_user_path", { id: user_id, **structure_id_param, **params })
   end
 
-  def structure_user_archives_path(user_id)
-    send(:"#{current_structure_type}_user_archives_path", { user_id: user_id, **structure_id_param })
-  end
-
   def new_structure_user_path
     send(:"new_#{current_structure_type}_user_path", **structure_id_param)
+  end
+
+  def new_structure_convocation_path(**params)
+    send(:"new_#{current_structure_type}_convocation_path", { **structure_id_param, **params })
   end
 
   def new_structure_upload_path(**params)
@@ -32,7 +32,9 @@ module NavigationHelper
   end
 
   def new_structure_user_archive_path(**params)
-    send(:"new_#{current_structure_type}_user_archive_path", { **structure_id_param, **params })
+    return send(:new_batch_department_user_archives_path, { **structure_id_param, **params }) if department_level?
+
+    send(:new_organisation_user_archive_path, { **structure_id_param, **params })
   end
 
   def uploads_category_selection_structure_users_path(**params)

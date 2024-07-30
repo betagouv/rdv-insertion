@@ -34,14 +34,6 @@ class Stat < ApplicationRecord
     @all_users ||= statable.nil? ? User.all : statable.users
   end
 
-  def archived_user_ids
-    @archived_user_ids ||= if statable.nil?
-                             User.where.associated(:archives).select(:id).ids
-                           else
-                             statable.archived_users.select(:id).ids
-                           end
-  end
-
   def all_participations
     statable.nil? ? Participation.all : statable.participations
   end
@@ -53,7 +45,6 @@ class Stat < ApplicationRecord
   # We filter the participations to only keep the participations of the users in the scope
   def participations_set
     participations = all_participations
-                     .where.not(user_id: archived_user_ids)
                      .joins(:user)
                      .where(users: { deleted_at: nil })
 
@@ -93,9 +84,9 @@ class Stat < ApplicationRecord
     @invited_users_set ||= users_set.with_sent_invitations.distinct
   end
 
-  # We filter the users by organisations and retrieve deleted or archived users
+  # We filter the users by organisations and withdraw deleted users
   def users_set
-    users = User.active.where.not(id: archived_user_ids).preload(:participations)
+    users = User.active.preload(:participations)
     users = users.joins(:organisations).where(organisations: all_organisations) if statable.present?
 
     users.distinct

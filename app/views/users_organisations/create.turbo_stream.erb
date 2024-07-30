@@ -1,5 +1,5 @@
 <%= turbo_stream.replace "organisations_list" do %>
-  <%= render partial: "users/user_organisations_list", locals: { user: @user.reload, department: @department } %>
+  <%= render partial: "users/user_organisations_list", locals: { user: @user.reload, department: @department, archives: @user_archives } %>
 <% end %>
 
 <%= render_turbo_stream_flash_messages %>

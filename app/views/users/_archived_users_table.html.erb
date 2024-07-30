@@ -13,8 +13,10 @@
     <th scope="col">Date de création</th>
     <th scope="col">Première invitation</th>
     <th scope="col">Dernière invitation</th>
-    <th scope="col">Archivé le</th>
-    <th scope="col">Motif d'archivage</th>
+    <% if !department_level? %>
+      <th scope="col">Archivé le</th>
+      <th scope="col">Motif d'archivage</th>
+    <% end %>
     <th scope="col"></th>
   </thead>
   <tbody class="align-middle">
@@ -30,8 +32,10 @@
         <td><%= display_attribute format_date(user.created_at) %></td>
         <td><%= display_attribute format_date(user.first_invitation_created_at) %></td>
         <td><%= display_attribute(format_date(user.last_invitation_created_at)) %></td>
-        <td><%= display_attribute format_date(user.archive_for(@department.id).created_at) %></td>
-        <td><%= display_attribute user.archive_for(@department.id).archiving_reason %></td>
+        <% if !department_level? %>
+          <td><%= display_attribute format_date(user.organisation_archive(@organisation)&.created_at) %></td>
+          <td><%= display_attribute user.organisation_archive(@organisation)&.archiving_reason %></td>
+        <% end %>
         <td class="padding-left-15">
           <%= link_to structure_user_path(user.id) do %>
             <button class="btn btn-blue">Gérer</button>

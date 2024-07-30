@@ -1,11 +1,17 @@
-<%=
-  link_to(
-    new_convocation_path(motif_category_id: motif_category_id, organisation_ids: organisation_ids, user_id: user_id),
-    data: { turbo_frame: 'remote_modal' }
-  ) do
-%>
-  <button class="btn btn-blue">
+<% if disabled %>
+  <button class="btn btn-blue disabled">
     📅 Convoquer <i class="fas fa-external-link-alt icon-sm"></i>
   </button>
+<% else %>
+  <%=
+    link_to(
+      new_structure_convocation_path(motif_category_id: motif_category_id, user_id: user_id),
+      data: { turbo_frame: "remote_modal" }
+    ) do
+  %>
+    <button class="btn btn-blue">
+      📅 Convoquer <i class="fas fa-external-link-alt icon-sm"></i>
+    </button>
+  <% end %>
 <% end %>
 

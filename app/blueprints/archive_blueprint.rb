@@ -1,4 +1,4 @@
 class ArchiveBlueprint < ApplicationBlueprint
   identifier :id
-  fields :archiving_reason, :department_id, :user_id
+  fields :archiving_reason, :organisation_id, :user_id
 end

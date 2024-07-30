@@ -6,8 +6,8 @@ describe "Agents can upload user list", :js do
   let!(:organisation) do
     create(
       :organisation,
-      department: department,
-      rdv_solidarites_organisation_id: rdv_solidarites_organisation_id,
+      department:,
+      rdv_solidarites_organisation_id:,
       # needed for the organisation users page
       category_configurations: [category_configuration],
       slug: "org1"
@@ -15,11 +15,9 @@ describe "Agents can upload user list", :js do
   end
   let!(:motif) { create(:motif, organisation: organisation, motif_category: motif_category) }
 
-  let!(:category_configuration) do
-    create(:category_configuration, motif_category: motif_category, file_configuration: file_configuration)
-  end
+  let!(:category_configuration) { create(:category_configuration, motif_category:, file_configuration:) }
 
-  let!(:other_org_from_same_department) { create(:organisation, department: department) }
+  let!(:other_org_from_same_department) { create(:organisation, department:) }
   let!(:other_department) { create(:department) }
   let!(:other_org_from_other_department) { create(:organisation, department: other_department) }
 

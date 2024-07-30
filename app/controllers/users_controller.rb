@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   include Users::Filterable
   include Users::Sortable
   include Users::Taggable
+  include Users::Archivable
 
   before_action :set_organisation, :set_department, :set_all_configurations,
                 :set_current_organisations, :set_users_scope,
@@ -19,8 +20,9 @@ class UsersController < ApplicationController
                 :set_users, :set_follow_ups, :set_structure_orientations, :set_orientation_types, :set_filterable_tags,
                 :set_referents_list, :filter_users, :order_users,
                 for: :index
-  before_action :set_user, :set_organisation, :set_department, :set_all_configurations,
-                :set_user_archive, :set_user_tags, :set_user_referents, :set_back_to_users_list_url,
+  before_action :set_user, :set_organisation, :set_department, :set_current_organisations, :set_all_configurations,
+                :set_user_tags, :set_user_referents, :set_back_to_users_list_url, :set_user_archives,
+                :set_user_is_archived,
                 for: :show
   before_action :set_organisation, :set_department,
                 for: :new
@@ -165,6 +167,7 @@ class UsersController < ApplicationController
       policy_scope(User)
       .preload(:tag_users)
       .where(current_organisations_filter)
+      .preload(:archives)
       .find(params[:id])
   end
 
@@ -239,10 +242,6 @@ class UsersController < ApplicationController
     @current_motif_category = @current_category_configuration&.motif_category
   end
 
-  def set_user_archive
-    @archive = Archive.find_by(user: @user, department: @department)
-  end
-
   def set_users
     if archived_scope?
       set_archived_users
@@ -256,7 +255,7 @@ class UsersController < ApplicationController
   def set_all_users
     @users = policy_scope(User)
              .active.distinct
-             .where(organisations: @current_organisations)
+             .preload(:organisations).where(organisations: @current_organisations)
     return if request.format == "csv"
 
     @users = @users.preload(:archives, follow_ups: [:invitations])
@@ -267,7 +266,7 @@ class UsersController < ApplicationController
              .preload(:organisations, follow_ups: [:notifications, :invitations, { participations: :rdv }])
              .active.distinct
              .where(organisations: @current_organisations)
-             .where.not(id: @department.archived_users.ids)
+             .where.not(id: archived_user_ids_in_organisations(@current_organisations))
              .joins(:follow_ups)
              .where(follow_ups: { motif_category: @current_motif_category })
              .where.not(follow_ups: { status: "closed" })
@@ -277,9 +276,22 @@ class UsersController < ApplicationController
     @users = policy_scope(User)
              .includes(:archives)
              .preload(:invitations, :participations)
+             .where(id: archived_user_ids_in_organisations(@current_organisations))
              .active.distinct
-             .where(id: @department.archived_users)
-             .where(organisations: @current_organisations)
+  end
+
+  def set_user_archives
+    @user_archives = @user.archives
+  end
+
+  def set_user_is_archived
+    @user_is_archived =
+      @user.archives.where(organisation: user_agent_department_organisations).count ==
+      user_agent_department_organisations.count
+  end
+
+  def user_agent_department_organisations
+    @user_agent_department_organisations ||= @user.organisations & @current_organisations
   end
 
   def set_follow_ups

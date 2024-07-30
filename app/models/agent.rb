@@ -44,6 +44,10 @@ class Agent < ApplicationRecord
     "#{first_name} #{last_name&.upcase}".strip
   end
 
+  def department_organisations(department_id)
+    organisations.select { |organisation| organisation.department_id == department_id }
+  end
+
   private
 
   # This is to make sure an agent can't be set as super_admin through an agent creation or update in the app.

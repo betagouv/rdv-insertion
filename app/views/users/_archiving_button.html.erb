@@ -1,28 +1,27 @@
-<% if archive.blank? %>
-  <!-- We must set a wrapper to trigger a tooltip on a disabled element -->
+<% if user_is_archived && !department_level? %>
+  <%=
+    link_to(
+      "Rouvrir le dossier",
+      # in this case we are at organisation level, there is always only one archive
+      organisation_archive_path(current_organisation, user.organisation_archive(current_organisation)),
+      class: "btn btn-blue", id: "archive-button",
+      data: {
+        turbo_confirm: "Rouvrir le dossier dans cette organisation ?",
+        turbo_confirm_text_content: "Êtes vous sûr ? <br/><br/>Le dossier de <b>#{user}</b> sera rouvert dans l'organisation <b>#{current_organisation&.name}</b> et retrouvera le statut précédant l'archivage.",
+        turbo_confirm_text_action: "Rouvrir le dossier",
+        turbo_method: :delete,
+      }
+    )
+  %>
+<% else %>
   <span class="tooltip-wrapper" data-controller="tooltip" data-action="mouseover->tooltip#archivingDisabled">
     <%=
       link_to(
         "Archiver le dossier",
         new_structure_user_archive_path(user_id: user.id),
-        class: "btn btn-blue #{"disabled" if !policy(Archive.new(department: department, user: user)).create?}", id: "archive-button",
+        class: "btn btn-blue #{"disabled" if user_is_archived}", id: "archive-button",
         data: { turbo_frame: 'remote_modal' },
       )
     %>
   </span>
-<% else %>
-  <%=
-    button_tag(
-      "Rouvrir le dossier",
-      class: "btn btn-blue", id: "unarchive-button",
-      disabled: !policy(archive).destroy?,
-      data: {
-        controller: "archives",
-        action: "click->archives#destroy",
-        archive_id: archive.id,
-        user_id: user.id,
-        department_id: department.id,
-      }
-    )
-  %>
 <% end %>
