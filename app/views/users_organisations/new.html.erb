@@ -1,5 +1,5 @@
 <%= render "common/remote_modal", title: "Choisissez une organisation" do %>
-    <%= form_for(:users_organisation, url: structure_users_organisations_path(@user.id), method: :post) do |f| %>
+    <%= form_for(:users_organisation, url: users_organisations_path_with_structure(@user.id), method: :post) do |f| %>
       <div class="form-group scrollable-list">
         <%= f.select :organisation_id,
                     collection: @organisations.map { |o| [o.name, o.id] },

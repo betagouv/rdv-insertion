@@ -4,7 +4,7 @@
     <%=
       link_to(
         "Archiver le dossier",
-        new_structure_user_archive_path(user_id: user.id),
+        new_archive_path_with_structure(user_id: user.id),
         class: "btn btn-blue #{"disabled" if !policy(Archive.new(department: department, user: user)).create?}", id: "archive-button",
         data: { turbo_frame: 'remote_modal' },
       )

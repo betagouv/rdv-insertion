@@ -24,13 +24,13 @@
   </td>
 
   <td>
-    <%= link_to edit_structure_user_orientation_path(orientation.user_id, orientation.id), data: { turbo_frame: 'remote_modal' } do %>
+    <%= link_to edit_user_orientation_path_with_structure(user_id: orientation.user_id, id: orientation.id), data: { turbo_frame: 'remote_modal' } do %>
       <i class="fas fa-pencil-alt text-dark-blue"></i>
     <% end %>
   </td>
 
   <td>
-    <%= link_to structure_user_orientation_path(orientation.user_id, orientation.id), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer cette orientation ?" } do %>
+    <%= link_to user_orientation_path_with_structure(user_id: orientation.user_id, id: orientation.id), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer cette orientation ?" } do %>
       <i class="fas fa-trash text-dark-blue"></i>
     <% end %>
   </td>

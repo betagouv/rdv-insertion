@@ -1,4 +1,4 @@
-<%= link_to structure_follow_up_closings_path(follow_up.id), method: :delete do %>
+<%= link_to structure_follow_up_closings_path(follow_up_id: follow_up.id, user_id: follow_up.user_id), method: :delete do %>
   <button class="btn btn-blue"  data-controller="tooltip" data-action="mouseover->tooltip#reopenFollowUpButton">
     <i class="fas fa-lock-open"></i> Rouvrir
   </button>

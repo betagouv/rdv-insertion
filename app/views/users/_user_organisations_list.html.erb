@@ -31,7 +31,7 @@
               }
             end
           %>
-          <%= link_to(structure_users_organisations_path(user.id, users_organisation: { user_id: user.id, organisation_id: organisation.id }), data:, class: 'text-dark-grey-alt ms-2' ) do %>
+          <%= link_to(users_organisations_path_with_structure(user: user.id, users_organisation: { user_id: user.id, organisation_id: organisation.id }), data:, class: 'text-dark-grey-alt ms-2' ) do %>
             <i class="fas fa-times"></i>
           <% end %>
         <% end %>
@@ -39,7 +39,7 @@
     <% end %>
   </p>
 
-  <%= link_to(structure_users_organisations_path(user.id), data: { turbo_frame: 'remote_modal' }) do %>
+  <%= link_to(users_organisations_path_with_structure(user_id: user.id), data: { turbo_frame: 'remote_modal' }) do %>
     <button class="btn btn-blue"><i class="fas fa-plus"></i> Ajouter une organisation </button>
   <% end %>
 </div>

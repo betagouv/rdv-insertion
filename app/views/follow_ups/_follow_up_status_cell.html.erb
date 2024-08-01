@@ -1,7 +1,7 @@
 <td
   id="follow-up-status-<%= follow_up.id %>"
   class="<%= background_class_for_follow_up_status(follow_up, number_of_days_before_action_required) %>"
-  data-link-path="<%= structure_user_follow_ups_path(follow_up.user_id, anchor: "follow_up_#{follow_up.id}") %>"
+  data-link-path="<%= structure_user_follow_ups_path(user_id: follow_up.user_id, anchor: "follow_up_#{follow_up.id}") %>"
 >
   <%= display_follow_up_status(follow_up, number_of_days_before_action_required) %>
   <% if follow_up.rdv_pending? && follow_up.current_pending_rdv.present? %>

@@ -156,7 +156,7 @@
     </div>
     <% if @current_category_configuration.present? %>
       <div class="d-flex flex-column align-items-end dropdown">
-        <%= link_to(new_structure_batch_action_path(@current_motif_category.id), class: "btn btn-blue") do %>
+        <%= link_to(new_structure_batch_action_path(motif_category_id: @current_motif_category.id), class: "btn btn-blue") do %>
           Envoyer des invitations aux non-invités
         <% end %>
       </div>

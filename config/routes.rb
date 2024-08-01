@@ -55,10 +55,7 @@ Rails.application.routes.draw do
       scope module: :users do
         resources :follow_ups, only: [:index]
         resource :parcours, only: [:show]
-        resources :orientations, only: [:new, :create, :edit, :update, :destroy]
-        resources :parcours_documents, only: [:show, :update, :create, :destroy]
       end
-      resources :archives, only: [:new, :create]
       resources :invitations, only: [:create]
     end
     resources :follow_ups, module: :follow_ups, only: [] do
@@ -68,12 +65,6 @@ Rails.application.routes.draw do
     resources :category_configurations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
     patch "category_configurations_positions/update", to: "category_configurations_positions#update"
     resources :tags, only: [:create, :destroy]
-    resources :users_organisations, only: [:index, :create]
-    resource :users_organisations, only: [:destroy]
-    resources :referent_assignations, only: [:index, :create]
-    resource :referent_assignations, only: [:destroy]
-    resources :tag_assignations, only: [:index, :create]
-    resource :tag_assignations, only: [:destroy]
     resources :agent_roles, module: :agent_roles, only: [] do
       collection do
         resources :csv_export_authorizations, only: [:index]
@@ -94,6 +85,10 @@ Rails.application.routes.draw do
 
   resources :users, module: :users, only: [] do
     resources :rdvs, only: [:new]
+    resources :parcours_documents, only: [:show, :update, :create, :destroy]
+    resources :tag_assignations, only: [:index, :create, :destroy], param: :tag_id
+    resources :referent_assignations, only: [:index, :create, :destroy], param: :agent_id
+    resources :orientations, only: [:new, :create, :edit, :update, :destroy]
   end
 
   get "invitation", to: "invitations#invitation_code", as: :invitation_landing
@@ -108,12 +103,14 @@ Rails.application.routes.draw do
 
   resources :participations, only: [:update]
   resources :follow_ups, only: [:create]
+  resources :users_organisations, only: [:index, :create]
+  resource :users_organisations, only: [:destroy]
 
   namespace :users do
     resources :searches, only: :create
   end
 
-  resources :archives, only: [:destroy]
+  resources :archives, only: [:new, :create, :update, :destroy]
 
   namespace :organisations do
     resources :user_added_notifications, only: [:create]
@@ -147,11 +144,8 @@ Rails.application.routes.draw do
       scope module: :users do
         resources :follow_ups, only: [:index]
         resource :parcours, only: [:show]
-        resources :orientations, only: [:new, :create, :edit, :update, :destroy]
-        resources :parcours_documents, only: [:show, :update, :create, :destroy]
       end
       resources :invitations, only: [:create]
-      resources :archives, only: [:new, :create]
     end
     resources :follow_ups, module: :follow_ups, only: [] do
       resource :closings, only: [:create, :destroy]
@@ -159,10 +153,6 @@ Rails.application.routes.draw do
     resource :stats, only: [:show], controller: 'website/stats'
     resources :users_organisations, only: [:index, :create]
     resource :users_organisations, only: [:destroy]
-    resources :referent_assignations, only: [:index, :create]
-    resource :referent_assignations, only: [:destroy]
-    resources :tag_assignations, only: [:index, :create]
-    resource :tag_assignations, only: [:destroy]
     resources :invitation_dates_filterings, :creation_dates_filterings, only: [:new]
   end
 

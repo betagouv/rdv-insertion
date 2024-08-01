@@ -6,7 +6,7 @@ module FollowUps
     def create
       authorize @follow_up, :close?
       if close_follow_up.success?
-        redirect_to structure_user_follow_ups_path(@follow_up.user_id)
+        redirect_to structure_user_follow_ups_path(user_id: @follow_up.user_id)
       else
         turbo_stream_display_error_modal(@follow_up.errors.full_messages)
       end
@@ -15,7 +15,7 @@ module FollowUps
     def destroy
       authorize @follow_up, :reopen?
       if @follow_up.update(closed_at: nil)
-        redirect_to structure_user_follow_ups_path(@follow_up.user_id)
+        redirect_to structure_user_follow_ups_path(user_id: @follow_up.user_id)
       else
         turbo_stream_display_error_modal(@follow_up.errors.full_messages)
       end

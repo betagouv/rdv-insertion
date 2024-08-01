@@ -1,5 +1,5 @@
 <div id="user-<%= user.id %>-<%= invitation_format %>-invitation">
-  <%= form_with(url: structure_user_invitations_path(user.id), html: { method: :post }, data: { controller: "invitations-checkbox-form", action: "turbo:submit-start->invitations-checkbox-form#submitStart", user_id: user.id, department_id: @department.id, organisation_id: @organisation&.id, invitation_format: invitation_format, follow_up_id: follow_up.id }) do |f| %>
+  <%= form_with(url: structure_user_invitations_path(user_id: user.id), html: { method: :post }, data: { controller: "invitations-checkbox-form", action: "turbo:submit-start->invitations-checkbox-form#submitStart", user_id: user.id, department_id: @department.id, organisation_id: @organisation&.id, invitation_format: invitation_format, follow_up_id: follow_up.id }) do |f| %>
     <div class="form-group">
       <%= f.hidden_field :motif_category_id, value: motif_category.id %>
       <%= f.hidden_field :invitation_format, value: invitation_format %>

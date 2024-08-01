@@ -1,5 +1,5 @@
 <%= render "common/remote_modal", title: "Ajouter une orientation" do %>
-  <%= form_for(@orientation, url: structure_user_orientations_path(@user.id), method: :post) do |form| %>
+  <%= form_for(@orientation, url: user_orientations_path_with_structure(user_id: @user.id), method: :post) do |form| %>
     <%= render "orientations/orientation_form", form:, orientation: @orientation, organisations: @organisations, agents: @agents %>
   <% end %>
 <% end %>

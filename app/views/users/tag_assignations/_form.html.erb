@@ -1,5 +1,5 @@
 <div>
-  <%= form_for(:tag_assignation, url: structure_tag_assignations_path(user_id), method: :post) do |f| %>
+  <%= form_for(:tag_assignation, url: user_tag_assignations_path_with_structure(user_id:), method: :post) do |f| %>
     <div class="w-100 px-2">
       <% if assigned_tags.any? %>
         <p class="mb-2"> <%= "Tag".pluralize(assigned_tags.size) %> déjà <%= "sélectionné".pluralize(assigned_tags.size) %></p>

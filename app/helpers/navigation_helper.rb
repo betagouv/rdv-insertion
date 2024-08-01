@@ -3,106 +3,33 @@ module NavigationHelper
     department_level? ? { department_id: current_department_id } : { organisation_id: current_organisation_id }
   end
 
-  def structure_users_path(**params)
-    send(:"#{current_structure_type}_users_path", { **structure_id_param, **params.compact_blank })
+  #
+  # Will catch routes methods calls containing "structure"
+  #
+  # When method ends with "_with_structure" => it will add the current structure id as a query param
+  # When method contains "structure"        => it will replace structure with the current structure name
+  #
+  # Example : current structure is a Department with id 1
+  #
+  # structure_foo_path will generate a path scoped to the current structure
+  #        executes => department_foo_path(department_id: 1)
+  #        returns  => /departments/1/foo
+  #
+  # foo_path_with_structure will generate an unscoped path with the current structure id as a query parameter
+  #       executes => foo_path(department_id: 1)
+  #       returns  => /foo?department_id=1
+  #
+  def method_missing(method_name, params = {}, additional_params = {})
+    return super unless method_name.to_s.match(/^(?=.*structure)(?=.*(path|url))/)
+
+    params = { id: params } if params.is_a?(Integer)
+    params_with_structure = { **params, **structure_id_param, **additional_params }
+    route_name = method_name.to_s.gsub("_with_structure", "").gsub("structure", current_structure_type)
+
+    send(route_name, params_with_structure)
   end
 
-  def structure_category_configurations_positions_update_path
-    send(:"#{current_structure_type}_category_configurations_positions_update_path", structure_id_param)
-  end
-
-  def edit_structure_user_path(user_id)
-    send(:"edit_#{current_structure_type}_user_path", { id: user_id, **structure_id_param })
-  end
-
-  def structure_user_path(user_id, **params)
-    send(:"#{current_structure_type}_user_path", { id: user_id, **structure_id_param, **params })
-  end
-
-  def structure_user_archives_path(user_id)
-    send(:"#{current_structure_type}_user_archives_path", { user_id: user_id, **structure_id_param })
-  end
-
-  def new_structure_user_path
-    send(:"new_#{current_structure_type}_user_path", **structure_id_param)
-  end
-
-  def new_structure_upload_path(**params)
-    send(:"new_#{current_structure_type}_upload_path", { **structure_id_param, **params })
-  end
-
-  def new_structure_user_archive_path(**params)
-    send(:"new_#{current_structure_type}_user_archive_path", { **structure_id_param, **params })
-  end
-
-  def uploads_category_selection_structure_users_path(**params)
-    send(:"uploads_category_selection_#{current_structure_type}_users_path", { **structure_id_param, **params })
-  end
-
-  def structure_user_invitations_path(user_id, **params)
-    send(:"#{current_structure_type}_user_invitations_path", { user_id:, **structure_id_param, **params })
-  end
-
-  def structure_user_follow_ups_path(user_id, **params)
-    send(:"#{current_structure_type}_user_follow_ups_path", { user_id:, **structure_id_param, **params })
-  end
-
-  def new_structure_batch_action_path(motif_category_id)
-    send(:"new_#{current_structure_type}_batch_action_path", { **structure_id_param, motif_category_id: })
-  end
-
-  def structure_parcours_path(user_id)
-    send(:"#{current_structure_type}_user_parcours_path", { user_id:, **structure_id_param })
-  end
-
-  def edit_structure_user_orientation_path(user_id, orientation_id)
-    send(
-      :"edit_#{current_structure_type}_user_orientation_path", { user_id:, id: orientation_id, **structure_id_param }
-    )
-  end
-
-  def structure_user_orientation_path(user_id, orientation_id)
-    send(:"#{current_structure_type}_user_orientation_path", { user_id:, id: orientation_id, **structure_id_param })
-  end
-
-  def structure_user_orientations_path(user_id)
-    send(:"#{current_structure_type}_user_orientations_path", { user_id:, **structure_id_param })
-  end
-
-  def new_structure_user_orientation_path(user_id)
-    send(:"new_#{current_structure_type}_user_orientation_path", { user_id:, **structure_id_param })
-  end
-
-  def structure_user_parcours_document_path(user_id, parcours_document_id)
-    send(:"#{current_structure_type}_user_parcours_document_path",
-         { user_id:, id: parcours_document_id, **structure_id_param })
-  end
-
-  def structure_user_parcours_documents_path(user_id)
-    send(:"#{current_structure_type}_user_parcours_documents_path", { user_id:, **structure_id_param })
-  end
-
-  def structure_tag_assignations_path(user_id, **params)
-    send(:"#{current_structure_type}_tag_assignations_path", { user_id:, **structure_id_param, **params })
-  end
-
-  def structure_users_organisations_path(user_id, **params)
-    send(:"#{current_structure_type}_users_organisations_path", { user_id:, **structure_id_param, **params })
-  end
-
-  def structure_referent_assignations_path(user_id, **params)
-    send(:"#{current_structure_type}_referent_assignations_path", { user_id:, **structure_id_param, **params })
-  end
-
-  def structure_follow_up_closings_path(follow_up_id)
-    send(:"#{current_structure_type}_follow_up_closings_path", { follow_up_id:, **structure_id_param })
-  end
-
-  def new_structure_creation_dates_filtering_path(url_params)
-    send(:"new_#{current_structure_type}_creation_dates_filtering_path", { **structure_id_param, **url_params })
-  end
-
-  def new_structure_invitation_dates_filtering_path(url_params)
-    send(:"new_#{current_structure_type}_invitation_dates_filtering_path", { **structure_id_param, **url_params })
+  def respond_to_missing?(method_name, include_private = false)
+    method_name.to_s.match(/^(?=.*structure)(?=.*(path|url))/) || super
   end
 end

@@ -12,7 +12,7 @@
       <h4>Historique d'accompagnement</h4>
       <%= render "orientations/orientations_list", orientations: @orientations %>
 
-      <%= link_to(new_structure_user_orientation_path(@user.id), data: { turbo_frame: 'remote_modal' }) do %>
+      <%= link_to(new_user_orientation_path_with_structure(user_id: @user.id), data: { turbo_frame: 'remote_modal' }) do %>
         <button class="btn btn-blue mb-3"><i class="fas fa-plus"></i> Ajouter une orientation</button>
       <% end %>
     </div>

@@ -8,7 +8,7 @@
     <% end %>
   </div>
   <% if policy(document).edit? %>
-    <%= form_for(document, as: :parcours_document, url: structure_user_parcours_document_path(document.user_id, document.signed_id), remote: true, html: { class: "d-inline" }) do |f| %>
+    <%= form_for(document, as: :parcours_document, url: user_parcours_document_path_with_structure(user_id: document.user_id, id: document.signed_id), remote: true, html: { class: "d-inline" }) do |f| %>
       <div class="date-update d-flex d-none">
         <%= f.date_field :document_date, class: "form-control me-1" %>
         <%= button_tag type: "submit", class: "btn btn-link validate-date-button text-dark-blue" do %>

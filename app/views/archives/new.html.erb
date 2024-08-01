@@ -1,6 +1,6 @@
 <%= render "common/remote_modal" do %>
   <div class="modal-body pt-0">
-    <%= form_for(:archive, url: structure_user_archives_path(@user.id), method: :post) do |f| %>
+    <%= form_for(:archive, url: archives_path_with_structure(user_id: @user.id), method: :post) do |f| %>
       <div id="custom-body" class="w-100 mb-4">
         <div class="w-100 text-center mb-3">
           <%= image_tag "illustrations/error-warning-line.svg", alt: "Illustration d'un message d'avertissement", class: "mb-3" %>

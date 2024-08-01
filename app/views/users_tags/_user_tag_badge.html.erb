@@ -10,7 +10,7 @@
   <% if with_delete %>
     <%=
       link_to(
-        structure_tag_assignations_path(user.id, tag_id: tag.id),
+        user_tag_assignation_path_with_structure(user_id: user.id, tag_id: tag.id),
         data: {
           turbo_confirm: "Retirer le tag de cet usager ?",
           turbo_confirm_text_content: "Êtes-vous sûr de vouloir retirer le tag <b>#{tag.value}</b> de l'usager <b>#{user}</b> ?",

@@ -1,5 +1,5 @@
 <%= render "common/remote_modal", title: "Ajouter l'usager à une organisation" do %>
-  <%= form_for(:users_organisation, url: structure_users_organisations_path(@user.id), method: :post) do |f| %>
+  <%= form_for(:users_organisation, url: users_organisations_path_with_structure(user_id: @user.id), method: :post) do |f| %>
     <%= f.hidden_field :user_id, value: @user.id %>
 
     <div class="mb-3">

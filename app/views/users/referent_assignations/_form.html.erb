@@ -1,5 +1,5 @@
 <div>
-  <%= form_for(:referent_assignation, url: structure_referent_assignations_path(user_id), method: :post) do |f| %>
+  <%= form_for(:referent_assignation, url: user_referent_assignations_path_with_structure(user_id:), method: :post) do |f| %>
     <div class="w-100 px-2">
       <% if assigned_referents.any? %>
         <p class="mb-2"> <%= "Référent".pluralize(assigned_referents.size) %> déjà <%= "assigné".pluralize(assigned_referents.size) %></p>

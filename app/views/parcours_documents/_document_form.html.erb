@@ -1,4 +1,4 @@
-<%= form_for(:parcours_document, url: structure_user_parcours_documents_path(user.id), class: "mt-3", method: :post, data: { controller: "parcours-documents", action: "turbo:submit-start->parcours-documents#spin turbo:submit-end->parcours-documents#stopSpin", max_size: ParcoursDocument::MAX_SIZE }) do |f| %>
+<%= form_for(:parcours_document, url: user_parcours_documents_path_with_structure(user_id: user.id), class: "mt-3", method: :post, data: { controller: "parcours-documents", action: "turbo:submit-start->parcours-documents#spin turbo:submit-end->parcours-documents#stopSpin", max_size: ParcoursDocument::MAX_SIZE }) do |f| %>
   <%= f.hidden_field :type, value: type.camelize %>
   <%= f.file_field(
       :file,

@@ -11,7 +11,7 @@
           </span>
           <%=
             link_to(
-             structure_referent_assignations_path(user.id, agent_id: referent.id),
+             user_referent_assignation_path_with_structure(user_id: user.id, agent_id: referent.id),
               data: {
                 turbo_confirm: "Retirer l'agent référent de cet usager ?",
                 turbo_confirm_text_content: "Êtes-vous sûr de vouloir retirer l'agent référent <b>#{referent}</b> de l'usager <b>#{user}</b> ?",
@@ -27,7 +27,7 @@
       <% end %>
     <% end %>
   </p>
-  <%= link_to(structure_referent_assignations_path(@user.id), data: { turbo_frame: 'remote_modal' }) do %>
+  <%= link_to(user_referent_assignations_path_with_structure(user_id: @user.id), data: { turbo_frame: 'remote_modal' }) do %>
     <button class="btn btn-blue mb-3"><i class="fas fa-plus"></i> Ajouter un référent </button>
   <% end %>
 </div>

@@ -9,7 +9,7 @@
       <% end %>
     <% end %>
   </p>
-  <%= link_to(structure_tag_assignations_path(@user.id), data: { turbo_frame: 'remote_modal' }) do %>
+  <%= link_to(user_tag_assignations_path_with_structure(user_id: @user.id), data: { turbo_frame: 'remote_modal' }) do %>
     <button class="btn btn-blue mb-3"><i class="fas fa-plus"></i> Ajouter un tag </button>
   <% end %>
 </div>
