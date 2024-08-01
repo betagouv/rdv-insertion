@@ -28,20 +28,13 @@
   </div>
 
   <h3>Notifications tierces</h3>
-  <p>
-  <% if @category_configuration.notify_no_available_slots? %>
-    L'email suivant est notifié en cas d'absence de créneaux disponibles : <%= @category_configuration.email_to_notify_no_available_slots %><br />
-  <% end %>
-  <% if @category_configuration.notify_rdv_changes? %>
-    L'email suivant est notifié en cas de création, modification, ou annulation de rendez-vous : <%= @category_configuration.email_to_notify_rdv_changes %>
-  <% end %>
-  <% if !@category_configuration.notify_no_available_slots? && !@category_configuration.notify_rdv_changes? %>
-    Aucune notification tierce n'est configurée.
-  <% end %>
-  </p>
+  <ul class="mt-3">
+    <li class="mb-2">Notifier sur toutes les prises de rendez-vous ayant lieu pour cette catégorie de motifs : <%= @category_configuration.email_to_notify_rdv_changes.presence || "aucune adresse email de renseignée" %></li>
+    <li>Notifier en cas de créneaux indisponibles sur les motifs de cette catégorie : <%= @category_configuration.email_to_notify_no_available_slots.presence || "aucune adresse email de renseignée" %></li>
+  </ul>
 
   <h3>Invitations périodiques</h3>
-  <p>
+  <p class="mt-3">
     <% if @category_configuration.periodic_invites_activated? %>
       Les invitations périodiques sont actives et sont envoyées
         <% if @category_configuration.number_of_days_between_periodic_invites.present? %>
