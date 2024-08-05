@@ -8,11 +8,9 @@ module Organisations
     def call
       Organisation.transaction do
         check_rdv_solidarites_organisation_id
-        assign_rdv_solidarites_organisation_attributes
         save_record!(@organisation)
         save_record!(agent_role_for_new_organisation)
         upsert_rdv_solidarites_webhook_endpoint
-        tag_rdv_solidarites_organisation
       end
       trigger_rdv_solidarites_webhook_endpoint
     end
@@ -23,12 +21,6 @@ module Organisations
       return if @organisation.rdv_solidarites_organisation_id?
 
       fail!("L'ID de l'organisation RDV-Solidarités n'a pas été renseigné correctement")
-    end
-
-    def assign_rdv_solidarites_organisation_attributes
-      @organisation.assign_attributes(
-        rdv_solidarites_organisation.attributes.slice(*Organisation::SHARED_ATTRIBUTES_WITH_RDV_SOLIDARITES)
-      )
     end
 
     def agent_role_for_new_organisation
@@ -48,14 +40,6 @@ module Organisations
       TriggerRdvSolidaritesWebhooksJob.perform_async(
         rdv_solidarites_webhook_endpoint_id,
         @organisation.rdv_solidarites_organisation_id
-      )
-    end
-
-    def tag_rdv_solidarites_organisation
-      @tag_rdv_solidarites_organisation ||= call_service!(
-        RdvSolidaritesApi::UpdateOrganisation,
-        organisation_attributes: { "verticale" => "rdv_insertion" },
-        rdv_solidarites_organisation_id: @organisation.rdv_solidarites_organisation_id
       )
     end
 

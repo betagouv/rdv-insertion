@@ -38,17 +38,6 @@ describe Organisations::Create, type: :service do
       is_a_success
     end
 
-    it "tries to retrieve an organisation from rdvs" do
-      expect(RdvSolidaritesApi::RetrieveOrganisation).to receive(:call)
-      subject
-    end
-
-    it "assigns attributes to the organisation" do
-      subject
-      expect(organisation.reload.name).to eq("Nouvelle org")
-      expect(organisation.reload.phone_number).to eq("0102030405")
-    end
-
     it "saves the organisation in db" do
       subject
       expect(Organisation.count).to eq(organisation_count_before + 1)
@@ -68,21 +57,6 @@ describe Organisations::Create, type: :service do
 
     it "calls the create webhook endpoint service" do
       expect(RdvSolidaritesApi::CreateWebhookEndpoint).to receive(:call)
-      subject
-    end
-
-    it "calls the update webhook endpoint service (for verticale attribute)" do
-      expect(RdvSolidaritesApi::UpdateOrganisation).to receive(:call).with(
-        hash_including(
-          {
-            organisation_attributes: hash_including(
-              {
-                "verticale" => "rdv_insertion"
-              }
-            )
-          }
-        )
-      )
       subject
     end
 
@@ -116,25 +90,6 @@ describe Organisations::Create, type: :service do
           .and_return(false)
         allow(organisation).to receive_message_chain(:errors, :full_messages, :to_sentence)
           .and_return("some error")
-      end
-
-      it "is a failure" do
-        is_a_failure
-      end
-
-      it "stores the error" do
-        expect(subject.errors).to eq(["some error"])
-      end
-
-      it "does not call the TriggerRdvSolidaritesWebhooksJob" do
-        expect(TriggerRdvSolidaritesWebhooksJob).not_to receive(:perform_async)
-      end
-    end
-
-    context "when the rdv solidarites organisation update fails" do
-      before do
-        allow(RdvSolidaritesApi::RetrieveOrganisation).to receive(:call)
-          .and_return(OpenStruct.new(errors: ["some error"], success?: false))
       end
 
       it "is a failure" do
