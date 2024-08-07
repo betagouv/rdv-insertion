@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
+  mount AgentConnect::Engine => "/agent_connect"
 
   scope module: 'website' do
     root "static_pages#welcome"
